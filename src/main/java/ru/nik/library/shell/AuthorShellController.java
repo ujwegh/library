@@ -32,7 +32,7 @@ public class AuthorShellController {
     @ShellMethod("newauthor")
     public String newauthor(@ShellOption String name) {
         int i = authorService.addAuthor(name);
-        if (i == 0) {
+        if ((i != 1) && (i != 2)) {
             return "Author " + name + " adding attempt has been failed.";
         }
         return "Author " + name + " successfully added.";
@@ -41,7 +41,7 @@ public class AuthorShellController {
     @ShellMethod("updateauthor")
     public String updateauthor(@ShellOption Integer id,@ShellOption String name) {
         int i = authorService.updateAuthor(id, name);
-        if (i == 0) {
+        if ((i != 1) && (i != 2)) {
             return "Author with id: " +id+" and name: " + name + " updating attempt has been failed.";
     }
         return "Author with id: " +id+" and name: " + name + " successfully updated.";

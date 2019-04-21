@@ -42,7 +42,7 @@ public class BookShellController {
     @ShellMethod("updatebook")
     public String updatebook(@ShellOption Integer id, @ShellOption String name, @ShellOption String description,
                              @ShellOption String authorName, @ShellOption String genreName) {
-        int i = bookService.updateBook(id, name, description, authorName, genreName);
+        int i = bookService.updateBook(id, name, description);
         if (i == 0) {
             return "Book with " + id + " updating attempt has been failed.";
         }
@@ -61,7 +61,7 @@ public class BookShellController {
     @ShellMethod("addbook")
     public String addbook(@ShellOption String name, @ShellOption String description,
                           @ShellOption String authorName, @ShellOption String genreName) {
-        int i = bookService.addBook(name, description, authorName, genreName);
+        int i = bookService.addBook(name, description);
         if (i == 0) {
             return "Book " + name + " adding attempt has been failed.";
         }

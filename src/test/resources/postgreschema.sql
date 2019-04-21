@@ -23,9 +23,3 @@ CREATE TABLE books (
   genre       VARCHAR(255) references genres (name) on DELETE cascade on UPDATE cascade
 );
 
--- CREATE TABLE books (
---   id INT PRIMARY KEY,
---   name varchar(100),
---   description VARCHAR(255),
---   FOREIGN KEY (id) REFERENCES authors(id)
--- )

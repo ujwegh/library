@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
 @SqlGroup({
-        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:schema.sql"),
-        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:data.sql")
+        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:postgreschema.sql"),
+        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:data-test.sql")
 })
 class GenreShellControllerTest {
 

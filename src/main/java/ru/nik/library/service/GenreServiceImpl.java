@@ -43,7 +43,7 @@ public class GenreServiceImpl implements GenreService {
     public Genre getGenreByName(String name) {
         try {
             return dao.getByName(name);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
 
@@ -53,7 +53,7 @@ public class GenreServiceImpl implements GenreService {
     public Genre getGenreById(int id) {
         try {
             return dao.getById(id);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
 

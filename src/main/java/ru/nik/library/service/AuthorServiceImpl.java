@@ -44,20 +44,18 @@ public class AuthorServiceImpl implements AuthorService {
     public Author getAuthorByName(String name) {
         try {
             return dao.getByName(name);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
-
     }
 
     @Override
     public Author getAuthorById(int id) {
         try {
             return dao.getById(id);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
-
     }
 
     @Override

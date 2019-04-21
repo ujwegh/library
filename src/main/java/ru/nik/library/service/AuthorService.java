@@ -19,4 +19,6 @@ public interface AuthorService {
 
     List<Author> getAllAutors();
 
+//    Integer addAuthorWithBook(String name);
+
 }
