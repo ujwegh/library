@@ -100,7 +100,7 @@ class BookServiceImplTest {
     @Test
     void updateBookAuthors() {
         Book expected = new Book(1,"книга 1", "описание");
-        Author one = new Author("Ваня");
+        Author one = new Author("Петя");
         Author two = new Author("Кинг");
 
         expected.setAuthors(Set.of(one, two));

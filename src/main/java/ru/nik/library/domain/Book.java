@@ -33,13 +33,13 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

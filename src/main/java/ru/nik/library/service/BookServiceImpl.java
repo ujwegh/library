@@ -15,14 +15,14 @@ import java.util.*;
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
+    private final AuthorService authorService;
+    private final GenreService genreService;
 
     @Autowired
-    public BookServiceImpl(BookDao dao, AuthorDao dao1, GenreDao genreDao) {
+    public BookServiceImpl(BookDao dao, AuthorService authorService, GenreService genreService) {
         this.bookDao = dao;
-        this.authorDao = dao1;
-        this.genreDao = genreDao;
+        this.authorService = authorService;
+        this.genreService = genreService;
     }
 
     @Override
@@ -63,16 +63,13 @@ public class BookServiceImpl implements BookService {
         if (book != null) {
             for (String name : authors) {
                 try {
-                    author = authorDao.getByName(name);
+                    author = authorService.getAuthorByName(name);
                 } catch (Exception ignored) {}
 
                 if (author == null) {
                     author = new Author(null, name);
-                    author.setBooks(Set.of(book));
-                    authorDao.insert(author);
-                } else {
-                    author.setBooks(Set.of(book));
                 }
+                author.setBooks(Set.of(book));
                 authorSet.add(author);
             }
             Set<Author> bookAuthors = book.getAuthors();
@@ -91,16 +88,13 @@ public class BookServiceImpl implements BookService {
         if (book != null) {
             for (String name : genres) {
                 try {
-                    genre = genreDao.getByName(name);
+                    genre = genreService.getGenreByName(name);
                 } catch (Exception ignored) {}
 
                 if (genre == null) {
                     genre = new Genre(null, name);
-                    genre.setBooks(Set.of(book));
-                    genreDao.insert(genre);
-                } else {
-                    genre.setBooks(Set.of(book));
                 }
+                genre.setBooks(Set.of(book));
                 genreSet.add(genre);
             }
             Set<Genre> bookAuthors = book.getGenres();
