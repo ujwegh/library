@@ -1,7 +1,6 @@
 package ru.nik.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
@@ -16,16 +15,16 @@ import java.util.*;
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
-    private final AuthorService authorService;
-    private final GenreService genreService;
+    private final AuthorDao authorDao;
+    private final GenreDao genreDao;
 
     @Autowired
-    public BookServiceImpl(BookDao dao, AuthorService authorService, GenreService genreService) {
+    public BookServiceImpl(BookDao dao, AuthorDao dao1, GenreDao genreDao) {
         this.bookDao = dao;
-        this.authorService = authorService;
-        this.genreService = genreService;
+        this.authorDao = dao1;
+        this.genreDao = genreDao;
     }
-    
+
     @Override
     public Integer addBook(String name, String description) {
         return bookDao.insert(new Book(name, description));
@@ -38,7 +37,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Integer updateBook(int id, String name, String description) {
-
         return bookDao.insert(new Book(id, name, description));
     }
 
@@ -60,61 +58,56 @@ public class BookServiceImpl implements BookService {
     @Override
     public Integer updateBookAuthors(int bookId, String... authors) {
         Author author = null;
-        List<Author> authorList = new ArrayList<>();
+        Set<Author> authorSet = new HashSet<>();
         Book book = bookDao.getById(bookId);
         if (book != null) {
             for (String name : authors) {
                 try {
-                    author = authorService.getAuthorByName(name);
+                    author = authorDao.getByName(name);
                 } catch (Exception ignored) {}
 
                 if (author == null) {
                     author = new Author(null, name);
                     author.setBooks(Set.of(book));
-//                    authorService.addAuthor();
+                    authorDao.insert(author);
                 } else {
                     author.setBooks(Set.of(book));
-
                 }
-
-                authorList.add(author);
+                authorSet.add(author);
             }
+            Set<Author> bookAuthors = book.getAuthors();
+            bookAuthors.addAll(authorSet);
+            book.setAuthors(bookAuthors);
+            return bookDao.insert(book);
         }
-
-        Set<Author> bookAuthors = book.getAuthors();
-        bookAuthors.add(author);
-        book.setAuthors(bookAuthors);
-        return bookDao.insert(book);
+        return null;
     }
 
     @Override
     public Integer updateBookGenres(int bookId, String... genres) {
-        Author author = null;
         Genre genre = null;
+        Set<Genre> genreSet = new HashSet<>();
+        Book book = bookDao.getById(bookId);
+        if (book != null) {
+            for (String name : genres) {
+                try {
+                    genre = genreDao.getByName(name);
+                } catch (Exception ignored) {}
 
-//        try {
-//            author = authorService.getAuthorByName(authorName);
-//        } catch (Exception ignored) {
-//        }
-//        try {
-//            genre = genreService.getGenreByName(genreName);
-//        } catch (Exception ignored) {
-//        }
-//
-//        if (author == null) {
-//            author = new Author(null, authorName);
-//            authorService.addAuthor(authorName);
-//        }
-//        if (genre == null) {
-//            genre = new Genre(null, genreName);
-//            genreService.addGenre(genreName);
-//        }
-//
-//        Book book = bookDao.getById(id);
-//        Set<Author> authors = book.getAuthors();
-//        authors.add(author);
-//        Set<Genre> genres = book.getGenres();
-//        genres.add(genre);
+                if (genre == null) {
+                    genre = new Genre(null, name);
+                    genre.setBooks(Set.of(book));
+                    genreDao.insert(genre);
+                } else {
+                    genre.setBooks(Set.of(book));
+                }
+                genreSet.add(genre);
+            }
+            Set<Genre> bookAuthors = book.getGenres();
+            bookAuthors.addAll(genreSet);
+            book.setGenres(bookAuthors);
+            return bookDao.insert(book);
+        }
         return null;
     }
 

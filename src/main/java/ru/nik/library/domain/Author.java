@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,6 +26,7 @@ public class Author{
     @Column(name = "name")
     private String name;
 
+    @Lazy
     @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
     private Set<Book> books = new HashSet<>();
 

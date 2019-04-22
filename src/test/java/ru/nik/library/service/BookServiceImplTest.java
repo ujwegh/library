@@ -15,6 +15,7 @@ import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Genre;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -42,57 +43,84 @@ class BookServiceImplTest {
         Book two = new Book("книга 2", "описание");
         service.addBook(one.getName(), one.getDescription());
         service.addBook(two.getName(), two.getDescription());
-        authorService.addAuthor("вова");
     }
 
     @Test
     void addBookTest() {
         Book expected = new Book("математика", "для школы");
-        System.out.println(authorService.getAllAutors());
-        expected.setAuthors(Set.of());
         service.addBook(expected.getName(), expected.getDescription());
+        List<Book> books = service.getAllBooks();
+        assertNotNull(books);
+        Book actual = books.get(2);
+        System.out.println(actual);
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getDescription(), actual.getDescription());
+    }
+
+    @Test
+    void deleteBookByIdTest() {
+        Book expected = new Book("книга 1", "описание");
+        service.deleteBookById(2);
         List<Book> books = service.getAllBooks();
         assertNotNull(books);
         Book actual = books.get(0);
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getDescription(), actual.getDescription());
     }
-//
-//    @Test
-//    void deleteBookByIdTest() {
-//        Book expected = new Book("сказки", "для взрослых",
-//                new Author("Кинг"), new Genre("детектив"));
-//        service.deleteBookById(1005);
-//        Book actual = service.getAllBooks().get(0);
-//        assertEquals(expected.toString(), actual.toString());
-//    }
-//
-//    @Test
-//    void updateBookTest() {
-//        Book expected = new Book("сказки", "для взрослых",
-//                new Author("Пушкин"), new Genre("сказки"));
-//        service.updateBook(1004, expected.getName(), expected.getDescription(),
-//                expected.getAuthor().getName(), expected.getGenre().getName());
-//        Book actual = service.getBookById(1004);
-//        assertEquals(expected.toString(), actual.toString());
-//    }
-//
-//    @Test
-//    void getBookByIdTest() {
-//        Book expected = new Book("сказки", "для взрослых",
-//                new Author("Кинг"), new Genre("детектив"));
-//        Book actual = service.getBookById(1004);
-//        assertEquals(expected.toString(), actual.toString());
-//    }
-//
-//    @Test
-//    void getAllBooksTest() {
-//        List<Book> expected = new ArrayList<>();
-//        expected.add(new Book("сказки", "для взрослых",
-//                new Author("Кинг"), new Genre("детектив")));
-//        expected.add(new Book("сказки", "для детей",
-//                new Author("Пушкин"), new Genre("фантастика")));
-//        List<Book> actual = service.getAllBooks();
-//        assertEquals(expected.size(), actual.size());
-//    }
+
+    @Test
+    void updateBookTest() {
+        Book expected = new Book("книга 2", "новое описание");
+        service.updateBook(2, expected.getName(), expected.getDescription());
+        Book actual = service.getBookById(2);
+        assertNotNull(actual);
+        assertEquals(expected.toString(), actual.toString());
+    }
+
+    @Test
+    void getBookByIdTest() {
+        Book expected = new Book("книга 2", "описание");
+        Book actual = service.getBookById(2);
+        assertNotNull(actual);
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getDescription(), actual.getDescription());
+    }
+
+    @Test
+    void getAllBooksTest() {
+        Book one = new Book("книга 1", "описание");
+        Book two = new Book("книга 2", "описание");
+        List<Book> expected = new ArrayList<>();
+        expected.add(one);
+        expected.add(two);
+        List<Book> actual = service.getAllBooks();
+        assertEquals(expected.size(), actual.size());
+    }
+
+    @Test
+    void updateBookAuthors() {
+        Book expected = new Book(1,"книга 1", "описание");
+        Author one = new Author("Ваня");
+        Author two = new Author("Кинг");
+
+        expected.setAuthors(Set.of(one, two));
+        service.updateBookAuthors(1, one.getName(), two.getName());
+        Book actual = service.getBookById(1);
+        System.out.println(actual);
+
+
+
+
+    }
+
+    @Test
+    void updateBookGenres() {
+        Book actual = service.getBookById(1);
+
+
+
+
+
+
+    }
 }

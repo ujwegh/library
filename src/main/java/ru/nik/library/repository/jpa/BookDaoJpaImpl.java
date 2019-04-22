@@ -13,7 +13,6 @@ import java.util.List;
 
 @SuppressWarnings("JpaQlInspection")
 @Repository
-@org.springframework.transaction.annotation.Transactional
 public class BookDaoJpaImpl implements BookDao {
 
     @PersistenceContext
