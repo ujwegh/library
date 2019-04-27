@@ -21,13 +21,15 @@ public class BookDaoJpaImpl implements BookDao {
     @Override
     @Transactional
     public int insert(Book book) {
-        if (book.isNew()) {
-            em.persist(book);
-            return 1;
-        } else {
-            em.persist(book);
-            return 2;
-        }
+        em.persist(book);
+        return 1;
+    }
+
+    @Override
+    @Transactional
+    public int update(Book book) {
+        em.merge(book);
+        return 2;
     }
 
     @Override

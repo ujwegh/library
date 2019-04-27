@@ -54,7 +54,7 @@ class GenreDaoJpaImplTest {
     @Test
     void update() {
         Genre expected = new Genre(1, "Новый жанр");
-        int i = dao.insert(expected);
+        int i = dao.update(expected);
         Genre actual = dao.getByName(expected.getName());
         assertEquals(2, i);
         assertEquals(expected.getName(), actual.getName());
@@ -105,5 +105,17 @@ class GenreDaoJpaImplTest {
         List<Genre> genres = dao.getAll();
         assertNotNull(genres);
         assertEquals(1, genres.size());
+    }
+
+    @Test
+    void getAllByNames() {
+        Genre one = new Genre("учебник");
+        Genre two = new Genre("справочник");
+        List<Genre> expected = new ArrayList<>();
+        expected.add(one);
+        expected.add(two);
+        List<Genre> actual = dao.getAllByNames(one.getName(), two.getName());
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.size());
     }
 }

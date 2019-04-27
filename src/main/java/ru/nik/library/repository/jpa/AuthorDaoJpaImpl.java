@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("JpaQlInspection")
@@ -22,13 +23,15 @@ public class AuthorDaoJpaImpl implements AuthorDao {
     @Override
     @Transactional
     public int insert(Author author) {
-        if (author.isNew()) {
-            em.persist(author);
-            return 1;
-        } else {
-            em.merge(author);
-            return 2;
-        }
+        em.persist(author);
+        return 1;
+    }
+
+    @Override
+    @Transactional
+    public int update(Author author) {
+        em.merge(author);
+        return 2;
     }
 
     @Override
@@ -63,5 +66,13 @@ public class AuthorDaoJpaImpl implements AuthorDao {
         Query query = em.createQuery("delete from Author a where a.name = :name");
         query.setParameter("name", name);
         return query.executeUpdate();
+    }
+
+    @Override
+    public List<Author> getAllByNames(String... names) {
+        List<String> nameList = Arrays.asList(names);
+        TypedQuery<Author> query = em.createQuery("select a from Author a where a.name in (:names)", Author.class);
+        query.setParameter("names", nameList);
+        return query.getResultList();
     }
 }

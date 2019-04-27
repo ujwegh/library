@@ -19,6 +19,7 @@ import ru.nik.library.domain.Genre;
 import ru.nik.library.repository.BookDao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +52,6 @@ class BookDaoJpaImplTest {
         book.setComments(List.of(new Comment("вот это хренотаа"), new Comment("советую почитать")));
         int i = dao.insert(book);
         List<Book> books = dao.getAll();
-//        books.forEach(b-> System.out.println(b));
         assertEquals(1, i);
         assertEquals(3, books.size());
     }
@@ -59,11 +59,19 @@ class BookDaoJpaImplTest {
     @Test
     void update() {
         Book expected = dao.getById(1);
-        expected.setComments(List.of(new Comment("ляляля")));
-        expected.setAuthors(Set.of(new Author("новый автор")));
-        expected.setGenres(Set.of(new Genre("бульварное чтиво")));
-        int i = dao.insert(expected);
+        List<Comment> list = new ArrayList<>();
+        list.add(new Comment("ddd"));
+        Set<Author> authors = new HashSet<>();
+        authors.add(new Author("новый автор"));
+        Set<Genre> genres = new HashSet<>();
+        genres.add(new Genre("бульварное чтиво"));
+
+        expected.setComments(list);
+        expected.setAuthors(authors);
+        expected.setGenres(genres);
+        int i = dao.update(expected);
         Book actual = dao.getById(1);
+        System.out.println(actual);
         assertNotNull(actual);
         assertEquals(expected, actual);
     }

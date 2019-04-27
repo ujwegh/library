@@ -18,4 +18,6 @@ public interface GenreService {
     Genre getGenreById(int id);
 
     List<Genre> getAllGenres();
+
+    List<Genre> getAllByNames(String ... names);
 }

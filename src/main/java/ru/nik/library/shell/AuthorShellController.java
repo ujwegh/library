@@ -20,7 +20,7 @@ public class AuthorShellController {
 
     @ShellMethod("allAuthors")
     public String authors() {
-        List<Author> authors = authorService.getAllAutors();
+        List<Author> authors = authorService.getAllAuthors();
         StringBuilder builder = new StringBuilder();
         authors.forEach(a -> builder.append("id: ").append(a.getId()).append(" ").append(a.toString()).append("\n"));
         if (builder.toString().isEmpty()) {

@@ -26,13 +26,9 @@ public class Author{
     @Column(name = "name")
     private String name;
 
-    @Lazy
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
 
-    public Author(Author author) {
-        this(null, author.getName());
-    }
 
     public Author(Integer id, String name) {
         this.id = id;

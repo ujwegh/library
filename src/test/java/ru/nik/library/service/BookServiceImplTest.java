@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
@@ -17,6 +18,7 @@ import ru.nik.library.domain.Genre;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,13 +31,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 class BookServiceImplTest {
 
     @Autowired
     private BookService service;
-
-    @Autowired
-    private AuthorService authorService;
 
     @BeforeEach
     void init() {
@@ -52,7 +52,9 @@ class BookServiceImplTest {
         List<Book> books = service.getAllBooks();
         assertNotNull(books);
         Book actual = books.get(2);
+        System.out.println();
         System.out.println(actual);
+        System.out.println();
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getDescription(), actual.getDescription());
     }
@@ -70,8 +72,8 @@ class BookServiceImplTest {
 
     @Test
     void updateBookTest() {
-        Book expected = new Book("книга 2", "новое описание");
-        service.updateBook(2, expected.getName(), expected.getDescription());
+        Book expected = new Book(2,"книга 2", "новое описание");
+        service.updateBook(expected.getId(), expected.getName(), expected.getDescription());
         Book actual = service.getBookById(2);
         assertNotNull(actual);
         assertEquals(expected.toString(), actual.toString());
@@ -103,24 +105,23 @@ class BookServiceImplTest {
         Author one = new Author("Петя");
         Author two = new Author("Кинг");
 
-        expected.setAuthors(Set.of(one, two));
+        Set<Author> authors = new HashSet<>(Set.of(one, two));
+        expected.setAuthors(authors);
         service.updateBookAuthors(1, one.getName(), two.getName());
         Book actual = service.getBookById(1);
-        System.out.println(actual);
-
-
-
-
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
     void updateBookGenres() {
+        Book expected = new Book(1,"книга 1", "описание");
+        Genre one = new Genre("жанр 1");
+        Genre two = new Genre("жанр 2");
+
+        Set<Genre> genres = new HashSet<>(Set.of(one, two));
+        expected.setGenres(genres);
+        service.updateBookGenres(1, one.getName(), two.getName());
         Book actual = service.getBookById(1);
-
-
-
-
-
-
+        assertEquals(expected.toString(), actual.toString());
     }
 }

@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("JpaQlInspection")
@@ -21,13 +22,15 @@ public class GenreDaoJpaImpl implements GenreDao {
     @Override
     @Transactional
     public int insert(Genre genre) {
-        if (genre.isNew()) {
-            em.persist(genre);
-            return 1;
-        } else {
-            em.merge(genre);
-            return 2;
-        }
+        em.persist(genre);
+        return 1;
+    }
+
+    @Override
+    @Transactional
+    public int update(Genre genre) {
+        em.merge(genre);
+        return 2;
     }
 
     @Override
@@ -62,5 +65,13 @@ public class GenreDaoJpaImpl implements GenreDao {
         Query query = em.createQuery("delete from Genre a where a.name = :name");
         query.setParameter("name", name);
         return query.executeUpdate();
+    }
+
+    @Override
+    public List<Genre> getAllByNames(String... names) {
+        List<String> nameList = Arrays.asList(names);
+        TypedQuery<Genre> query = em.createQuery("select a from Genre a where a.name in (:names)", Genre.class);
+        query.setParameter("names", nameList);
+        return query.getResultList();
     }
 }

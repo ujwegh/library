@@ -25,7 +25,7 @@ public class Genre{
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "genres")
     private Set<Book> books = new HashSet<>();
 
     public Genre(Integer id, String name) {

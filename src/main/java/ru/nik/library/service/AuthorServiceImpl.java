@@ -37,7 +37,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Integer updateAuthor(int id, String name) {
         Author author = new Author(id, name);
-        return dao.insert(author);
+        return dao.update(author);
     }
 
     @Override
@@ -59,7 +59,12 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<Author> getAllAutors() {
+    public List<Author> getAllAuthors() {
         return dao.getAll();
+    }
+
+    @Override
+    public List<Author> getAllByNames(String... names) {
+        return dao.getAllByNames(names);
     }
 }

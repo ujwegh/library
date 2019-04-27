@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+//@ToString
 @Entity
 @Table(name = "books")
 public class Book {
@@ -30,16 +30,18 @@ public class Book {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Lazy
+    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "map_books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Lazy
+    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "map_books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
@@ -60,4 +62,15 @@ public class Book {
         return getId() == null;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", comments=" + (comments != null ? comments.size() : null) +
+                ", authors=" + (authors != null ? authors.size() : null) +
+                ", genres=" + (genres != null ? genres.size() : null) +
+                '}';
+    }
 }

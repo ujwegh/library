@@ -36,7 +36,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Integer updateGenre(int id, String name) {
         Genre genre = new Genre(id, name);
-        return dao.insert(genre);
+        return dao.update(genre);
     }
 
     @Override
@@ -62,5 +62,10 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public List<Genre> getAllGenres() {
         return dao.getAll();
+    }
+
+    @Override
+    public List<Genre> getAllByNames(String... names) {
+        return dao.getAllByNames(names);
     }
 }

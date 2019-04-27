@@ -54,7 +54,7 @@ class AuthorDaoJpaImplTest {
     @Test
     void update() {
         Author expected = new Author(1, "Новый автор");
-        int i = dao.insert(expected);
+        int i = dao.update(expected);
         Author actual = dao.getByName(expected.getName());
         assertEquals(2, i);
         assertEquals(expected.getName(), actual.getName());
@@ -104,5 +104,17 @@ class AuthorDaoJpaImplTest {
         List<Author> authors = dao.getAll();
         assertNotNull(authors);
         assertEquals(1, authors.size());
+    }
+
+    @Test
+    void getAllByNames() {
+        Author one = new Author("Пушкин");
+        Author two = new Author("Кинг");
+        List<Author> expected = new ArrayList<>();
+        expected.add(one);
+        expected.add(two);
+        List<Author> actual = dao.getAllByNames(one.getName(), two.getName());
+        assertNotNull(actual);
+        assertEquals(expected.size(), actual.size());
     }
 }

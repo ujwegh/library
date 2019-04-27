@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     public Integer updateBookComment(int id, int bookId, String message) {
         Comment comment = dao.getById(id, bookId);
         comment.setComment(message);
-        return dao.insert(comment, bookId);
+        return dao.update(comment, bookId);
     }
 
     @Override

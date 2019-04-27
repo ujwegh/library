@@ -6,10 +6,7 @@ import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
 import ru.nik.library.repository.CommentDao;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 @SuppressWarnings("JpaQlInspection")
@@ -20,18 +17,23 @@ public class CommentDaoJpaImpl implements CommentDao {
     private EntityManager em;
 
     @Override
+    @Transactional
     public int insert(Comment comment, int bookId) {
-        if (!comment.isNew() && getById(comment.getId(), bookId) == null) {
-            return 0;
-        }
         comment.setBook(em.getReference(Book.class, bookId));
-        if (comment.isNew()) {
+        try {
             em.persist(comment);
             return 1;
-        } else {
-            em.merge(comment);
-            return 2;
+        } catch (EntityExistsException e) {
+            return 0;
         }
+    }
+
+    @Override
+    @Transactional
+    public int update(Comment comment, int bookId) {
+        comment.setBook(em.getReference(Book.class, bookId));
+        em.merge(comment);
+        return 2;
     }
 
     @Override
@@ -53,6 +55,7 @@ public class CommentDaoJpaImpl implements CommentDao {
     }
 
     @Override
+    @Transactional
     public int deleteById(int id, int bookId) {
         Query query = em.createQuery("delete from Comment a where a.id = :id and a.book.id=:bookId");
         query.setParameter("id", id);

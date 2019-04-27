@@ -10,6 +10,7 @@ import ru.nik.library.repository.BookDao;
 import ru.nik.library.repository.GenreDao;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -37,7 +38,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Integer updateBook(int id, String name, String description) {
-        return bookDao.insert(new Book(id, name, description));
+        return bookDao.update(new Book(id, name, description));
     }
 
     @Override
@@ -57,50 +58,44 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Integer updateBookAuthors(int bookId, String... authors) {
-        Author author = null;
-        Set<Author> authorSet = new HashSet<>();
+        Author author;
+        Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
         Book book = bookDao.getById(bookId);
-        if (book != null) {
-            for (String name : authors) {
-                try {
-                    author = authorService.getAuthorByName(name);
-                } catch (Exception ignored) {}
 
-                if (author == null) {
-                    author = new Author(null, name);
-                }
-                author.setBooks(Set.of(book));
-                authorSet.add(author);
-            }
+        if (book != null) {
+            List<Author> authorList = authorService.getAllByNames(authors);
+
+            Set<Author> sett = new TreeSet<>(Comparator.comparing(Author::getName));
+
+            sett.addAll(authorSet);
+            sett.addAll(authorList);
+
             Set<Author> bookAuthors = book.getAuthors();
-            bookAuthors.addAll(authorSet);
+            bookAuthors.addAll(sett);
             book.setAuthors(bookAuthors);
-            return bookDao.insert(book);
+            return bookDao.update(book);
         }
         return null;
     }
 
     @Override
     public Integer updateBookGenres(int bookId, String... genres) {
-        Genre genre = null;
-        Set<Genre> genreSet = new HashSet<>();
+        Genre genre;
+        Set<Genre> authorSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
         Book book = bookDao.getById(bookId);
-        if (book != null) {
-            for (String name : genres) {
-                try {
-                    genre = genreService.getGenreByName(name);
-                } catch (Exception ignored) {}
 
-                if (genre == null) {
-                    genre = new Genre(null, name);
-                }
-                genre.setBooks(Set.of(book));
-                genreSet.add(genre);
-            }
-            Set<Genre> bookAuthors = book.getGenres();
-            bookAuthors.addAll(genreSet);
-            book.setGenres(bookAuthors);
-            return bookDao.insert(book);
+        if (book != null) {
+            List<Genre> genreList = genreService.getAllByNames(genres);
+
+            Set<Genre> sett = new TreeSet<>(Comparator.comparing(Genre::getName));
+
+            sett.addAll(authorSet);
+            sett.addAll(genreList);
+
+            Set<Genre> bookGenres = book.getGenres();
+            bookGenres.addAll(sett);
+            book.setGenres(bookGenres);
+            return bookDao.update(book);
         }
         return null;
     }

@@ -60,7 +60,7 @@ class CommentDaoJpaImplTest {
     void update() {
         Comment expected = dao.getById(1, 1);
         expected.setComment("был коммент 1, а стал коммент 3");
-        int i = dao.insert(expected, expected.getBook().getId());
+        int i = dao.update(expected, expected.getBook().getId());
         assertEquals(2, i);
         Comment actual = dao.getById(1, 1);
         assertNotNull(actual);

@@ -6,12 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import ru.nik.library.domain.Author;
 
 import java.util.ArrayList;
@@ -41,7 +38,7 @@ class AuthorServiceImplTest {
     void addAuthorTest() {
         Author expected = new Author("Толкин");
         service.addAuthor(expected.getName());
-        List<Author> autors = service.getAllAutors();
+        List<Author> autors = service.getAllAuthors();
         assertNotNull(autors);
         Author actual = autors.get(2);
         assertEquals(expected.getName(), actual.getName());
@@ -50,7 +47,7 @@ class AuthorServiceImplTest {
     @Test
     void deleteAuthorByIdTest() {
         service.deleteAuthorById(1);
-        List<Author> authors = service.getAllAutors();
+        List<Author> authors = service.getAllAuthors();
         assertNotNull(authors);
         assertEquals(1, authors.size());
         assertNull(service.getAuthorById(1));
@@ -59,7 +56,7 @@ class AuthorServiceImplTest {
     @Test
     void deleteAuthorByNameTest() {
         service.deleteAuthorByName("Достоевский");
-        List<Author> authors = service.getAllAutors();
+        List<Author> authors = service.getAllAuthors();
         assertNotNull(authors);
         assertEquals(1, authors.size());
         assertNull(service.getAuthorByName("Достоевский"));
@@ -92,7 +89,7 @@ class AuthorServiceImplTest {
         List<Author> expected = new ArrayList<>();
         expected.add(new Author("Достоевский"));
         expected.add(new Author("Лермонтов"));
-        List<Author> actual = service.getAllAutors();
+        List<Author> actual = service.getAllAuthors();
         assertEquals(expected.size(), actual.size());
     }
 }
