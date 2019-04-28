@@ -18,25 +18,25 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Integer addGenre(String name) {
+    public Boolean addGenre(String name) {
         Genre genre = new Genre(null, name);
-        return dao.insert(genre);
+        return dao.insert(genre) != 0;
     }
 
     @Override
-    public Integer deleteGenreById(int id) {
-        return dao.deleteById(id);
+    public Boolean deleteGenreById(int id) {
+        return dao.deleteById(id) != 0;
     }
 
     @Override
-    public Integer deleteGenreByName(String name) {
-        return dao.deleteByName(name);
+    public Boolean deleteGenreByName(String name) {
+        return dao.deleteByName(name) != 0;
     }
 
     @Override
-    public Integer updateGenre(int id, String name) {
+    public Boolean updateGenre(int id, String name) {
         Genre genre = new Genre(id, name);
-        return dao.update(genre);
+        return dao.update(genre) != 0;
     }
 
     @Override

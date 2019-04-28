@@ -19,25 +19,25 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Integer addAuthor(String name) {
+    public Boolean addAuthor(String name) {
         Author author = new Author(null, name);
-        return dao.insert(author);
+        return dao.insert(author) != 0;
     }
 
     @Override
-    public Integer deleteAuthorById(int id) {
-        return dao.deleteById(id);
+    public Boolean deleteAuthorById(int id) {
+        return dao.deleteById(id) != 0;
     }
 
     @Override
-    public Integer deleteAuthorByName(String name) {
-        return dao.deleteByName(name);
+    public Boolean deleteAuthorByName(String name) {
+        return dao.deleteByName(name) != 0;
     }
 
     @Override
-    public Integer updateAuthor(int id, String name) {
+    public Boolean updateAuthor(int id, String name) {
         Author author = new Author(id, name);
-        return dao.update(author);
+        return dao.update(author) != 0;
     }
 
     @Override

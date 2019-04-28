@@ -5,17 +5,17 @@ import ru.nik.library.domain.Book;
 import java.util.List;
 
 public interface BookService {
-    Integer addBook(String name, String description);
+    Boolean addBook(String name, String description);
 
-    Integer deleteBookById(int id);
+    Boolean deleteBookById(int id);
 
-    Integer updateBook(int id,String name, String description);
+    Boolean updateBook(int id,String name, String description);
 
     Book getBookById(int id);
 
     List<Book> getAllBooks();
 
-    Integer updateBookAuthors(int bookId, String ... authors);
+    Boolean updateBookAuthors(int bookId, String ... authors);
 
-    Integer updateBookGenres(int bookId, String ... genres);
+    Boolean updateBookGenres(int bookId, String ... genres);
 }

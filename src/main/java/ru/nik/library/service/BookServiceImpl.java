@@ -27,18 +27,18 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Integer addBook(String name, String description) {
-        return bookDao.insert(new Book(name, description));
+    public Boolean addBook(String name, String description) {
+        return bookDao.insert(new Book(name, description)) != 0;
     }
 
     @Override
-    public Integer deleteBookById(int id) {
-        return bookDao.deleteById(id);
+    public Boolean deleteBookById(int id) {
+        return bookDao.deleteById(id) != 0;
     }
 
     @Override
-    public Integer updateBook(int id, String name, String description) {
-        return bookDao.update(new Book(id, name, description));
+    public Boolean updateBook(int id, String name, String description) {
+        return bookDao.update(new Book(id, name, description)) != 0;
     }
 
     @Override
@@ -57,8 +57,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Integer updateBookAuthors(int bookId, String... authors) {
-        Author author;
+    public Boolean updateBookAuthors(int bookId, String... authors) {
         Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
         Book book = bookDao.getById(bookId);
 
@@ -73,14 +72,13 @@ public class BookServiceImpl implements BookService {
             Set<Author> bookAuthors = book.getAuthors();
             bookAuthors.addAll(sett);
             book.setAuthors(bookAuthors);
-            return bookDao.update(book);
+            return bookDao.update(book) != 0;
         }
         return null;
     }
 
     @Override
-    public Integer updateBookGenres(int bookId, String... genres) {
-        Genre genre;
+    public Boolean updateBookGenres(int bookId, String... genres) {
         Set<Genre> authorSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
         Book book = bookDao.getById(bookId);
 
@@ -95,7 +93,7 @@ public class BookServiceImpl implements BookService {
             Set<Genre> bookGenres = book.getGenres();
             bookGenres.addAll(sett);
             book.setGenres(bookGenres);
-            return bookDao.update(book);
+            return bookDao.update(book) != 0;
         }
         return null;
     }

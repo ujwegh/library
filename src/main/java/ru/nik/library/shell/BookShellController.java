@@ -42,8 +42,8 @@ public class BookShellController {
     @ShellMethod("updatebook")
     public String updatebook(@ShellOption Integer id, @ShellOption String name, @ShellOption String description,
                              @ShellOption String authorName, @ShellOption String genreName) {
-        int i = bookService.updateBook(id, name, description);
-        if (i == 0) {
+        boolean b = bookService.updateBook(id, name, description);
+        if (b) {
             return "Book with " + id + " updating attempt has been failed.";
         }
         return "Book with " + id + " and " + name + " successfully updated.";
@@ -51,8 +51,8 @@ public class BookShellController {
 
     @ShellMethod("deletebook")
     public String deletebook(@ShellOption Integer id) {
-        int i = bookService.deleteBookById(id);
-        if (i == 0) {
+        boolean b = bookService.deleteBookById(id);
+        if (b) {
             return "Book with " + id + " deleting attempt has been failed.";
         }
         return "Book with " + id + " successfully deleted.";
@@ -61,8 +61,8 @@ public class BookShellController {
     @ShellMethod("addbook")
     public String addbook(@ShellOption String name, @ShellOption String description,
                           @ShellOption String authorName, @ShellOption String genreName) {
-        int i = bookService.addBook(name, description);
-        if (i == 0) {
+        boolean b = bookService.addBook(name, description);
+        if (b) {
             return "Book " + name + " adding attempt has been failed.";
         }
         return "Book with " + name + " successfully added.";

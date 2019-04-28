@@ -31,8 +31,8 @@ public class AuthorShellController {
 
     @ShellMethod("newauthor")
     public String newauthor(@ShellOption String name) {
-        int i = authorService.addAuthor(name);
-        if ((i != 1) && (i != 2)) {
+        boolean b = authorService.addAuthor(name);
+        if (b) {
             return "Author " + name + " adding attempt has been failed.";
         }
         return "Author " + name + " successfully added.";
@@ -40,8 +40,8 @@ public class AuthorShellController {
 
     @ShellMethod("updateauthor")
     public String updateauthor(@ShellOption Integer id,@ShellOption String name) {
-        int i = authorService.updateAuthor(id, name);
-        if ((i != 1) && (i != 2)) {
+        boolean b = authorService.updateAuthor(id, name);
+        if (b) {
             return "Author with id: " +id+" and name: " + name + " updating attempt has been failed.";
     }
         return "Author with id: " +id+" and name: " + name + " successfully updated.";
@@ -49,8 +49,8 @@ public class AuthorShellController {
 
     @ShellMethod("deleteauthorbyname")
     public String deleteauthorbyname(@ShellOption String name) {
-        int i = authorService.deleteAuthorByName(name);
-        if (i == 0) {
+        boolean b = authorService.deleteAuthorByName(name);
+        if (b) {
             return "Author " + name + " deleting attempt has been failed.";
         }
         return "Author " + name + " successfully deleted.";
@@ -58,8 +58,8 @@ public class AuthorShellController {
 
     @ShellMethod("deleteauthorbyid")
     public String deleteauthorbyid(@ShellOption Integer id) {
-        int i = authorService.deleteAuthorById(id);
-        if (i == 0) {
+        boolean b = authorService.deleteAuthorById(id);
+        if (b) {
             return "Author with id: " + id + " deleting attempt has been failed.";
         }
         return "Author with id: " + id + " successfully deleted.";

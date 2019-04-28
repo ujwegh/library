@@ -19,21 +19,21 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public Integer addComment(int bookId, String message) {
+    public Boolean addComment(int bookId, String message) {
         Comment comment = new Comment(message);
-        return dao.insert(comment, bookId);
+        return dao.insert(comment, bookId) != 0;
     }
 
     @Override
-    public Integer deleteCommentById(int id, int bookId) {
-        return dao.deleteById(id, bookId);
+    public Boolean deleteCommentById(int id, int bookId) {
+        return dao.deleteById(id, bookId) != 0;
     }
 
     @Override
-    public Integer updateBookComment(int id, int bookId, String message) {
+    public Boolean updateBookComment(int id, int bookId, String message) {
         Comment comment = dao.getById(id, bookId);
         comment.setComment(message);
-        return dao.update(comment, bookId);
+        return dao.update(comment, bookId) != 0;
     }
 
     @Override

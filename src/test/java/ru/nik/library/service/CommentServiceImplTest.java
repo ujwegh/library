@@ -46,8 +46,8 @@ class CommentServiceImplTest {
     @Test
     void addComment() {
         Comment comment = new Comment("новый коментарий");
-        int i = service.addComment(1, comment.getComment());
-        assertEquals(1, i);
+        boolean b = service.addComment(1, comment.getComment());
+        assertTrue(b);
         List<Comment> comments = service.getAllComments(1);
         assertNotNull(comments);
         assertEquals(3, comments.size());
@@ -55,7 +55,8 @@ class CommentServiceImplTest {
 
     @Test
     void deleteCommentById() {
-        int i = service.deleteCommentById(1,1);
+        boolean b = service.deleteCommentById(1,1);
+        assertTrue(b);
         List<Comment> comments = service.getAllComments(1);
         assertEquals(1, comments.size());
         assertThrows(EmptyResultDataAccessException.class, () -> service.getCommentById(1, 1));
@@ -66,7 +67,8 @@ class CommentServiceImplTest {
     void updateBookComment() {
         Comment comment = service.getCommentById(1,1);
         comment.setComment("измененный комент");
-        int i = service.updateBookComment(1, 1, comment.getComment());
+        boolean b = service.updateBookComment(1, 1, comment.getComment());
+        assertTrue(b);
         Comment actual = service.getCommentById(1, 1);
         assertNotNull(actual);
         assertEquals(comment, actual);

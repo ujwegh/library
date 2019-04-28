@@ -5,13 +5,13 @@ import ru.nik.library.domain.Genre;
 import java.util.List;
 
 public interface GenreService {
-    Integer addGenre(String name);
+    Boolean addGenre(String name);
 
-    Integer deleteGenreById(int id);
+    Boolean deleteGenreById(int id);
 
-    Integer deleteGenreByName(String name);
+    Boolean deleteGenreByName(String name);
 
-    Integer updateGenre(int id, String name);
+    Boolean updateGenre(int id, String name);
 
     Genre getGenreByName(String name);
 
