@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,7 +15,7 @@ import java.util.Set;
 @ToString
 @Table(name = "book_authors")
 @Entity
-public class Author{
+public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

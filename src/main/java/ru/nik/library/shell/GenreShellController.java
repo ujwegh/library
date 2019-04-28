@@ -7,9 +7,11 @@ import org.springframework.shell.standard.ShellOption;
 import ru.nik.library.domain.Genre;
 import ru.nik.library.service.GenreService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @ShellComponent
+@Transactional
 public class GenreShellController {
     private final GenreService genreService;
 
@@ -33,25 +35,25 @@ public class GenreShellController {
     @ShellMethod("newgenre")
     public String newgenre(@ShellOption String name) {
         boolean b = genreService.addGenre(name);
-        if (b) {
+        if (!b) {
             return "Genre " + name + "adding attempt has been failed.";
         }
         return "Genre " + name + " successfully added.";
     }
 
-    @ShellMethod("updateauthor")
-    public String updategenre(@ShellOption Integer id,@ShellOption String name) {
+    @ShellMethod("updategenre")
+    public String updategenre(@ShellOption Integer id, @ShellOption String name) {
         boolean b = genreService.updateGenre(id, name);
-        if (b) {
-            return "Genre with " +id+" and " + name + "updating attempt has been failed.";
+        if (!b) {
+            return "Genre with " + id + " and " + name + "updating attempt has been failed.";
         }
-        return "Genre with " +id+" and " + name + " successfully updated.";
+        return "Genre with " + id + " and " + name + " successfully updated.";
     }
 
     @ShellMethod("deletegenrebyname")
     public String deletegenrebyname(@ShellOption String name) {
         boolean b = genreService.deleteGenreByName(name);
-        if (b) {
+        if (!b) {
             return "Genre " + name + " deleting attempt has been failed.";
         }
         return "Genre " + name + " successfully deleted.";
@@ -60,7 +62,7 @@ public class GenreShellController {
     @ShellMethod("deletegenrebyid")
     public String deletegenrebyid(@ShellOption Integer id) {
         boolean b = genreService.deleteGenreById(id);
-        if (b) {
+        if (!b) {
             return "Genre with " + id + " deleting attempt has been failed.";
         }
         return "Genre with " + id + " successfully deleted.";
@@ -69,7 +71,7 @@ public class GenreShellController {
     @ShellMethod("getgenrebyname")
     public String getgenrebyname(@ShellOption String name) {
         Genre genre = genreService.getGenreByName(name);
-        if (genre == null){
+        if (genre == null) {
             return "There is no genres with this name.";
         }
         return genre.toString();
@@ -78,7 +80,7 @@ public class GenreShellController {
     @ShellMethod("getgenrebyid")
     public String getgenrebyid(@ShellOption Integer id) {
         Genre genre = genreService.getGenreById(id);
-        if (genre == null){
+        if (genre == null) {
             return "There is no genres with this name.";
         }
         return genre.toString();

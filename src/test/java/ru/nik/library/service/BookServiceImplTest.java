@@ -72,7 +72,7 @@ class BookServiceImplTest {
 
     @Test
     void updateBookTest() {
-        Book expected = new Book(2,"книга 2", "новое описание");
+        Book expected = new Book(2, "книга 2", "новое описание");
         service.updateBook(expected.getId(), expected.getName(), expected.getDescription());
         Book actual = service.getBookById(2);
         assertNotNull(actual);
@@ -101,7 +101,7 @@ class BookServiceImplTest {
 
     @Test
     void updateBookAuthors() {
-        Book expected = new Book(1,"книга 1", "описание");
+        Book expected = new Book(1, "книга 1", "описание");
         Author one = new Author("Петя");
         Author two = new Author("Кинг");
 
@@ -114,7 +114,7 @@ class BookServiceImplTest {
 
     @Test
     void updateBookGenres() {
-        Book expected = new Book(1,"книга 1", "описание");
+        Book expected = new Book(1, "книга 1", "описание");
         Genre one = new Genre("жанр 1");
         Genre two = new Genre("жанр 2");
 

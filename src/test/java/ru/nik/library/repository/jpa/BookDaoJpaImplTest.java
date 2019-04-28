@@ -103,6 +103,6 @@ class BookDaoJpaImplTest {
         int i = dao.deleteById(1);
         List<Book> books = dao.getAll();
         assertEquals(1, i);
-        assertEquals(1,books.size());
+        assertEquals(1, books.size());
     }
 }

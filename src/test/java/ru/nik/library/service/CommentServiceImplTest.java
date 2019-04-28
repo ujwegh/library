@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest(properties = {
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
@@ -55,7 +56,7 @@ class CommentServiceImplTest {
 
     @Test
     void deleteCommentById() {
-        boolean b = service.deleteCommentById(1,1);
+        boolean b = service.deleteCommentById(1, 1);
         assertTrue(b);
         List<Comment> comments = service.getAllComments(1);
         assertEquals(1, comments.size());
@@ -65,7 +66,7 @@ class CommentServiceImplTest {
 
     @Test
     void updateBookComment() {
-        Comment comment = service.getCommentById(1,1);
+        Comment comment = service.getCommentById(1, 1);
         comment.setComment("измененный комент");
         boolean b = service.updateBookComment(1, 1, comment.getComment());
         assertTrue(b);

@@ -66,7 +66,7 @@ class AuthorServiceImplTest {
     void updateAuthorTest() {
         Author expected = new Author("Пушкин А.С.");
         service.updateAuthor(1, expected.getName());
-        Author actual= service.getAuthorById(1);
+        Author actual = service.getAuthorById(1);
         assertEquals(expected.getName(), actual.getName());
     }
 

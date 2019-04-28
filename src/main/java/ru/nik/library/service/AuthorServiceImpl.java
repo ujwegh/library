@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.nik.library.domain.Author;
 import ru.nik.library.repository.AuthorDao;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
