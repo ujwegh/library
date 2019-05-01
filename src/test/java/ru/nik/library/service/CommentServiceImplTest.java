@@ -60,8 +60,7 @@ class CommentServiceImplTest {
         assertTrue(b);
         List<Comment> comments = service.getAllComments(1);
         assertEquals(1, comments.size());
-        assertThrows(EmptyResultDataAccessException.class, () -> service.getCommentById(1, 1));
-
+        assertNull(service.getCommentById(1,1));
     }
 
     @Test

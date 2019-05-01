@@ -11,10 +11,15 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
+import ru.nik.library.domain.Comment;
+import ru.nik.library.domain.Genre;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,6 +87,14 @@ class BookRepositoryTest {
         Book book = repository.findById(1);
         book.setName("Новая книжка");
         book.setDescription("новое описание");
+        Set<Author> authors = new HashSet<>();
+        authors.add(new Author("Пушкин"));
+        authors.add(new Author("Лермонтов"));
+        book.setAuthors(authors);
+        List<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("вот это хренотаа"));
+        comments.add(new Comment("советую почитать"));
+        book.setComments(comments);
         Book actual = repository.save(book);
         assertNotNull(actual);
         assertEquals(book, actual);

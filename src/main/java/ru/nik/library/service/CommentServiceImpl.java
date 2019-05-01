@@ -2,47 +2,56 @@ package ru.nik.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
-import ru.nik.library.repository.CommentDao;
+import ru.nik.library.repository.datajpa.BookRepository;
+import ru.nik.library.repository.datajpa.CommentRepository;
 
 import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentDao dao;
+    private final CommentRepository repository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public CommentServiceImpl(CommentDao dao) {
-        this.dao = dao;
+    public CommentServiceImpl(CommentRepository repository, BookRepository bookRepository) {
+        this.repository = repository;
+        this.bookRepository = bookRepository;
     }
-
 
     @Override
     public Boolean addComment(int bookId, String message) {
         Comment comment = new Comment(message);
-        return dao.insert(comment, bookId) != 0;
+        Book book = bookRepository.findById(bookId);
+        if (book != null){
+            comment.setBook(book);
+        } else {
+            return false;
+        }
+        return repository.save(comment) != null;
     }
 
     @Override
     public Boolean deleteCommentById(int id, int bookId) {
-        return dao.deleteById(id, bookId) != 0;
+        return repository.deleteByIdAndBook_Id(id, bookId) != 0;
     }
 
     @Override
     public Boolean updateBookComment(int id, int bookId, String message) {
-        Comment comment = dao.getById(id, bookId);
+        Comment comment = repository.findByIdAndBook_Id(id, bookId);
         comment.setComment(message);
-        return dao.update(comment, bookId) != 0;
+        return repository.save(comment) != null;
     }
 
     @Override
     public Comment getCommentById(int id, int bookId) {
-        return dao.getById(id, bookId);
+        return repository.findByIdAndBook_Id(id, bookId);
     }
 
     @Override
     public List<Comment> getAllComments(int bookId) {
-        return dao.getAll(bookId);
+        return repository.findAllByBook_Id(bookId);
     }
 }

@@ -109,7 +109,8 @@ class AuthorRepositoryTest {
 
     @Test
     void deleteByName() {
-        repository.deleteByName("Пушкин");
+        int i = repository.deleteByName("Пушкин");
+        assertEquals(1, i);
         assertNull(repository.findByName("Пушкин"));
     }
 }

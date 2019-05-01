@@ -1,5 +1,6 @@
 package ru.nik.library.repository.datajpa;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import ru.nik.library.domain.Book;
 
@@ -11,8 +12,5 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
 
     Book findById(int id);
 
-    void deleteById(int id);
-
-
-
+    void deleteById(int id) throws EmptyResultDataAccessException;
 }

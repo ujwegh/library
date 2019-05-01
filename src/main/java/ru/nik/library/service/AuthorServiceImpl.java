@@ -1,71 +1,67 @@
 package ru.nik.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.nik.library.domain.Author;
-import ru.nik.library.repository.AuthorDao;
+import ru.nik.library.repository.datajpa.AuthorRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorDao dao;
+    private final AuthorRepository repository;
 
     @Autowired
-    public AuthorServiceImpl(AuthorDao dao) {
-        this.dao = dao;
+    public AuthorServiceImpl(AuthorRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Boolean addAuthor(String name) {
         Author author = new Author(null, name);
-        return dao.insert(author) != 0;
+        return repository.save(author) != null;
     }
 
     @Override
     public Boolean deleteAuthorById(int id) {
-        return dao.deleteById(id) != 0;
+        try {
+            repository.deleteById(id);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 
     @Override
     public Boolean deleteAuthorByName(String name) {
-        return dao.deleteByName(name) != 0;
+        return repository.deleteByName(name) != 0;
     }
 
     @Override
     public Boolean updateAuthor(int id, String name) {
         Author author = new Author(id, name);
-        return dao.update(author) != 0;
+        return repository.save(author) != null;
     }
 
     @Override
     public Author getAuthorByName(String name) {
-        try {
-            return dao.getByName(name);
-        } catch (Exception e) {
-            return null;
-        }
+        return repository.findByName(name);
     }
 
     @Override
     public Author getAuthorById(int id) {
-        try {
-            return dao.getById(id);
-        } catch (Exception e) {
-            return null;
-        }
+        return repository.findById(id);
     }
 
     @Override
     public List<Author> getAllAuthors() {
-        return dao.getAll();
+        return repository.findAll();
     }
 
     @Override
     public List<Author> getAllByNames(String... names) {
-        return dao.getAllByNames(names);
+        return repository.findAllByNameIn(names);
     }
 }

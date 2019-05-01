@@ -109,7 +109,8 @@ class GenreRepositoryTest {
 
     @Test
     void deleteByName() {
-        repository.deleteByName("жанр 1");
+        int i = repository.deleteByName("жанр 1");
+        assertEquals(1, i);
         assertNull(repository.findByName("жанр 1"));
     }
 }

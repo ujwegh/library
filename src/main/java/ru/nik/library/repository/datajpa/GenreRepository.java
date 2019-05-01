@@ -1,11 +1,10 @@
 package ru.nik.library.repository.datajpa;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import ru.nik.library.domain.Genre;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface GenreRepository extends CrudRepository<Genre, Integer> {
@@ -17,7 +16,8 @@ public interface GenreRepository extends CrudRepository<Genre, Integer> {
 
     Genre findById(int id);
 
-    void deleteById(int id);
+    void deleteById(int id) throws EmptyResultDataAccessException;
 
-    void deleteByName(String name);
+    @Transactional
+    int deleteByName(String name);
 }

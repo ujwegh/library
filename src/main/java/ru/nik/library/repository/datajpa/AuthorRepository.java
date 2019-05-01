@@ -1,8 +1,10 @@
 package ru.nik.library.repository.datajpa;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.repository.CrudRepository;
 import ru.nik.library.domain.Author;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface AuthorRepository extends CrudRepository<Author, Integer> {
@@ -15,7 +17,8 @@ public interface AuthorRepository extends CrudRepository<Author, Integer> {
 
     Author findById(int id);
 
-    void deleteById(int id);
+    void deleteById(int id) throws EmptyResultDataAccessException;
 
-    void deleteByName(String name);
+    @Transactional
+    int deleteByName(String name);
 }
