@@ -45,18 +45,18 @@ class GenreDaoJpaImplTest {
     @Test
     void insert() {
         Genre genre = new Genre("учебник");
-        int i = dao.insert(genre);
+        boolean b = dao.insert(genre);
+        assertTrue(b);
         int size = dao.getAll().size();
-        assertEquals(1, i);
         assertEquals(3, size);
     }
 
     @Test
     void update() {
         Genre expected = new Genre(1, "Новый жанр");
-        int i = dao.update(expected);
+        Genre genre = dao.update(expected);
+        assertNotNull(genre);
         Genre actual = dao.getByName(expected.getName());
-        assertEquals(2, i);
         assertEquals(expected.getName(), actual.getName());
     }
 
@@ -91,8 +91,8 @@ class GenreDaoJpaImplTest {
 
     @Test
     void deleteById() {
-        int i = dao.deleteById(1);
-        assertEquals(1, i);
+        boolean b = dao.deleteById(1);
+        assertTrue(b);
         List<Genre> genres = dao.getAll();
         assertNotNull(genres);
         assertEquals(1, genres.size());
@@ -100,8 +100,8 @@ class GenreDaoJpaImplTest {
 
     @Test
     void deleteByName() {
-        int i = dao.deleteByName("учебник");
-        assertEquals(1, i);
+        boolean b = dao.deleteByName("учебник");
+        assertTrue(b);
         List<Genre> genres = dao.getAll();
         assertNotNull(genres);
         assertEquals(1, genres.size());

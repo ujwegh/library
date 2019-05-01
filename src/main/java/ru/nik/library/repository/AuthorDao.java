@@ -5,9 +5,9 @@ import ru.nik.library.domain.Author;
 import java.util.List;
 
 public interface AuthorDao {
-    int insert(Author author);
+    boolean insert(Author author);
 
-    int update(Author author);
+    Author update(Author author);
 
     Author getById(int id);
 
@@ -15,9 +15,9 @@ public interface AuthorDao {
 
     List<Author> getAll();
 
-    int deleteById(int id);
+    boolean deleteById(int id);
 
-    int deleteByName(String name);
+    boolean deleteByName(String name);
 
     List<Author> getAllByNames(String ... names);
 }

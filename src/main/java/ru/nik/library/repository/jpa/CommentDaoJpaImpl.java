@@ -18,22 +18,21 @@ public class CommentDaoJpaImpl implements CommentDao {
 
     @Override
     @Transactional
-    public int insert(Comment comment, int bookId) {
+    public boolean insert(Comment comment, int bookId) {
         comment.setBook(em.getReference(Book.class, bookId));
         try {
             em.persist(comment);
-            return 1;
-        } catch (EntityExistsException e) {
-            return 0;
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
     @Override
     @Transactional
-    public int update(Comment comment, int bookId) {
+    public Comment update(Comment comment, int bookId) {
         comment.setBook(em.getReference(Book.class, bookId));
-        em.merge(comment);
-        return 2;
+        return em.merge(comment);
     }
 
     @Override
@@ -56,10 +55,10 @@ public class CommentDaoJpaImpl implements CommentDao {
 
     @Override
     @Transactional
-    public int deleteById(int id, int bookId) {
+    public boolean deleteById(int id, int bookId) {
         Query query = em.createQuery("delete from Comment a where a.id = :id and a.book.id=:bookId");
         query.setParameter("id", id);
         query.setParameter("bookId", bookId);
-        return query.executeUpdate();
+        return query.executeUpdate() != 0;
     }
 }

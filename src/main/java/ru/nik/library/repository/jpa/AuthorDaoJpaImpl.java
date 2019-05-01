@@ -22,16 +22,19 @@ public class AuthorDaoJpaImpl implements AuthorDao {
 
     @Override
     @Transactional
-    public int insert(Author author) {
-        em.persist(author);
-        return 1;
+    public boolean insert(Author author) {
+        try {
+            em.persist(author);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     @Transactional
-    public int update(Author author) {
-        em.merge(author);
-        return 2;
+    public Author update(Author author) {
+        return em.merge(author);
     }
 
     @Override
@@ -54,18 +57,18 @@ public class AuthorDaoJpaImpl implements AuthorDao {
 
     @Override
     @Transactional
-    public int deleteById(int id) {
+    public boolean deleteById(int id) {
         Query query = em.createQuery("delete from Author a where a.id = :id");
         query.setParameter("id", id);
-        return query.executeUpdate();
+        return query.executeUpdate() != 0;
     }
 
     @Override
     @Transactional
-    public int deleteByName(String name) {
+    public boolean deleteByName(String name) {
         Query query = em.createQuery("delete from Author a where a.name = :name");
         query.setParameter("name", name);
-        return query.executeUpdate();
+        return query.executeUpdate() != 0;
     }
 
     @Override

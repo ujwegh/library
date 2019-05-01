@@ -5,9 +5,9 @@ import ru.nik.library.domain.Genre;
 import java.util.List;
 
 public interface GenreDao {
-    int insert(Genre genre);
+    boolean insert(Genre genre);
 
-    int update(Genre genre);
+    Genre update(Genre genre);
 
     Genre getById(int id);
 
@@ -15,9 +15,9 @@ public interface GenreDao {
 
     List<Genre> getAll();
 
-    int deleteById(int id);
+    boolean deleteById(int id);
 
-    int deleteByName(String name);
+    boolean deleteByName(String name);
 
     List<Genre> getAllByNames(String... names);
 }

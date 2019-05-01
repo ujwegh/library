@@ -50,9 +50,9 @@ class BookDaoJpaImplTest {
         Book book = new Book("новая книжка", "очень интересная");
         book.setAuthors(Set.of(new Author("Пушкин"), new Author("Лермонтов")));
         book.setComments(List.of(new Comment("вот это хренотаа"), new Comment("советую почитать")));
-        int i = dao.insert(book);
+        boolean b = dao.insert(book);
         List<Book> books = dao.getAll();
-        assertEquals(1, i);
+        assertTrue(b);
         assertEquals(3, books.size());
     }
 
@@ -69,7 +69,8 @@ class BookDaoJpaImplTest {
         expected.setComments(list);
         expected.setAuthors(authors);
         expected.setGenres(genres);
-        int i = dao.update(expected);
+        Book book = dao.update(expected);
+        assertNotNull(book);
         Book actual = dao.getById(1);
         System.out.println(actual);
         assertNotNull(actual);
@@ -100,9 +101,9 @@ class BookDaoJpaImplTest {
 
     @Test
     void deleteById() {
-        int i = dao.deleteById(1);
+        boolean b = dao.deleteById(1);
+        assertTrue(b);
         List<Book> books = dao.getAll();
-        assertEquals(1, i);
         assertEquals(1, books.size());
     }
 }

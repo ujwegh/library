@@ -21,16 +21,19 @@ public class GenreDaoJpaImpl implements GenreDao {
 
     @Override
     @Transactional
-    public int insert(Genre genre) {
-        em.persist(genre);
-        return 1;
+    public boolean insert(Genre genre) {
+        try {
+            em.persist(genre);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     @Transactional
-    public int update(Genre genre) {
-        em.merge(genre);
-        return 2;
+    public Genre update(Genre genre) {
+        return em.merge(genre);
     }
 
     @Override
@@ -53,18 +56,18 @@ public class GenreDaoJpaImpl implements GenreDao {
 
     @Override
     @Transactional
-    public int deleteById(int id) {
+    public boolean deleteById(int id) {
         Query query = em.createQuery("delete from Genre a where a.id = :id");
         query.setParameter("id", id);
-        return query.executeUpdate();
+        return query.executeUpdate() != 0;
     }
 
     @Override
     @Transactional
-    public int deleteByName(String name) {
+    public boolean deleteByName(String name) {
         Query query = em.createQuery("delete from Genre a where a.name = :name");
         query.setParameter("name", name);
-        return query.executeUpdate();
+        return query.executeUpdate() != 0;
     }
 
     @Override
