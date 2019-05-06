@@ -13,8 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
-import ru.nik.library.repository.jpa.BookDaoJpaImpl;
-import ru.nik.library.repository.jpa.CommentDaoJpaImpl;
 
 import java.util.List;
 
