@@ -16,12 +16,12 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/webjars/**",
-                "/img/**",
-                "/css/**",
-                "/js/**").addResourceLocations(RESOURCES_LOCATION,
+                "/img/**", "/css/**", "/js/**", "/vendor/**", "/images/**", "/fonts/**").addResourceLocations(RESOURCES_LOCATION,
                 "classpath:/static/img/",
                 "classpath:/static/css/",
-                "classpath:/static/js/");
+                "classpath:/static/images/",
+                "classpath:/static/fonts/",
+                "classpath:/static/vendor/");
     }
 
     /**

@@ -34,14 +34,14 @@ public class Book {
     private List<Comment> comments;
 
     @Lazy
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
     @Lazy
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

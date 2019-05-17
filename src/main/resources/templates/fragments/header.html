@@ -12,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Library project</a>
+            <a class="navbar-brand">Library project</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -20,10 +20,10 @@
                     <a href="#" th:href="@{/}">Home</a>
                 </li>
                 <li th:classappend="${module == 'Authors' ? 'active' : ''}">
-                    <a href="#" th:href="@{/authors}">Tasks</a>
+                    <a href="#" th:href="@{/authors}">Authors</a>
                 </li>
                 <li th:classappend="${module == 'Genres' ? 'active' : ''}">
-                    <a href="#" th:href="@{/genres}">Tasks</a>
+                    <a href="#" th:href="@{/genres}">Genres</a>
                 </li>
 
                 <!--<li th:classappend="${module == 'tasks-ld' ? 'active' : ''}">-->

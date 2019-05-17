@@ -2,15 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Edit person</title>
+    <title>Edit entity</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
     <style type="text/css">
         body {
             padding: 50px;
-        }
-
-        label {
-            display: inline-block;
-            width: 100px;
         }
 
         input:read-only {
@@ -23,25 +30,125 @@
     </style>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}">Header</div>
+<br>
+<br>
+<div th:if="${author != null}" th:object="${author}">
+    <form id="edit-author-form" th:action="@{/authors/update(id=*{id})}" th:method="post" th:align="center">
+        <h1>Author Info:</h1>
 
-<!-- Person edition -->
-<!--<form id="edit-form" th:action="@{/edit(id=${person.id})}" th:method="post" action="edit.html">-->
-    <!--<h1>Person Info:</h1>-->
+        <div>
+            <label for="id-author-input">ID:</label>
+            <!--<input id="id-input" type="text" readonly="readonly" th:value="${author.id}" value="1"/>-->
+            <input id="id-author-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   placeholder="Author's name" aria-describedby="basic-addon2">
+        </div>
 
-    <!--<div class="row">-->
-        <!--<label for="id-input">ID:</label>-->
-        <!--<input id="id-input" type="text" readonly="readonly" th:value="${person.id}" value="1"/>-->
-    <!--</div>-->
+        <div>
+            <label for="holder-author-input">Name:</label>
+            <!--<input id="holder-input" name="namr" type="text" th:value="${author.name}" value="John Doe"/>-->
+            <input id="holder-author-input" name="name" type="text" th:value="*{name}" value="John Doe"
+                   class="form-control"
+                   placeholder="Author's name" aria-describedby="basic-addon2">
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<div th:if="${genre != null}" th:object="${genre}">
+    <form id="edit-genre-form" th:action="@{/genres/update(id=*{id})}" th:method="post" th:align="center">
+        <h1>Author Info:</h1>
 
-    <!--<div class="row">-->
-        <!--<label for="holder-input">Name:</label>-->
-        <!--<input id="holder-input" name="namr" type="text" th:value="${person.name}" value="John Doe"/>-->
-    <!--</div>-->
+        <div>
+            <label for="id-genre-input">ID:</label>
+            <!--<input id="id-input" type="text" readonly="readonly" th:value="${author.id}" value="1"/>-->
+            <input id="id-genre-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   aria-describedby="basic-addon2">
+        </div>
 
-    <!--<div class="row">-->
-        <!--<button type="submit">Save</button>-->
-    <!--</div>-->
-<!--</form>-->
+        <div>
+            <label for="holder-genre-input">Name:</label>
+            <!--<input id="holder-input" name="namr" type="text" th:value="${author.name}" value="John Doe"/>-->
+            <input id="holder-genre-input" name="name" type="text" th:value="*{name}" value="John Doe"
+                   class="form-control"
+                   placeholder="Genre's name" aria-describedby="basic-addon2">
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<div th:if="${book != null}" th:object="${book}">
+    <form id="edit-book-form" th:action="@{/books/update(id=*{id})}" th:method="post" th:align="center">
+        <h1>Book Info:</h1>
+
+        <div>
+            <label for="id-book-input">ID:</label>
+            <input id="id-book-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   aria-describedby="basic-addon2">
+        </div>
+
+        <div>
+            <label for="name-book-input">Name:</label>
+            <input id="name-book-input" name="name" type="text" th:value="*{name}" value="John Doe"
+                   class="form-control"
+                   placeholder="Book's name" aria-describedby="basic-addon2">
+        </div>
+
+        <div>
+            <label for="description-book-input">Description:</label>
+            <input id="description-book-input" name="description" type="text" th:value="*{description}" value="John Doe"
+                   class="form-control"
+                   placeholder="Book's description" aria-describedby="basic-addon2">
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+    <form id="edit-authors" th:action="@{/books/update/authors(id=*{id})}" th:method="post" th:align="center" name="authorss">
+        <h1>Book Info:</h1>
+
+        <div>
+            <label for="name-input0">Author:</label>
+            <input id="name-input0" type="text" name="author0" th:value="*{authors}" value="1" class="form-control"
+                   aria-describedby="basic-addon2">
+        </div>
+        <div>
+            <label for="name-input1">Author:</label>
+            <input id="name-input1" type="text" name="author1" th:value="*{authors}" value="1" class="form-control"
+                   aria-describedby="basic-addon2">
+        </div>
+        <div>
+            <label for="name-input2">Author:</label>
+            <input id="name-input2" type="text" name="author2" th:value="*{authors}" value="1" class="form-control"
+                   aria-describedby="basic-addon2">
+        </div>
+        <div>
+            <label for="name-input3">Author:</label>
+            <input id="name-input3" type="text" name="author3" th:value="*{authors}" value="1" class="form-control"
+                   aria-describedby="basic-addon2">
+        </div>
+        <div>
+            <label for="name-input4">Author:</label>
+            <input id="name-input4" type="text" name="author4" th:value="*{authors}" value="1" class="form-control"
+                   aria-describedby="basic-addon2">
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+
+
+    </form>
+
+
+</div>
 
 </body>
 </html>

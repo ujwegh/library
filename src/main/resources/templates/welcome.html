@@ -4,22 +4,89 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link  rel="stylesheet" media="screen" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
-    <link  media="screen" type="text/css" th:href="@{/css/core.css}" />
-    <script  th:src="@{/static/js/jquery.min.js}"></script>
-    <script  th:src="@{/static/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}">Header</div>
 
 <br>
+<H1 align="center">Welcome to the library!</H1>
 <br>
 <br>
-    <H1 align="center">Welcome to the library!</H1>
+<form th:align="center" th:action="@{/books}" th:method="POST">
+    <label>
+        <input type="text" name="name" th:value="*{name}" class="form-control" placeholder="Book's name"
+               aria-label="Recipient's username" aria-describedby="basic-addon2" th:align="center">
+    </label>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
 
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100 ver1 m-b-110">
+                <table align="center" class="authors">
+                    <thead>
+                    <tr class="row100 head">
+                        <th class="column100">ID</th>
+                        <th class="column100">Name</th>
+                        <th class="column100">Description</th>
+                        <th class="column100">Authors</th>
+                        <th class="column100">Genres</th>
+                        <th class="column100">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--/*@thymesVar id="authors" type="ru.nik.library.domain.Book"*/-->
+                    <tr th:each="book : ${books}" th:object="${book}" class="row100">
+                        <td th:text="*{id}" class="column100">1</td>
+                        <td th:text="*{name}" class="column100">John Doe</td>
+                        <td th:text="*{description}" class="column100">Desc-on</td>
 
-
-
+                        <!--<td class="column100">-->
+                        <!--<div th:if="${book.authors.size() > 0}">-->
+                        <!--<div th:each="author : ${book.authors}">-->
+                        <!--<p th:text="author.name"></p>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div th:unless="${book.authors.size() > 0}">-->
+                        <!--<li th:text="No authors"></li>-->
+                        <!--</div>-->
+                        <!--</td>-->
+                        <td
+                            th:text="*{authors.size() != 0} ? *{authors.size()} + ', ': 'No authors'" class="column100">John Doe
+                        </td>
+                        <td
+                            th:text="*{genres.size() != 0} ? *{genres.size()} + ', ' : 'No genres'" class="column100">John Doe
+                        </td>
+                        <td>
+                            <a th:href="@{/books/edit(id=${book.id})}" class="column100 btn btn-primary"
+                               href="edit.html">Edit</a>
+                            <a th:href="@{/books/view(id=${book.id})}" class="column100 btn btn-primary"
+                               href="edit.html">View</a>
+                            <form th:action="@{/books/delete(id=${book.id})}" th:method="POST"
+                                  style="float: right">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit" id="submitButton1" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </body>
