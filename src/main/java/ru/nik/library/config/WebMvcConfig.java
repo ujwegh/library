@@ -19,6 +19,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 "/img/**", "/css/**", "/js/**", "/vendor/**", "/images/**", "/fonts/**").addResourceLocations(RESOURCES_LOCATION,
                 "classpath:/static/img/",
                 "classpath:/static/css/",
+                "classpath:/static/js/",
                 "classpath:/static/images/",
                 "classpath:/static/fonts/",
                 "classpath:/static/vendor/");

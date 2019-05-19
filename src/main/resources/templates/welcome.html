@@ -13,8 +13,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
 
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:href="@{/js/jquery.min.js}"></script>
+    <script th:href="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}">Header</div>
@@ -39,8 +39,8 @@
                     <thead>
                     <tr class="row100 head">
                         <th class="column100">ID</th>
-                        <th class="column100">Name</th>
-                        <th class="column100">Description</th>
+                        <th class="column100">Title</th>
+                        <!--<th class="column100">Description</th>-->
                         <th class="column100">Authors</th>
                         <th class="column100">Genres</th>
                         <th class="column100">Action</th>
@@ -48,10 +48,10 @@
                     </thead>
                     <tbody>
                     <!--/*@thymesVar id="authors" type="ru.nik.library.domain.Book"*/-->
-                    <tr th:each="book : ${books}" th:object="${book}" class="row100">
+                    <tr th:each="book, itemStat : ${books}" th:object="${book}" class="row100">
                         <td th:text="*{id}" class="column100">1</td>
                         <td th:text="*{name}" class="column100">John Doe</td>
-                        <td th:text="*{description}" class="column100">Desc-on</td>
+                        <!--<td th:text="*{description}" class="column100">Desc-on</td>-->
 
                         <!--<td class="column100">-->
                         <!--<div th:if="${book.authors.size() > 0}">-->

@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Author;
 
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@PropertySource("classpath:application-test.properties")
+@TestPropertySource("classpath:application-test.properties")
 @ContextConfiguration(classes = AuthorRepository.class)
 @EnableAutoConfiguration
 @EntityScan(basePackages = "ru.nik.library.domain")

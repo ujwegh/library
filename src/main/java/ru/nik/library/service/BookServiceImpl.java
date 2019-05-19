@@ -70,6 +70,10 @@ public class BookServiceImpl implements BookService {
             sett.addAll(authorSet);
             sett.addAll(authorList);
 
+            System.out.println("--------------------");
+            sett.forEach(author -> System.out.println(author.getName()));
+
+
             Set<Author> bookAuthors = book.getAuthors();
             bookAuthors.addAll(sett);
             book.setAuthors(bookAuthors);

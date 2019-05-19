@@ -5,13 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.service.BookService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
+
+import static ru.nik.library.utils.Util.getAuthorNames;
 
 
 @Controller
@@ -37,9 +42,15 @@ public class BookController {
     public String edit(@RequestParam("id") int id, Model model) {
         log.info("Edit book: " + id);
         Book book = service.getBookById(id);
+        String authorNames = null;
+        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
+            authorNames = getAuthorNames(book.getAuthors());
+        }
+        model.addAttribute("authors", authorNames);
         model.addAttribute("book", book);
         return "/edit";
     }
+
 
     @PostMapping("/books/delete")
     public String delete(@RequestParam("id") int id, Model model) {
@@ -70,15 +81,14 @@ public class BookController {
     }
 
     @PostMapping("/books/update/authors")
-    public String updateBookAuthors(@RequestParam("id") int id, @RequestParam("authorss") String str,
-                                    ModelMap modelMap, Model model) {
-        log.info("Update authors of book : id = " + id);
+    public String updateBookAuthors(@RequestParam("id") int id,
+                                    @ModelAttribute("authors") String authors, Model model) {
+        log.info("Update authors of book : id = " + id + ", authors = " + authors);
 
-        System.out.println(str);
-        String[] authors;
-        modelMap.keySet().forEach(System.out::println);
-
-
+        System.out.println(authors);
+        String[] authorNames = authors.split(", ");
+        System.out.println(Arrays.toString(authorNames));
+        service.updateBookAuthors(id, authorNames);
 
         List<Book> books = service.getAllBooks();
         model.addAttribute("books", books);
