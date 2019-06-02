@@ -10,13 +10,12 @@ import ru.nik.library.domain.Book;
 import ru.nik.library.service.BookService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 import static ru.nik.library.utils.Util.getAuthorNames;
+import static ru.nik.library.utils.Util.getGenreNames;
+import static ru.nik.library.utils.Util.sortBooks;
 
 
 @Controller
@@ -33,8 +32,7 @@ public class BookController {
     @GetMapping("/")
     String index(Model model) {
         log.info("Get all books");
-        List<Book> books = service.getAllBooks();
-        model.addAttribute("books", books);
+        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "welcome";
     }
 
@@ -43,12 +41,35 @@ public class BookController {
         log.info("Edit book: " + id);
         Book book = service.getBookById(id);
         String authorNames = null;
+        String genreNames = null;
         if (book.getAuthors() != null && book.getAuthors().size() > 0) {
             authorNames = getAuthorNames(book.getAuthors());
         }
+        if (book.getGenres() != null && book.getGenres().size() > 0) {
+            genreNames = getGenreNames(book.getGenres());
+        }
         model.addAttribute("authors", authorNames);
+        model.addAttribute("genres", genreNames);
         model.addAttribute("book", book);
         return "/edit";
+    }
+
+    @GetMapping("/books/view")
+    public String view(@RequestParam("id") int id, Model model) {
+        log.info("View book: " + id);
+        Book book = service.getBookById(id);
+        String authorNames = null;
+        String genreNames = null;
+        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
+            authorNames = getAuthorNames(book.getAuthors());
+        }
+        if (book.getGenres() != null && book.getGenres().size() > 0) {
+            genreNames = getGenreNames(book.getGenres());
+        }
+        model.addAttribute("authors", authorNames);
+        model.addAttribute("genres", genreNames);
+        model.addAttribute("book", book);
+        return "/viewbook";
     }
 
 
@@ -56,8 +77,7 @@ public class BookController {
     public String delete(@RequestParam("id") int id, Model model) {
         log.info("Delete book: " + id);
         service.deleteBookById(id);
-        List<Book> books = service.getAllBooks();
-        model.addAttribute("books", books);
+        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "welcome";
     }
 
@@ -65,8 +85,7 @@ public class BookController {
     public String addBook(@ModelAttribute("name") String name, @ModelAttribute("description") String description, Model model) {
         log.info("Add book: name =" + name + ", description = " + description);
         service.addBook(name, description);
-        List<Book> authors = service.getAllBooks();
-        model.addAttribute("books", authors);
+        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "welcome";
     }
 
@@ -75,8 +94,7 @@ public class BookController {
                              @ModelAttribute("description") String description, Model model) {
         log.info("Update book: id = " + id + ", name = " + name + ", description = " + description);
         service.updateBook(id, name, description);
-        List<Book> books = service.getAllBooks();
-        model.addAttribute("books", books);
+        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "redirect:/";
     }
 
@@ -85,13 +103,20 @@ public class BookController {
                                     @ModelAttribute("authors") String authors, Model model) {
         log.info("Update authors of book : id = " + id + ", authors = " + authors);
 
-        System.out.println(authors);
         String[] authorNames = authors.split(", ");
-        System.out.println(Arrays.toString(authorNames));
         service.updateBookAuthors(id, authorNames);
+        model.addAttribute("books", sortBooks(service.getAllBooks()));
+        return "redirect:/";
+    }
 
-        List<Book> books = service.getAllBooks();
-        model.addAttribute("books", books);
+    @PostMapping("/books/update/genres")
+    public String updateBookGenres(@RequestParam("id") int id,
+                                   @ModelAttribute("genres") String genres, Model model) {
+        log.info("Update genres of book : id = " + id + ", genres = " + genres);
+
+        String[] genreNames = genres.split(", ");
+        service.updateBookGenres(id, genreNames);
+        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "redirect:/";
     }
 

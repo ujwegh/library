@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Boolean deleteBookById(int id) {
-        try{
+        try {
             repository.deleteById(id);
             return true;
         } catch (EmptyResultDataAccessException e) {
@@ -62,21 +62,20 @@ public class BookServiceImpl implements BookService {
         Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
         Book book = repository.findById(bookId);
 
+        Set<Author> toAdd = new HashSet<>();
+        Set<Author> toDelete = new HashSet<>();
         if (book != null) {
             List<Author> authorList = authorService.getAllByNames(authors);
+            authorSet.forEach(a -> authorList.stream()
+                    .filter(dbAuthor -> a.getName().equals(dbAuthor.getName()))
+                    .forEachOrdered(dbAuthor -> {
+                        toDelete.add(a);
+                        toAdd.add(dbAuthor);
+                    }));
+            authorSet.removeAll(toDelete);
+            authorSet.addAll(toAdd);
 
-            Set<Author> sett = new TreeSet<>(Comparator.comparing(Author::getName));
-
-            sett.addAll(authorSet);
-            sett.addAll(authorList);
-
-            System.out.println("--------------------");
-            sett.forEach(author -> System.out.println(author.getName()));
-
-
-            Set<Author> bookAuthors = book.getAuthors();
-            bookAuthors.addAll(sett);
-            book.setAuthors(bookAuthors);
+            book.setAuthors(authorSet);
             return repository.save(book) != null;
         }
         return null;
@@ -84,20 +83,24 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Boolean updateBookGenres(int bookId, String... genres) {
-        Set<Genre> authorSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
+        Set<Genre> genreSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
         Book book = repository.findById(bookId);
 
+        Set<Genre> toAdd = new HashSet<>();
+        Set<Genre> toDelete = new HashSet<>();
         if (book != null) {
             List<Genre> genreList = genreService.getAllByNames(genres);
 
-            Set<Genre> sett = new TreeSet<>(Comparator.comparing(Genre::getName));
+            genreSet.forEach(a -> genreList.stream()
+                    .filter(dbGenre -> a.getName().equals(dbGenre.getName()))
+                    .forEachOrdered(dbGenre -> {
+                        toDelete.add(a);
+                        toAdd.add(dbGenre);
+                    }));
+            genreSet.removeAll(toDelete);
+            genreSet.addAll(toAdd);
 
-            sett.addAll(authorSet);
-            sett.addAll(genreList);
-
-            Set<Genre> bookGenres = book.getGenres();
-            bookGenres.addAll(sett);
-            book.setGenres(bookGenres);
+            book.setGenres(genreSet);
             return repository.save(book) != null;
         }
         return null;

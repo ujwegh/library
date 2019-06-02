@@ -4,7 +4,6 @@
     <title>List of all books</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
@@ -13,22 +12,11 @@
     <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
-
-    <!--===============================================================================================-->
-    <!--<script th:src="@{/js/jquery.min.js}"></script>-->
-    <!--<script th:src="@{/js/bootstrap.min.js}"></script>-->
-    <!--===============================================================================================-->
-    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">-->
-    <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">-->
-    <!--<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css">-->
-
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}">Header</div>
 <br>
-<!--=================================authors=================================-->
-<!--===============================================================================================-->
+
 <div th:if="${authors != null}">
     <h1 align="center">Authors</h1>
     <br>
@@ -48,21 +36,19 @@
                     <table align="center" class="authors">
                         <thead>
                         <tr class="row100 head">
-                            <th class="column100">ID</th>
+                            <th class="column101">№</th>
                             <th class="column100">Name</th>
                             <th class="column100">Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <!--/*@thymesVar id="authors" type="ru.nik.library.domain.Author"*/-->
-                        <tr th:each="author : ${authors}" th:object="${author}" class="row100">
-                            <td th:text="*{id}" class="column100">1</td>
+                        <tr th:each="author, itemStat : ${authors}" th:object="${author}" class="row100">
+                            <td th:text="${itemStat.index}" class="column101">1</td>
                             <td th:text="*{name}" class="column100">John Doe</td>
                             <td>
                                 <a th:href="@{/authors/edit(id=*{id})}" class="column100 btn btn-primary"
-                                   href="edit.html">Edit</a>
-                                <form th:action="@{/authors/delete(id=*{id})}" th:method="POST"
-                                      style="float: right">
+                                   href="edit.html" style="float: left">Edit</a>
+                                <form th:action="@{/authors/delete(id=*{id})}" th:method="POST">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <button type="submit" id="submitButton1" class="btn btn-danger">Delete</button>
                                 </form>
@@ -76,8 +62,6 @@
     </div>
 </div>
 
-<!--=================================genres=================================-->
-<!--===============================================================================================-->
 <div th:if="${genres != null}">
     <h1 align="center">Genres</h1>
     <br>
@@ -97,21 +81,19 @@
                     <table align="center" class="authors">
                         <thead>
                         <tr class="row100 head">
-                            <th class="column100">ID</th>
+                            <th class="column101">№</th>
                             <th class="column100">Name</th>
                             <th class="column100">Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <!--/*@thymesVar id="genres" type="ru.nik.library.domain.Genre"*/-->
-                        <tr th:each="genre : ${genres}" th:object="${genre}" class="row100">
-                            <td th:text="*{id}" class="column100">1</td>
+                        <tr th:each="genre, itemStat : ${genres}" th:object="${genre}" class="row100">
+                            <td th:text="${itemStat.index}" class="column101">1</td>
                             <td th:text="*{name}" class="column100">John Doe</td>
                             <td>
                                 <a th:href="@{/genres/edit(id=*{id})}" class="column100 btn btn-primary"
-                                   href="edit.html">Edit</a>
-                                <form th:action="@{/genres/delete(id=*{id})}" th:method="POST"
-                                      style="float: right">
+                                   href="edit.html" style="float: left">Edit</a>
+                                <form th:action="@{/genres/delete(id=*{id})}" th:method="POST">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <button type="submit" id="submitButton2" class="btn btn-danger">Delete</button>
                                 </form>

@@ -34,14 +34,14 @@ public class Book {
     private List<Comment> comments;
 
     @Lazy
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
     @Lazy
-    @ManyToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
@@ -60,6 +60,24 @@ public class Book {
 
     public boolean isNew() {
         return getId() == null;
+    }
+
+    public String getAuthorsNames() {
+        StringBuilder builder = new StringBuilder();
+        if (!authors.isEmpty()) {
+            authors.forEach(a -> builder.append(a.getName()).append(", "));
+            return builder.toString().substring(0, builder.toString().length() - 2);
+        }
+        return "";
+    }
+
+    public String getGenresNames() {
+        StringBuilder builder = new StringBuilder();
+        if (!genres.isEmpty()) {
+            genres.forEach(a -> builder.append(a.getName()).append(", "));
+            return builder.toString().substring(0, builder.toString().length() - 2);
+        }
+        return "";
     }
 
     @Override

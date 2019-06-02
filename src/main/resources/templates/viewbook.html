@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>View book</title>
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
@@ -16,10 +16,53 @@
 <div th:replace="~{fragments/header :: header}">Header</div>
 <br>
 <br>
+<div th:object="${book}" th:align="center">
+    <h1>Book Info:</h1>
 
+    <div>
+        <label for="id-book-input">ID:</label>
+        <input id="id-book-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+               aria-describedby="basic-addon2" style="margin: auto; width: auto">
+    </div>
 
+    <div>
+        <label for="name-book-input">Name:</label>
+        <input id="name-book-input" name="name" type="text" readonly="readonly" th:value="*{name}" value="John Doe"
+               class="form-control"
+               placeholder="Book's name" aria-describedby="basic-addon2" style="margin: auto; width: auto">
+    </div>
 
+    <div>
+        <label for="description-book-input">Description:</label>
+        <textarea id="description-book-input" name="description" readonly="readonly" th:text="*{description}" text="John Doe"
+                  class="form-control"
+                  placeholder="Book's description" aria-describedby="basic-addon2"
+                  style="margin: auto; width: 250px; height: 150px"></textarea>
+    </div>
+    <div>
+        <label for="author-book-input">Authors:</label>
+        <textarea id="author-book-input" name="author" readonly="readonly" th:text="${book.getAuthorsNames()}" text="John Doe"
+                  class="form-control"
+                  placeholder="Book's authors" aria-describedby="basic-addon2"
+                  style="margin: auto; width: 250px; height: 50px"></textarea>
+    </div>
+    <div>
+        <label for="genre-book-input">Genres:</label>
+        <textarea id="genre-book-input" name="genre" readonly="readonly" th:text="${book.getGenresNames()}" text="John Doe"
+                  class="form-control"
+                  placeholder="Book's genres" aria-describedby="basic-addon2"
+                  style="margin: auto; width: 250px; height: 50px"></textarea>
+    </div>
+    <br>
+    <!--<form id="edit-book-comments-form" th:href="@{/comments(bookId=*{id})}" th:align="center">-->
+        <!--<div>-->
+            <!--<button type="submit" class="btn btn-primary">View comments</button>-->
+        <!--</div>-->
+    <!--</form>-->
+    <a th:href="@{/comments(bookId=*{id})}" class="btn btn-primary"
+       href="comments.html">View comments</a>
 
+</div>
 
 </body>
 </html>

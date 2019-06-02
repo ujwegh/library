@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Edit entity</title>
+    <title>Edit</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -83,6 +83,34 @@
     </form>
 </div>
 
+<div th:if="${comment != null}" th:object="${comment}">
+    <form id="edit-comment-form" th:action="@{/comments/update(id=*{id}, bookId=*{book.id})}" th:method="post" th:align="center">
+        <h1>Author Info:</h1>
+
+        <div>
+            <label for="id-comment-input">ID:</label>
+            <input id="id-comment-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+        <div>
+            <label for="book-id-comment-input">Book ID:</label>
+            <input id="book-id-comment-input" type="text" readonly="readonly" th:value="*{book.id}" value="1" class="form-control"
+                   aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+
+        <div>
+            <label for="holder-comment-input">Name:</label>
+            <input id="holder-comment-input" name="comment" type="text" th:value="*{comment}" value="John Doe"
+                   class="form-control"
+                   placeholder="Genre's name" aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
 <div th:if="${book != null}" th:object="${book}">
     <form id="edit-book-form" th:action="@{/books/update(id=*{id})}" th:method="post" th:align="center">
         <h1>Book Info:</h1>
@@ -113,29 +141,23 @@
         </div>
     </form>
 
-    <!--<div class="container" style="margin: auto">-->
-        <!--<div class="row" style="margin: auto; width: 250px;">-->
-            <!--<input type="hidden" name="count" value="1" />-->
-            <!--<div class="control-group" id="fields">-->
-                <!--<label class="control-label" for="field1">Nice Multiple Form Fields</label>-->
-                <!--<div class="controls" id="profs">-->
-                    <!--<form class="input-append">-->
-                        <!--<div id="field"><input autocomplete="off" class="form-control" id="field1" name="prof1" type="text" placeholder="Type something" data-items="8"/><button id="b1" class="btn add-more" type="button">+</button></div>-->
-                    <!--</form>-->
-                    <!--<br>-->
-                    <!--<small>Press + to add another form field :)</small>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-
     <form id="edit-book-authors-form" th:action="@{/books/update/authors(id=*{id})}" th:method="post" th:align="center">
         <div>
             <label for="id-book-authors-input">Book authors:</label>
             <input id="id-book-authors-input" type="text" th:value="${authors != null}? ${authors} : ''" value="1" class="form-control"
                    name="authors" aria-describedby="basic-addon2" style="margin: auto; width: 300px">
         </div>
-        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+    <form id="edit-book-genres-form" th:action="@{/books/update/genres(id=*{id})}" th:method="post" th:align="center">
+        <div>
+            <label for="id-book-genres-input">Book genres:</label>
+            <input id="id-book-genres-input" type="text" th:value="${genres != null}? ${genres} : ''" value="1" class="form-control"
+                   name="genres" aria-describedby="basic-addon2" style="margin: auto; width: 300px">
+        </div>
         <div>
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
