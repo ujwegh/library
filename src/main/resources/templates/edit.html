@@ -84,7 +84,7 @@
 </div>
 
 <div th:if="${comment != null}" th:object="${comment}">
-    <form id="edit-comment-form" th:action="@{/comments/update(id=*{id}, bookId=*{book.id})}" th:method="post" th:align="center">
+    <form id="edit-comment-form" th:action="@{/comments/update(id=*{id}, bookId=${bookId})}" th:method="post" th:align="center">
         <h1>Author Info:</h1>
 
         <div>
@@ -94,7 +94,7 @@
         </div>
         <div>
             <label for="book-id-comment-input">Book ID:</label>
-            <input id="book-id-comment-input" type="text" readonly="readonly" th:value="*{book.id}" value="1" class="form-control"
+            <input id="book-id-comment-input" type="text" readonly="readonly" th:value="${bookId}" value="1" class="form-control"
                    aria-describedby="basic-addon2" style="margin: auto; width: auto">
         </div>
 

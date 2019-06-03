@@ -25,7 +25,7 @@ public class GenreController {
     }
 
     @GetMapping("/genres")
-    public String getAuthors(Model model) {
+    public String getGenres(Model model) {
         log.info("Get all genres");
         List<Genre> genres = service.getAllGenres();
         model.addAttribute("genres", genres);
