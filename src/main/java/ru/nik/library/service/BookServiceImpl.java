@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Genre;
-import ru.nik.library.repository.BookDao;
 import ru.nik.library.repository.datajpa.BookRepository;
 
 import java.util.*;

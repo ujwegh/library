@@ -1,5 +1,6 @@
 package ru.nik.library.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,11 +13,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Table(name = "book_authors")
 @Entity
+@Data
 public class Author {
 
     @Id

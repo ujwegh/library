@@ -1,5 +1,6 @@
 package ru.nik.library.repository.datajpa;
 
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -35,12 +36,15 @@ class BookRepositoryTest {
     @Autowired
     private BookRepository repository;
 
+    @Autowired
+    private EntityManager manager;
+
     @BeforeEach
     public void init() {
         Book one = new Book("книга", "интересная");
         Book two = new Book("журнал", "новый");
-        repository.save(one);
-        repository.save(two);
+        manager.persist(one);
+        manager.persist(two);
     }
 
 

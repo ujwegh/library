@@ -59,7 +59,7 @@
             <!--<button type="submit" class="btn btn-primary">View comments</button>-->
         <!--</div>-->
     <!--</form>-->
-    <a th:href="@{/comments(bookId=*{id})}" class="btn btn-primary"
+    <a th:href="@{'/comments/' + *{id}}" class="btn btn-primary"
        href="comments.html">View comments</a>
 
 </div>

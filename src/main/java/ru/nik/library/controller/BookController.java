@@ -36,8 +36,8 @@ public class BookController {
         return "welcome";
     }
 
-    @GetMapping("/books/edit")
-    public String edit(@RequestParam("id") int id, Model model) {
+    @GetMapping("/books/edit/{id}")
+    public String edit(@PathVariable("id") int id, Model model) {
         log.info("Edit book: " + id);
         Book book = service.getBookById(id);
         String authorNames = null;
@@ -54,8 +54,8 @@ public class BookController {
         return "/edit";
     }
 
-    @GetMapping("/books/view")
-    public String view(@RequestParam("id") int id, Model model) {
+    @GetMapping("/books/view/{id}")
+    public String view(@PathVariable("id") int id, Model model) {
         log.info("View book: " + id);
         Book book = service.getBookById(id);
         String authorNames = null;
@@ -78,45 +78,42 @@ public class BookController {
         log.info("Delete book: " + id);
         service.deleteBookById(id);
         model.addAttribute("books", sortBooks(service.getAllBooks()));
-        return "welcome";
+        return "redirect:/";
     }
 
     @PostMapping("/books")
-    public String addBook(@ModelAttribute("name") String name, @ModelAttribute("description") String description, Model model) {
+    public String addBook(@ModelAttribute("name") String name,
+        @ModelAttribute("description") String description) {
         log.info("Add book: name =" + name + ", description = " + description);
         service.addBook(name, description);
-        model.addAttribute("books", sortBooks(service.getAllBooks()));
-        return "welcome";
+        return "redirect:/";
     }
 
     @PostMapping("/books/update")
     public String updateBook(@RequestParam("id") int id, @ModelAttribute("name") String name,
-                             @ModelAttribute("description") String description, Model model) {
+        @ModelAttribute("description") String description) {
         log.info("Update book: id = " + id + ", name = " + name + ", description = " + description);
         service.updateBook(id, name, description);
-        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "redirect:/";
     }
 
     @PostMapping("/books/update/authors")
     public String updateBookAuthors(@RequestParam("id") int id,
-                                    @ModelAttribute("authors") String authors, Model model) {
+        @ModelAttribute("authors") String authors) {
         log.info("Update authors of book : id = " + id + ", authors = " + authors);
 
         String[] authorNames = authors.split(", ");
         service.updateBookAuthors(id, authorNames);
-        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "redirect:/";
     }
 
     @PostMapping("/books/update/genres")
     public String updateBookGenres(@RequestParam("id") int id,
-                                   @ModelAttribute("genres") String genres, Model model) {
+        @ModelAttribute("genres") String genres) {
         log.info("Update genres of book : id = " + id + ", genres = " + genres);
 
         String[] genreNames = genres.split(", ");
         service.updateBookGenres(id, genreNames);
-        model.addAttribute("books", sortBooks(service.getAllBooks()));
         return "redirect:/";
     }
 

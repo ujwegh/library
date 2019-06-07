@@ -56,9 +56,9 @@
                             class="column100">John Doe
                         </td>
                         <td>
-                            <a th:href="@{/books/edit(id=${book.id})}" class="column100 btn btn-primary"
+                            <a th:href="@{'/books/edit/'+ *{id}}" class="column100 btn btn-primary"
                                href="edit.html">Edit</a>
-                            <a th:href="@{/books/view(id=${book.id})}" class="column100 btn btn-primary"
+                            <a th:href="@{'/books/view/' + *{id}}" class="column100 btn btn-primary"
                                href="edit.html">View</a>
                             <form th:action="@{/books/delete(id=${book.id})}" th:method="POST">
                                 <input type="hidden" name="_method" value="delete"/>

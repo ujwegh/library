@@ -1,5 +1,6 @@
 package ru.nik.library.repository.datajpa;
 
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -31,12 +32,15 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository repository;
 
+    @Autowired
+    private EntityManager manager;
+
     @BeforeEach
     public void init() {
         Author one = new Author("Пушкин");
         Author two = new Author("Кинг");
-        repository.save(one);
-        repository.save(two);
+        manager.persist(one);
+        manager.persist(two);
     }
 
     @Test

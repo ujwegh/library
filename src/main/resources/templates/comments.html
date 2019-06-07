@@ -24,7 +24,7 @@
     <h1>Book comments</h1>
     <br>
     <br>
-    <form th:align="center" th:action="@{/comments(bookId=${bookId})}" th:method="POST">
+    <form th:align="center" th:action="@{'/comments/' + ${bookId}}" th:method="POST">
         <label>
             <textarea id="comment-book-input" name="comment" th:text="${comment}" text="John Doe"
                       class="form-control"
@@ -51,9 +51,9 @@
                             <td th:text="${itemStat.index}" class="column101">1</td>
                             <td th:text="*{comment}" class="column100">John Doe</td>
                             <td>
-                                <a th:href="@{/comments/edit(id=*{id}, bookId=${bookId})}" class="column100 btn btn-primary"
+                                <a th:href="@{'/comments/'+ ${bookId} + '/edit/' + *{id}}" class="column100 btn btn-primary"
                                    href="edit.html" style="float: left">Edit</a>
-                                <form th:action="@{/comments/delete(id=*{id}, bookId=${bookId})}" th:method="POST">
+                                <form th:action="@{'/comments/' + ${bookId} + '/delete/' + *{id}}" th:method="POST">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <button type="submit" id="submitButton1" class="btn btn-danger">Delete</button>
                                 </form>

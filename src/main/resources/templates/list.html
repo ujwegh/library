@@ -46,7 +46,7 @@
                             <td th:text="${itemStat.index}" class="column101">1</td>
                             <td th:text="*{name}" class="column100">John Doe</td>
                             <td>
-                                <a th:href="@{/authors/edit(id=*{id})}" class="column100 btn btn-primary"
+                                <a th:href="@{'/authors/edit/' + *{id}}" class="column100 btn btn-primary"
                                    href="edit.html" style="float: left">Edit</a>
                                 <form th:action="@{/authors/delete(id=*{id})}" th:method="POST">
                                     <input type="hidden" name="_method" value="delete"/>
@@ -91,7 +91,7 @@
                             <td th:text="${itemStat.index}" class="column101">1</td>
                             <td th:text="*{name}" class="column100">John Doe</td>
                             <td>
-                                <a th:href="@{/genres/edit(id=*{id})}" class="column100 btn btn-primary"
+                                <a th:href="@{'/genres/edit/' + *{id}}" class="column100 btn btn-primary"
                                    href="edit.html" style="float: left">Edit</a>
                                 <form th:action="@{/genres/delete(id=*{id})}" th:method="POST">
                                     <input type="hidden" name="_method" value="delete"/>

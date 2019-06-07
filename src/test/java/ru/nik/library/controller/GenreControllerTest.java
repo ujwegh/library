@@ -3,6 +3,7 @@ package ru.nik.library.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,9 +18,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -47,25 +50,28 @@ class GenreControllerTest {
     void getGenresTest() throws Exception {
         given(service.getAllGenres()).willReturn(expected);
         this.mvc.perform(get("/genres")).andExpect(status().isOk())
-                .andExpect(view().name("list"))
-                .andExpect(model().attribute("genres", expected));
+            .andExpect(view().name("list"))
+            .andExpect(model().attribute("genres", expected));
+        verify(this.service, Mockito.atLeastOnce()).getAllGenres();
     }
 
     @Test
     void editTest() throws Exception {
         given(service.getGenreById(0)).willReturn(expected.get(0));
-        this.mvc.perform(get("/genres/edit").param("id", "0")).andExpect(status().isOk())
-                .andExpect(view().name("/edit"))
-                .andExpect(model().attribute("genre", expected.get(0)));
+        this.mvc.perform(get("/genres/edit/{id}", "0")).andExpect(status().isOk())
+            .andExpect(view().name("/edit"))
+            .andExpect(model().attribute("genre", expected.get(0)));
+        verify(this.service, Mockito.atLeastOnce()).getGenreById(0);
     }
 
     @Test
     void deleteTest() throws Exception {
         given(service.deleteGenreById(0)).willReturn(true);
         given(service.getAllGenres()).willReturn(Collections.singletonList(expected.get(1)));
-        this.mvc.perform(post("/genres/delete").param("id", "0")).andExpect(status().isOk())
-                .andExpect(view().name("list"))
-                .andExpect(model().attribute("genres", Collections.singletonList(expected.get(1))));
+        this.mvc.perform(post("/genres/delete").param("id", "0"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/genres")).andExpect(view().name("redirect:/genres"));
+        verify(this.service, Mockito.atLeastOnce()).deleteGenreById(0);
     }
 
     @Test
@@ -73,9 +79,10 @@ class GenreControllerTest {
         given(service.addGenre("детектив")).willReturn(true);
         expected.add(new Genre("детектив"));
         given(service.getAllGenres()).willReturn(expected);
-        this.mvc.perform(post("/genres").param("name", "детектив")).andExpect(status().isOk())
-                .andExpect(view().name("list"))
-                .andExpect(model().attribute("genres", expected));
+        this.mvc.perform(post("/genres").param("name", "детектив"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/genres")).andExpect(view().name("redirect:/genres"));
+        verify(this.service, Mockito.atLeastOnce()).addGenre("детектив");
     }
 
     @Test
@@ -84,7 +91,8 @@ class GenreControllerTest {
         expected.set(0, new Genre("детектив"));
         given(service.getAllGenres()).willReturn(expected);
         this.mvc.perform(post("/genres/update").param("id", "0").sessionAttr("name", "детектив"))
-                .andExpect(status().isOk()).andExpect(view().name("list"))
-                .andExpect(model().attribute("genres", expected));
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/genres")).andExpect(view().name("redirect:/genres"));
+        verify(this.service, Mockito.atLeastOnce()).updateGenre(0, "");
     }
 }

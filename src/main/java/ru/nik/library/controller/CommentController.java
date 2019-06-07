@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.nik.library.domain.Comment;
@@ -26,8 +27,8 @@ public class CommentController {
         this.service = service;
     }
 
-    @GetMapping("/comments")
-    public String getComments(@RequestParam("bookId") int bookId, Model model) {
+    @GetMapping("/comments/{bookId}")
+    public String getComments(@PathVariable("bookId") int bookId, Model model) {
         log.info("Get all comments");
         List<Comment> comments = service.getAllComments(bookId);
         model.addAttribute("bookId", bookId);
@@ -35,8 +36,8 @@ public class CommentController {
         return "comments";
     }
 
-    @GetMapping("/comments/edit")
-    public String edit(@RequestParam("id") int id, @RequestParam("bookId") int bookId, Model model) {
+    @GetMapping("/comments/{bookId}/edit/{id}")
+    public String edit(@PathVariable("id") int id, @PathVariable("bookId") int bookId, Model model) {
         log.info("Edit comment: " + id + ", book id: " + bookId);
         Comment comment = service.getCommentById(id, bookId);
         model.addAttribute("bookId", bookId);
@@ -44,34 +45,27 @@ public class CommentController {
         return "/edit";
     }
 
-    @PostMapping("/comments/delete")
+    @PostMapping("/comments/{bookId}/delete")
     @Transactional
-    public String delete(@RequestParam("id") int id, @RequestParam("bookId") int bookId, Model model) {
+    public String delete(@RequestParam("id") int id, @PathVariable("bookId") int bookId) {
         log.info("Delete comment: " + id + ", book id: " + bookId);
         service.deleteCommentById(id, bookId);
-        List<Comment> comments = service.getAllComments(bookId);
-        model.addAttribute("bookId", bookId);
-        model.addAttribute("comments", comments);
-        return "redirect:/comments";
+        return "redirect:/comments/"+bookId;
     }
 
-    @PostMapping("/comments")
-    public String addComment(@RequestParam("bookId") int bookId, @RequestParam("comment") String comment, Model model) {
+    @PostMapping("/comments/{bookId}")
+    public String addComment(@PathVariable("bookId") int bookId,
+        @RequestParam("comment") String comment) {
         log.info("Add comment: \"" + comment + "\", book id: " + bookId);
         service.addComment(bookId, comment);
-        List<Comment> comments = service.getAllComments(bookId);
-        model.addAttribute("bookId", bookId);
-        model.addAttribute("comments", comments);
-        return "redirect:/comments";
+        return "redirect:/comments/"+ bookId;
     }
 
-    @PostMapping("/comments/update")
-    public String updateAuthor(@RequestParam("id") int id,  @RequestParam("bookId") int bookId, @ModelAttribute("comment") String comment, Model model) {
+    @PostMapping("/comments/{bookId}/update")
+    public String updateAuthor(@RequestParam("id") int id, @PathVariable("bookId") int bookId,
+        @ModelAttribute("comment") String comment) {
         log.info("Update comment: " + id + " name = " + comment);
         service.updateBookComment(id, bookId, comment);
-        List<Comment> comments = service.getAllComments(bookId);
-        model.addAttribute("bookId", bookId);
-        model.addAttribute("comments", comments);
-        return "redirect:/comments";
+        return "redirect:/comments/"+ bookId;
     }
 }

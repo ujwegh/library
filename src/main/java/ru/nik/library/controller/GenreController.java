@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.nik.library.domain.Genre;
@@ -32,8 +33,8 @@ public class GenreController {
         return "list";
     }
 
-    @GetMapping("/genres/edit")
-    public String edit(@RequestParam("id") int id, Model model) {
+    @GetMapping("/genres/edit/{id}")
+    public String edit(@PathVariable("id") int id, Model model) {
         log.info("Edit genre: " + id);
         Genre genre = service.getGenreById(id);
         model.addAttribute("genre", genre);
@@ -41,30 +42,24 @@ public class GenreController {
     }
 
     @PostMapping("/genres/delete")
-    public String delete(@RequestParam("id") int id, Model model) {
+    public String delete(@RequestParam("id") int id) {
         log.info("Delete genre: " + id);
         service.deleteGenreById(id);
-        List<Genre> genres = service.getAllGenres();
-        model.addAttribute("genres", genres);
-        return "list";
+        return "redirect:/genres";
     }
 
     @PostMapping("/genres")
-    public String addGenre(@RequestParam("name") String name, Model model) {
+    public String addGenre(@RequestParam("name") String name) {
         log.info("Add genre: " + name);
         service.addGenre(name);
-        List<Genre> genres = service.getAllGenres();
-        model.addAttribute("genres", genres);
-        return "list";
+        return "redirect:/genres";
     }
 
     @PostMapping("/genres/update")
-    public String updateGenre(@RequestParam("id") int id, @ModelAttribute("name") String name, Model model) {
+    public String updateGenre(@RequestParam("id") int id, @ModelAttribute("name") String name) {
         log.info("Update genre: id = " + id + " name = " + name);
         service.updateGenre(id, name);
-        List<Genre> genres = service.getAllGenres();
-        model.addAttribute("genres", genres);
-        return "list";
+        return "redirect:/genres";
     }
 
 
