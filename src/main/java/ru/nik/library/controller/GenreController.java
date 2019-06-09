@@ -34,7 +34,7 @@ public class GenreController {
     }
 
     @GetMapping("/genres/edit/{id}")
-    public String edit(@PathVariable("id") int id, Model model) {
+    public String edit(@PathVariable("id") String id, Model model) {
         log.info("Edit genre: " + id);
         Genre genre = service.getGenreById(id);
         model.addAttribute("genre", genre);
@@ -42,7 +42,7 @@ public class GenreController {
     }
 
     @PostMapping("/genres/delete")
-    public String delete(@RequestParam("id") int id) {
+    public String delete(@RequestParam("id") String id) {
         log.info("Delete genre: " + id);
         service.deleteGenreById(id);
         return "redirect:/genres";
@@ -56,7 +56,7 @@ public class GenreController {
     }
 
     @PostMapping("/genres/update")
-    public String updateGenre(@RequestParam("id") int id, @ModelAttribute("name") String name) {
+    public String updateGenre(@RequestParam("id") String id, @ModelAttribute("name") String name) {
         log.info("Update genre: id = " + id + " name = " + name);
         service.updateGenre(id, name);
         return "redirect:/genres";

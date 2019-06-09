@@ -37,7 +37,7 @@ public class BookController {
     }
 
     @GetMapping("/books/edit/{id}")
-    public String edit(@PathVariable("id") int id, Model model) {
+    public String edit(@PathVariable("id") String id, Model model) {
         log.info("Edit book: " + id);
         Book book = service.getBookById(id);
         String authorNames = null;
@@ -55,7 +55,7 @@ public class BookController {
     }
 
     @GetMapping("/books/view/{id}")
-    public String view(@PathVariable("id") int id, Model model) {
+    public String view(@PathVariable("id") String id, Model model) {
         log.info("View book: " + id);
         Book book = service.getBookById(id);
         String authorNames = null;
@@ -74,7 +74,7 @@ public class BookController {
 
 
     @PostMapping("/books/delete")
-    public String delete(@RequestParam("id") int id, Model model) {
+    public String delete(@RequestParam("id") String id, Model model) {
         log.info("Delete book: " + id);
         service.deleteBookById(id);
         model.addAttribute("books", sortBooks(service.getAllBooks()));
@@ -90,7 +90,7 @@ public class BookController {
     }
 
     @PostMapping("/books/update")
-    public String updateBook(@RequestParam("id") int id, @ModelAttribute("name") String name,
+    public String updateBook(@RequestParam("id") String id, @ModelAttribute("name") String name,
         @ModelAttribute("description") String description) {
         log.info("Update book: id = " + id + ", name = " + name + ", description = " + description);
         service.updateBook(id, name, description);
@@ -98,7 +98,7 @@ public class BookController {
     }
 
     @PostMapping("/books/update/authors")
-    public String updateBookAuthors(@RequestParam("id") int id,
+    public String updateBookAuthors(@RequestParam("id") String id,
         @ModelAttribute("authors") String authors) {
         log.info("Update authors of book : id = " + id + ", authors = " + authors);
 
@@ -108,7 +108,7 @@ public class BookController {
     }
 
     @PostMapping("/books/update/genres")
-    public String updateBookGenres(@RequestParam("id") int id,
+    public String updateBookGenres(@RequestParam("id") String id,
         @ModelAttribute("genres") String genres) {
         log.info("Update genres of book : id = " + id + ", genres = " + genres);
 

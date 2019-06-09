@@ -7,11 +7,9 @@ import org.springframework.shell.standard.ShellOption;
 import ru.nik.library.domain.Comment;
 import ru.nik.library.service.CommentService;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @ShellComponent
-@Transactional
 public class CommentShellController {
 
     private final CommentService service;
@@ -22,7 +20,7 @@ public class CommentShellController {
     }
 
     @ShellMethod("allComments")
-    public String allcomments(@ShellOption Integer bookId) {
+    public String allcomments(@ShellOption String bookId) {
 
         List<Comment> comments = service.getAllComments(bookId);
         if (comments != null) {
@@ -32,7 +30,7 @@ public class CommentShellController {
     }
 
     @ShellMethod("getcomment")
-    public String getcomment(@ShellOption Integer id, @ShellOption Integer bookId) {
+    public String getcomment(@ShellOption String id, @ShellOption String bookId) {
         Comment comment = service.getCommentById(id, bookId);
         if (comment != null) {
             return comment.toString();
@@ -41,7 +39,7 @@ public class CommentShellController {
     }
 
     @ShellMethod("addcomment")
-    public String addcomment(@ShellOption Integer bookId, @ShellOption String comment) {
+    public String addcomment(@ShellOption String bookId, @ShellOption String comment) {
         boolean b = service.addComment(bookId, comment);
         if (!b) {
             return "Comment " + comment + " adding attempt has been failed.";
@@ -50,7 +48,7 @@ public class CommentShellController {
     }
 
     @ShellMethod("updatecomment")
-    public String updatecomment(@ShellOption Integer id, @ShellOption Integer bookId,
+    public String updatecomment(@ShellOption String id, @ShellOption String bookId,
                                 @ShellOption String comment) {
         boolean b = service.updateBookComment(id, bookId, comment);
         if (!b) {
@@ -60,7 +58,7 @@ public class CommentShellController {
     }
 
     @ShellMethod("deletecomment")
-    public String deletecomment(@ShellOption Integer id, @ShellOption Integer bookId) {
+    public String deletecomment(@ShellOption String id, @ShellOption String bookId) {
         boolean b = service.deleteCommentById(id, bookId);
         if (!b) {
             return "Comment with id: " + id + " and book id: " + bookId + " deleting attempt has been failed.";

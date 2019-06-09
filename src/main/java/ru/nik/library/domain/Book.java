@@ -6,65 +6,52 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.context.annotation.Lazy;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
 @Getter
 @Setter
 //@ToString
-@Entity
-@Table(name = "books")
+@Document(collection = "books")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Integer id;
+    private String id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @DBRef
     private List<Comment> comments;
 
-    @Lazy
-    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    @JoinTable(name = "map_books_authors",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    @DBRef
     private Set<Author> authors = new HashSet<>();
 
-    @Lazy
-    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    @JoinTable(name = "map_books_genres",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @DBRef
     private Set<Genre> genres = new HashSet<>();
 
+    public Book(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
-    public Book(Integer id, String name, String description) {
+    @PersistenceConstructor
+    public Book(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public Book(String name, String description) {
-        this(null, name, description);
-    }
-
-    public boolean isNew() {
-        return getId() == null;
-    }
-
     public String getAuthorsNames() {
         StringBuilder builder = new StringBuilder();
-        if (!authors.isEmpty()) {
+        if (!authors.isEmpty() & authors.size() > 0) {
             authors.forEach(a -> builder.append(a.getName()).append(", "));
             return builder.toString().substring(0, builder.toString().length() - 2);
         }
@@ -73,7 +60,7 @@ public class Book {
 
     public String getGenresNames() {
         StringBuilder builder = new StringBuilder();
-        if (!genres.isEmpty()) {
+        if (!genres.isEmpty() & genres.size() > 0) {
             genres.forEach(a -> builder.append(a.getName()).append(", "));
             return builder.toString().substring(0, builder.toString().length() - 2);
         }
@@ -83,12 +70,12 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", comments=" + (comments != null ? comments.size() : null) +
-                ", authors=" + (authors != null ? authors.size() : null) +
-                ", genres=" + (genres != null ? genres.size() : null) +
-                '}';
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", comments=" + (comments != null ? comments.size() : null) +
+            ", authors=" + (authors != null ? authors.size() : null) +
+            ", genres=" + (genres != null ? genres.size() : null) +
+            '}';
     }
 }

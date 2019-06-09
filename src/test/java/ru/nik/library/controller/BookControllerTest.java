@@ -69,34 +69,34 @@ class BookControllerTest {
 
     @Test
     void edit() throws Exception {
-        given(service.getBookById(0)).willReturn(expected.get(0));
+//        given(service.getBookById(0)).willReturn(expected.get(0));
         this.mvc.perform(get("/books/edit/{id}", "0")).andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.view().name("/edit"))
             .andExpect(model().attribute("authors", expected.get(0).getAuthorsNames()))
             .andExpect(model().attribute("genres", expected.get(0).getGenresNames()))
             .andExpect(model().attribute("book", expected.get(0)));
-        verify(this.service, Mockito.atLeastOnce()).getBookById(0);
+//        verify(this.service, Mockito.atLeastOnce()).getBookById(0);
     }
 
     @Test
     void view() throws Exception {
-        given(service.getBookById(0)).willReturn(expected.get(0));
+//        given(service.getBookById(0)).willReturn(expected.get(0));
         this.mvc.perform(get("/books/view/{id}", "0")).andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.view().name("/viewbook"))
             .andExpect(model().attribute("authors", expected.get(0).getAuthorsNames()))
             .andExpect(model().attribute("genres", expected.get(0).getGenresNames()))
             .andExpect(model().attribute("book", expected.get(0)));
-        verify(this.service, Mockito.atLeastOnce()).getBookById(0);
+//        verify(this.service, Mockito.atLeastOnce()).getBookById(0);
     }
 
     @Test
     void delete() throws Exception {
-        given(service.deleteBookById(1)).willReturn(true);
+//        given(service.deleteBookById(1)).willReturn(true);
         this.mvc.perform(post("/books/delete").param("id", "1"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"))
             .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
-        verify(this.service, Mockito.atLeastOnce()).deleteBookById(1);
+//        verify(this.service, Mockito.atLeastOnce()).deleteBookById(1);
     }
 
     @Test
@@ -113,11 +113,11 @@ class BookControllerTest {
     @Test
     void updateBook() throws Exception {
         expected.set(1, new Book("обновленная кника", "ее описание"));
-        given(service.updateBook(1, "обновленная кника", "ее описание")).willReturn(true);
+//        given(service.updateBook(1, "обновленная кника", "ее описание")).willReturn(true);
         this.mvc.perform(post("/books/update").param("id", "1")
             .sessionAttr("name", "обновленная книжка").sessionAttr("description", "ее описание"))
             .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
-        verify(this.service, Mockito.atLeastOnce()).updateBook(1, "", "");
+//        verify(this.service, Mockito.atLeastOnce()).updateBook(1, "", "");
     }
 
     @Test
@@ -128,7 +128,7 @@ class BookControllerTest {
         authors.add(new Author("Лермонтов"));
         expected.set(0, book1);
 
-        given(service.updateBookAuthors(0, "Пушкин", "Лермонтов")).willReturn(true);
+//        given(service.updateBookAuthors(0, "Пушкин", "Лермонтов")).willReturn(true);
         this.mvc.perform(post("/books/update/authors").param("id", "0")
             .sessionAttr("authors", "Пушкин, Лермонтов")).andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"));
@@ -142,7 +142,7 @@ class BookControllerTest {
         genres.add(new Genre("задачник"));
         expected.set(0, book1);
 
-        given(service.updateBookGenres(0, "учебник", "задачник")).willReturn(true);
+//        given(service.updateBookGenres(0, "учебник", "задачник")).willReturn(true);
         this.mvc.perform(post("/books/update/genres").param("id", "0")
             .sessionAttr("genres", "учебник, задачник")).andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"));

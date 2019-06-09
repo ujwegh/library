@@ -5,41 +5,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@NoArgsConstructor
-@Entity
-@Table(name = "comments")
+@Document(collection = "comments")
 @Data
 public class Comment{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    private String id;
 
-    @Column(name = "comment")
     private String comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @DBRef
     private Book book;
 
-    public Comment(Integer id, String comment) {
-        this.id = id;
+
+    public Comment(String comment) {
         this.comment = comment;
     }
 
-    public Comment(String comment) {
-        this(null, comment);
+    @PersistenceConstructor
+    public Comment(String id, String comment) {
+        this.id = id;
+        this.comment = comment;
     }
-
-    public boolean isNew() {
-        return getId() == null;
-    }
-
 }

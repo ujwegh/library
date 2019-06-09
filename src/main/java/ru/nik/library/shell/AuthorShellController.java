@@ -7,11 +7,9 @@ import org.springframework.shell.standard.ShellOption;
 import ru.nik.library.domain.Author;
 import ru.nik.library.service.AuthorService;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @ShellComponent
-@Transactional
 public class AuthorShellController {
     private final AuthorService authorService;
 
@@ -41,7 +39,7 @@ public class AuthorShellController {
     }
 
     @ShellMethod("updateauthor")
-    public String updateauthor(@ShellOption Integer id, @ShellOption String name) {
+    public String updateauthor(@ShellOption String id, @ShellOption String name) {
         boolean b = authorService.updateAuthor(id, name);
         if (!b) {
             return "Author with id: " + id + " and name: " + name + " updating attempt has been failed.";
@@ -59,7 +57,7 @@ public class AuthorShellController {
     }
 
     @ShellMethod("deleteauthorbyid")
-    public String deleteauthorbyid(@ShellOption Integer id) {
+    public String deleteauthorbyid(@ShellOption String id) {
         boolean b = authorService.deleteAuthorById(id);
         if (!b) {
             return "Author with id: " + id + " deleting attempt has been failed.";
@@ -77,7 +75,7 @@ public class AuthorShellController {
     }
 
     @ShellMethod("getAuthorById")
-    public String getauthorbyid(@ShellOption Integer id) {
+    public String getauthorbyid(@ShellOption String id) {
         Author author = authorService.getAuthorById(id);
         if (author == null) {
             return "There is no authors with this name.";

@@ -19,12 +19,12 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Boolean addGenre(String name) {
-        Genre genre = new Genre(null, name);
+        Genre genre = new Genre( name);
         return repository.save(genre) != null;
     }
 
     @Override
-    public Boolean deleteGenreById(int id) {
+    public Boolean deleteGenreById(String id) {
         try {
             repository.deleteById(id);
             return true;
@@ -39,8 +39,9 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Boolean updateGenre(int id, String name) {
-        Genre genre = new Genre(id, name);
+    public Boolean updateGenre(String id, String name) {
+        Genre genre = repository.findById(id);
+        genre.setName(name);
         return repository.save(genre) != null;
     }
 
@@ -50,7 +51,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre getGenreById(int id) {
+    public Genre getGenreById(String id) {
         return repository.findById(id);
     }
 
@@ -62,5 +63,10 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public List<Genre> getAllByNames(String... names) {
         return repository.findAllByNameIn(names);
+    }
+
+    @Override
+    public List<Genre> saveAll(List<Genre> genres) {
+        return repository.saveAll(genres);
     }
 }

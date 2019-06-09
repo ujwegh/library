@@ -7,15 +7,15 @@ import java.util.List;
 public interface BookService {
     Boolean addBook(String name, String description);
 
-    Boolean deleteBookById(int id);
+    Boolean deleteBookById(String id);
 
-    Boolean updateBook(int id,String name, String description);
+    Boolean updateBook(String id,String name, String description);
 
-    Book getBookById(int id);
+    Book getBookById(String id);
 
     List<Book> getAllBooks();
 
-    Boolean updateBookAuthors(int bookId, String ... authors);
+    Boolean updateBookAuthors(String bookId, String ... authors);
 
-    Boolean updateBookGenres(int bookId, String ... genres);
+    Boolean updateBookGenres(String bookId, String ... genres);
 }

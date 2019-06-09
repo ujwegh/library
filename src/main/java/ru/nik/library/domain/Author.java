@@ -5,42 +5,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@NoArgsConstructor
-@Table(name = "book_authors")
-@Entity
+@Document(collection = "authors")
 @Data
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    private String id;
 
-    @Column(name = "name", unique = true)
+    @Indexed(unique = true)
     private String name;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @DBRef
     private Set<Book> books = new HashSet<>();
 
-
-    public Author(Integer id, String name) {
-        this.id = id;
+    public Author(String name) {
         this.name = name;
     }
 
-    public Author(String name) {
-        this(null, name);
-    }
-
-    public boolean isNew() {
-        return getId() == null;
+    @PersistenceConstructor
+    public Author(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }
