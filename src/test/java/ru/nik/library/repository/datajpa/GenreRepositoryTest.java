@@ -1,12 +1,14 @@
 package ru.nik.library.repository.datajpa;
 
 //import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
@@ -20,26 +22,22 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@DataMongoTest
 @PropertySource("classpath:application-test.properties")
 @ContextConfiguration(classes = GenreRepository.class)
 @EnableAutoConfiguration
 @EntityScan(basePackages = "ru.nik.library.domain")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class GenreRepositoryTest {
 
     @Autowired
     private GenreRepository repository;
 
-//    @Autowired
-//    private EntityManager manager;
-
     @BeforeEach
     public void init() {
-        Genre one = new Genre("жанр 1");
-        Genre two = new Genre("жанр 2");
-//        manager.persist(one);
-//        manager.persist(two);
+        Genre one = new Genre("abc", "жанр 1");
+        Genre two = new Genre("aaa", "жанр 2");
+        repository.save(one);
+        repository.save(two);
     }
 
     @Test
@@ -80,25 +78,26 @@ class GenreRepositoryTest {
 
     @Test
     void update() {
-//        Genre expected = repository.findById(1);;
-//        expected.setName("жанр 3");
-//        repository.save(expected);
-//        Genre actual = repository.findById(1);
-//        assertNotNull(actual);
-//        assertEquals(expected.toString(), actual.toString());
+        Genre expected = repository.findById("aaa");
+        ;
+        expected.setName("жанр 3");
+        repository.save(expected);
+        Genre actual = repository.findById("aaa");
+        assertNotNull(actual);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
     void findById() {
-        Genre expected = new Genre("жанр 1");
-//        Genre actual = repository.findById(1);
-//        assertNotNull(actual);
-//        assertEquals(expected.toString(), actual.toString());
+        Genre expected = new Genre("abc", "жанр 1");
+        Genre actual = repository.findById("abc");
+        assertNotNull(actual);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
     void findByName() {
-        Genre expected = new Genre( "жанр 1");
+        Genre expected = new Genre("abc", "жанр 1");
         Genre actual = repository.findByName(expected.getName());
         assertNotNull(actual);
         assertEquals(expected.toString(), actual.toString());
@@ -107,8 +106,8 @@ class GenreRepositoryTest {
 
     @Test
     void deleteById() {
-        repository.deleteById(1);
-        assertNull(repository.findById(1));
+        repository.deleteById("aaa");
+        assertNull(repository.findById("aaa"));
     }
 
     @Test

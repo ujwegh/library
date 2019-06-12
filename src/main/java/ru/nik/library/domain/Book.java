@@ -3,8 +3,6 @@ package ru.nik.library.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
-//@ToString
 @Document(collection = "books")
 public class Book {
 

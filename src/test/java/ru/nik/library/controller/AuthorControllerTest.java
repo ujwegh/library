@@ -1,10 +1,12 @@
 package ru.nik.library.controller;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -23,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
+@EnableAutoConfiguration
 @WebMvcTest(AuthorController.class)
 class AuthorControllerTest {
 
@@ -37,8 +40,10 @@ class AuthorControllerTest {
     @BeforeEach
     void setUp() {
         expected = new ArrayList<>();
-        expected.add(new Author("Пушкин"));
-        expected.add(new Author("Кинг"));
+        ObjectId id1 = new ObjectId();
+        ObjectId id2 = new ObjectId();
+        expected.add(new Author(id1.toString(),"Пушкин"));
+        expected.add(new Author(id2.toString(),"Кинг"));
     }
 
     @Test

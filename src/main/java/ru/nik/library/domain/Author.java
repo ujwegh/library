@@ -1,10 +1,6 @@
 package ru.nik.library.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;

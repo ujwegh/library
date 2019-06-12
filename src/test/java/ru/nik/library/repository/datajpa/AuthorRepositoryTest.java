@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
@@ -21,12 +22,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@DataMongoTest
 @TestPropertySource("classpath:application-test.properties")
 @ContextConfiguration(classes = AuthorRepository.class)
 @EnableAutoConfiguration
 @EntityScan(basePackages = "ru.nik.library.domain")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class AuthorRepositoryTest {
 
     @Autowired
@@ -37,10 +37,10 @@ class AuthorRepositoryTest {
 
     @BeforeEach
     public void init() {
-        Author one = new Author("Пушкин");
-        Author two = new Author("Кинг");
-//        manager.persist(one);
-//        manager.persist(two);
+        Author one = new Author("abc","Пушкин");
+        Author two = new Author("aaa","Кинг");
+        repository.save(one);
+        repository.save(two);
     }
 
     @Test
@@ -84,17 +84,17 @@ class AuthorRepositoryTest {
         Author expected = repository.findByName("Пушкин");
         expected.setName("Гоголь");
         repository.save(expected);
-//        Author actual = repository.findById(1);
-//        assertNotNull(actual);
-//        assertEquals(expected.toString(), actual.toString());
+        Author actual = repository.findById(expected.getId());
+        assertNotNull(actual);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
     void findById() {
-        Author expected = new Author("Пушкин");
-//        Author actual = repository.findById(1);
-//        assertNotNull(actual);
-//        assertEquals(expected.toString(), actual.toString());
+        Author expected = new Author("abc","Пушкин");
+        Author actual = repository.findById("abc");
+        assertNotNull(actual);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
@@ -102,14 +102,14 @@ class AuthorRepositoryTest {
         Author expected = new Author( "Пушкин");
         Author actual = repository.findByName(expected.getName());
         assertNotNull(actual);
-        assertEquals(expected.toString(), actual.toString());
+        assertEquals(expected.getName(), actual.getName());
     }
 
 
     @Test
     void deleteById() {
-        repository.deleteById(1);
-        assertNull(repository.findById(1));
+        repository.deleteById("aaa");
+        assertNull(repository.findById("aaa"));
     }
 
     @Test

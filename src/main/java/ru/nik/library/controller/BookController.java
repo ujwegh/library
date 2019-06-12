@@ -3,14 +3,10 @@ package ru.nik.library.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.service.BookService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
 import java.util.logging.Logger;
 
 import static ru.nik.library.utils.Util.getAuthorNames;

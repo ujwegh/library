@@ -59,8 +59,8 @@ public class CommentController {
         return "redirect:/comments/"+ bookId;
     }
 
-    @PostMapping("/comments/{bookId}/update")
-    public String updateAuthor(@RequestParam("id") String id, @PathVariable("bookId") String bookId,
+    @PostMapping("/comments/{bookId}/update/{id}")
+    public String updateAuthor(@PathVariable("id") String id, @PathVariable("bookId") String bookId,
         @ModelAttribute("comment") String comment) {
         log.info("Update comment: " + id + " name = " + comment);
         service.updateBookComment(id, bookId, comment);
