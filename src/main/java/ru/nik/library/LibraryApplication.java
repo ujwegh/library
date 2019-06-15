@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@EnableMongoRepositories
+@EnableMongoRepositories(basePackages = "ru.nik.library.repository.datajpa")
 @SpringBootApplication
 public class LibraryApplication {
 

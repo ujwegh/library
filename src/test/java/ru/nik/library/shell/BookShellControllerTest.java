@@ -1,32 +1,37 @@
 package ru.nik.library.shell;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import ru.nik.library.domain.Book;
+import ru.nik.library.service.AuthorServiceImpl;
 import ru.nik.library.service.BookService;
-
-//import javax.transaction.Transactional;
+import ru.nik.library.service.BookServiceImpl;
+import ru.nik.library.service.CommentServiceImpl;
+import ru.nik.library.service.GenreServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(properties = {
-        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
-        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
+    InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
+    ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
+@EnableMongoRepositories(basePackages = {"ru.nik.library.repository"})
 @EnableAutoConfiguration
-@AutoConfigureTestDatabase
+@ContextConfiguration(classes = {BookServiceImpl.class, AuthorServiceImpl.class,
+    GenreServiceImpl.class, CommentServiceImpl.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-//@Transactional
 class BookShellControllerTest {
 
     @Autowired
@@ -42,27 +47,31 @@ class BookShellControllerTest {
 
     @Test
     void books() {
+        List<Book> books = service.getAllBooks();
         String result = controller.books();
-        assertEquals("id: 1Book{id=1, name='книга 1', description='описание 1', comments=null, authors=0, genres=0}\n" +
-                "id: 2Book{id=2, name='книга 2', description='описание 2', comments=null, authors=0, genres=0}\n", result);
+        assertEquals("id: " + books.get(0).getId() + books.get(0).toString() + "\n" +
+            "id: " + books.get(1).getId() + books.get(1).toString() + "\n", result);
     }
 
     @Test
     void getbook() {
-//        String result = controller.getbook(1);
-//        assertEquals("Book{id=1, name='книга 1', description='описание 1', comments=null, authors=0, genres=0}", result);
+        List<Book> books = service.getAllBooks();
+        String result = controller.getbook(books.get(0).getId());
+        assertEquals(books.get(0).toString(), result);
     }
 
     @Test
     void updatebook() {
-//        String result = controller.updatebook(1, "математика", "без проблем");
-//        assertEquals("Book with 1 and математика successfully updated.", result);
+        List<Book> books = service.getAllBooks();
+        String result = controller.updatebook(books.get(0).getId(), "математика", "без проблем");
+        assertEquals("Book with "+ books.get(0).getId() +" and математика successfully updated.", result);
     }
 
     @Test
     void deletebook() {
-//        String result = controller.deletebook(1);
-//        assertEquals("Book with 1 successfully deleted.", result);
+        List<Book> books = service.getAllBooks();
+        String result = controller.deletebook(books.get(0).getId());
+        assertEquals("Book with "+ books.get(0).getId() +" successfully deleted.", result);
     }
 
     @Test
@@ -73,15 +82,16 @@ class BookShellControllerTest {
 
     @Test
     void addbookauthors() {
-//        String result = controller.addbookauthors(1, "Кинг", "Желязны", "Толкин");
-//        assertEquals("Book with id: 1 successfully updated. Updated authors with names: [Кинг, Желязны, Толкин]", result);
+        List<Book> books = service.getAllBooks();
+        String result = controller.addbookauthors(books.get(0).getId(), "Кинг", "Желязны", "Толкин");
+        assertEquals("Book with id: "+ books.get(0).getId() +" successfully updated. Updated authors with names: [Кинг, Желязны, Толкин]", result);
     }
 
     @Test
     void addbookgenres() {
-//        String result = controller.addbookauthors(1, "фантастика", "фентези", "роман");
-//        assertEquals("Book with id: 1 successfully updated. Updated authors with names: [фантастика, фентези, роман]", result);
-
+        List<Book> books = service.getAllBooks();
+        String result = controller.addbookauthors(books.get(0).getId(), "фантастика", "фентези", "роман");
+        assertEquals("Book with id: "+ books.get(0).getId() +" successfully updated. Updated authors with names: [фантастика, фентези, роман]", result);
 
     }
 }

@@ -1,6 +1,5 @@
 package ru.nik.library.repository.datajpa;
 
-//import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -8,15 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
-import ru.nik.library.domain.Genre;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,8 +35,8 @@ class BookRepositoryTest {
 
     @BeforeEach
     public void init() {
-        Book one = new Book("aaa","книга", "интересная");
-        Book two = new Book("bbb","журнал", "новый");
+        Book one = new Book("aaa", "книга", "интересная");
+        Book two = new Book("bbb", "журнал", "новый");
         repository.save(one);
         repository.save(two);
     }
@@ -49,8 +45,8 @@ class BookRepositoryTest {
     @Test
     void findAll() {
         List<Book> expected = new ArrayList<>();
-        Book one = new Book("aaa","книга", "интересная");
-        Book two = new Book("bbb","журнал", "новый");
+        Book one = new Book("aaa", "книга", "интересная");
+        Book two = new Book("bbb", "журнал", "новый");
         expected.add(one);
         expected.add(two);
 
@@ -62,7 +58,7 @@ class BookRepositoryTest {
 
     @Test
     void findById() {
-        Book expected = new Book("aaa","книга", "интересная");
+        Book expected = new Book("aaa", "книга", "интересная");
         Book actual = repository.findById("aaa");
         assertNotNull(actual);
         assertEquals(expected.toString(), actual.toString());
@@ -76,7 +72,7 @@ class BookRepositoryTest {
 
     @Test
     void save() {
-        Book expected = new Book("ccc","новая книга", "неизвестно");
+        Book expected = new Book("ccc", "новая книга", "неизвестно");
         Book actual = repository.save(expected);
         assertNotNull(actual);
         assertEquals(3, repository.findAll().size());
@@ -89,12 +85,12 @@ class BookRepositoryTest {
         book.setName("Новая книжка");
         book.setDescription("новое описание");
         Set<Author> authors = new HashSet<>();
-        authors.add(new Author("aa","Пушкин"));
-        authors.add(new Author("bb","Лермонтов"));
+        authors.add(new Author("aa", "Пушкин"));
+        authors.add(new Author("bb", "Лермонтов"));
         book.setAuthors(authors);
         List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("aa","вот это хренотаа"));
-        comments.add(new Comment("bb","советую почитать"));
+        comments.add(new Comment("aa", "вот это хренотаа"));
+        comments.add(new Comment("bb", "советую почитать"));
         book.setComments(comments);
         Book actual = repository.save(book);
         assertNotNull(actual);

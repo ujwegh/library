@@ -2,21 +2,20 @@ package ru.nik.library.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Genre;
 
-//import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,12 +23,15 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(properties = {
-        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
-        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
+    InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
+    ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
+@EnableMongoRepositories(basePackages = {"ru.nik.library.repository"})
 @EnableAutoConfiguration
-@AutoConfigureTestDatabase
+@ContextConfiguration(classes = {BookServiceImpl.class, AuthorServiceImpl.class,
+    GenreServiceImpl.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BookServiceImplTest {
 
@@ -60,31 +62,37 @@ class BookServiceImplTest {
 
     @Test
     void deleteBookByIdTest() {
-        Book expected = new Book("книга 1", "описание");
-//        service.deleteBookById(2);
+        List<Book> allBooks = service.getAllBooks();
+        Book expected = allBooks.get(0);
+        service.deleteBookById(expected.getId());
         List<Book> books = service.getAllBooks();
+        System.out.println(books);
         assertNotNull(books);
         Book actual = books.get(0);
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals("книга 2", actual.getName());
+        assertEquals("описание", actual.getDescription());
     }
 
     @Test
     void updateBookTest() {
-        Book expected = new Book( "книга 2", "новое описание");
-//        service.updateBook(expected.getId(), expected.getName(), expected.getDescription());
-//        Book actual = service.getBookById(2);
-//        assertNotNull(actual);
-//        assertEquals(expected.toString(), actual.toString());
+        List<Book> allBooks = service.getAllBooks();
+        Book expected = allBooks.get(0);
+        expected.setName("новый автор");
+        expected.setDescription("хорошая книжка");
+        service.updateBook(expected.getId(), expected.getName(), expected.getDescription());
+        Book actual = service.getBookById(expected.getId());
+        assertNotNull(actual);
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
     void getBookByIdTest() {
-        Book expected = new Book("книга 2", "описание");
-//        Book actual = service.getBookById(2);
-//        assertNotNull(actual);
-//        assertEquals(expected.getName(), actual.getName());
-//        assertEquals(expected.getDescription(), actual.getDescription());
+        List<Book> allBooks = service.getAllBooks();
+        Book expected = allBooks.get(0);
+        Book actual = service.getBookById(expected.getId());
+        assertNotNull(actual);
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getDescription(), actual.getDescription());
     }
 
     @Test
@@ -100,27 +108,29 @@ class BookServiceImplTest {
 
     @Test
     void updateBookAuthors() {
-        Book expected = new Book( "книга 1", "описание");
+        List<Book> allBooks = service.getAllBooks();
+        Book expected = allBooks.get(0);
         Author one = new Author("Петя");
         Author two = new Author("Кинг");
 
         Set<Author> authors = new HashSet<>(Set.of(one, two));
         expected.setAuthors(authors);
-//        service.updateBookAuthors(1, one.getName(), two.getName());
-//        Book actual = service.getBookById(1);
-//        assertEquals(expected.toString(), actual.toString());
+        service.updateBookAuthors(expected.getId(), one.getName(), two.getName());
+        Book actual = service.getBookById(expected.getId());
+        assertEquals(expected.toString(), actual.toString());
     }
 
     @Test
     void updateBookGenres() {
-        Book expected = new Book( "книга 1", "описание");
+        List<Book> allBooks = service.getAllBooks();
+        Book expected = allBooks.get(0);
         Genre one = new Genre("жанр 1");
         Genre two = new Genre("жанр 2");
 
         Set<Genre> genres = new HashSet<>(Set.of(one, two));
         expected.setGenres(genres);
-//        service.updateBookGenres(1, one.getName(), two.getName());
-//        Book actual = service.getBookById(1);
-//        assertEquals(expected.toString(), actual.toString());
+        service.updateBookGenres(expected.getId(), one.getName(), two.getName());
+        Book actual = service.getBookById(expected.getId());
+        assertEquals(expected.toString(), actual.toString());
     }
 }

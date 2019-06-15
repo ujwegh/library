@@ -1,6 +1,5 @@
 package ru.nik.library.repository.datajpa;
 
-//import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Book;
@@ -54,7 +51,7 @@ class CommentRepositoryTest {
     @Test
     void save() {
         Book book = bookRepository.findById("aaa");
-        Comment comment = new Comment("dd","какой-то коммент");
+        Comment comment = new Comment("dd", "какой-то коммент");
         comment.setBook(book);
         Comment actual = repository.save(comment);
         assertNotNull(actual);
@@ -71,7 +68,7 @@ class CommentRepositoryTest {
 
     @Test
     void findByIdAndBook_Id() {
-        Comment comment = new Comment("bb","коммент 2");
+        Comment comment = new Comment("bb", "коммент 2");
         Comment actual = repository.findByIdAndBook_Id("bb", "aaa");
         assertNotNull(actual);
         assertEquals(comment.getId(), actual.getId());
@@ -80,11 +77,11 @@ class CommentRepositoryTest {
 
     @Test
     void deleteByIdAndBook_Id() {
-        Comment comment = new Comment("bb","коммент 2");
+        Comment comment = new Comment("bb", "коммент 2");
         repository.deleteByIdAndBook_Id("bb", "aaa");
         List<Comment> comments = repository.findAllByBook_Id("aaa");
         assertNotNull(comments);
-        assertEquals(1,comments.size());
-        assertNull(repository.findByIdAndBook_Id("bb","aaa"));
+        assertEquals(1, comments.size());
+        assertNull(repository.findByIdAndBook_Id("bb", "aaa"));
     }
 }

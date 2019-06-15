@@ -1,32 +1,37 @@
 package ru.nik.library.shell;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import ru.nik.library.domain.Genre;
+import ru.nik.library.service.AuthorServiceImpl;
+import ru.nik.library.service.BookServiceImpl;
+import ru.nik.library.service.CommentServiceImpl;
 import ru.nik.library.service.GenreService;
-
-//import javax.transaction.Transactional;
+import ru.nik.library.service.GenreServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(properties = {
-        InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
-        ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
+    InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
+    ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
+@EnableMongoRepositories(basePackages = {"ru.nik.library.repository"})
 @EnableAutoConfiguration
-@AutoConfigureTestDatabase
+@ContextConfiguration(classes = {BookServiceImpl.class, AuthorServiceImpl.class,
+    GenreServiceImpl.class, CommentServiceImpl.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-//@Transactional
 class GenreShellControllerTest {
 
     @Autowired
@@ -42,9 +47,10 @@ class GenreShellControllerTest {
 
     @Test
     void genres() {
+        List<Genre> genres = service.getAllGenres();
         String result = controller.genres();
-        assertEquals("id: 1 Genre(id=1, name=жанр 1, books=[])\n"
-                + "id: 2 Genre(id=2, name=жанр 2, books=[])\n", result);
+        assertEquals("id: " + genres.get(0).getId() + " " + genres.get(0).toString() + "\n" +
+            "id: " + genres.get(1).getId() + " " + genres.get(1).toString() + "\n", result);
     }
 
     @Test
@@ -55,8 +61,10 @@ class GenreShellControllerTest {
 
     @Test
     void updategenre() {
-//        String result = controller.updategenre(1, "роман");
-//        assertEquals("Genre with 1 and роман successfully updated.", result);
+        List<Genre> genres = service.getAllGenres();
+        String result = controller.updategenre(genres.get(0).getId(), "роман");
+        assertEquals("Genre with " + genres.get(0).getId() + " and роман successfully updated.",
+            result);
     }
 
     @Test
@@ -67,19 +75,22 @@ class GenreShellControllerTest {
 
     @Test
     void deletegenrebyid() {
-//        String result = controller.deletegenrebyid(2);
-//        assertEquals("Genre with 2 successfully deleted.", result);
+        List<Genre> genres = service.getAllGenres();
+        String result = controller.deletegenrebyid(genres.get(0).getId());
+        assertEquals("Genre with " + genres.get(0).getId() + " successfully deleted.", result);
     }
 
     @Test
     void getgenrebyname() {
+        List<Genre> genres = service.getAllGenres();
         String result = controller.getgenrebyname("жанр 2");
-        assertEquals("Genre(id=2, name=жанр 2, books=[])", result);
+        assertEquals(genres.get(1).toString(), result);
     }
 
     @Test
     void getgenrebyid() {
-//        String result = controller.getgenrebyid(2);
-//        assertEquals("Genre(id=2, name=жанр 2, books=[])", result);
+        List<Genre> genres = service.getAllGenres();
+        String result = controller.getgenrebyid(genres.get(1).getId());
+        assertEquals(genres.get(1).toString(), result);
     }
 }
