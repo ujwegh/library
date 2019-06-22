@@ -5,18 +5,20 @@ import ru.nik.library.domain.Author;
 import java.util.List;
 
 public interface AuthorService {
-    Integer addAuthor(String name);
+    Boolean addAuthor(String name);
 
-    Integer deleteAuthorById(int id);
+    Boolean deleteAuthorById(int id);
 
-    Integer deleteAuthorByName(String name);
+    Boolean deleteAuthorByName(String name);
 
-    Integer updateAuthor(int id, String name);
+    Boolean updateAuthor(int id, String name);
 
     Author getAuthorByName(String name);
 
     Author getAuthorById(int id);
 
-    List<Author> getAllAutors();
+    List<Author> getAllAuthors();
+
+    List<Author> getAllByNames(String ... names);
 
 }

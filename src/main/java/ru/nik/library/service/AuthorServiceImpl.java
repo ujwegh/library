@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.nik.library.domain.Author;
 import ru.nik.library.repository.AuthorDao;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -19,49 +20,52 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Integer addAuthor(String name) {
+    public Boolean addAuthor(String name) {
         Author author = new Author(null, name);
-        return dao.insert(author);
+        return dao.insert(author) != 0;
     }
 
     @Override
-    public Integer deleteAuthorById(int id) {
-        return dao.deleteById(id);
+    public Boolean deleteAuthorById(int id) {
+        return dao.deleteById(id) != 0;
     }
 
     @Override
-    public Integer deleteAuthorByName(String name) {
-        return dao.deleteByName(name);
+    public Boolean deleteAuthorByName(String name) {
+        return dao.deleteByName(name) != 0;
     }
 
     @Override
-    public Integer updateAuthor(int id, String name) {
+    public Boolean updateAuthor(int id, String name) {
         Author author = new Author(id, name);
-        return dao.insert(author);
+        return dao.update(author) != 0;
     }
 
     @Override
     public Author getAuthorByName(String name) {
         try {
             return dao.getByName(name);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
-
     }
 
     @Override
     public Author getAuthorById(int id) {
         try {
             return dao.getById(id);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
-
     }
 
     @Override
-    public List<Author> getAllAutors() {
+    public List<Author> getAllAuthors() {
         return dao.getAll();
+    }
+
+    @Override
+    public List<Author> getAllByNames(String... names) {
+        return dao.getAllByNames(names);
     }
 }

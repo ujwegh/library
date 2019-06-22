@@ -1,5 +1,6 @@
 package ru.nik.library.shell;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,10 @@ import org.springframework.shell.standard.ShellOption;
 import ru.nik.library.domain.Book;
 import ru.nik.library.service.BookService;
 
+import javax.transaction.Transactional;
+
 @ShellComponent
+@Transactional
 public class BookShellController {
 
     private final BookService bookService;
@@ -22,12 +26,16 @@ public class BookShellController {
     @ShellMethod("books")
     public String books() {
         List<Book> books = bookService.getAllBooks();
-        StringBuilder builder = new StringBuilder();
-        books.forEach(b -> builder.append("id: ").append(b.getId()).append(b.toString()).append("\n"));
-        if (builder.toString().isEmpty()) {
-            return "Books not found.";
+        if (books != null) {
+            StringBuilder builder = new StringBuilder();
+            books.forEach(b -> builder.append("id: ").append(b.getId()).append(b.toString()).append("\n"));
+            if (builder.toString().isEmpty()) {
+                return "Books not found.";
+            }
+            return builder.toString();
         }
-        return builder.toString();
+        return "Books not found";
+
     }
 
     @ShellMethod("getbook")
@@ -40,10 +48,9 @@ public class BookShellController {
     }
 
     @ShellMethod("updatebook")
-    public String updatebook(@ShellOption Integer id, @ShellOption String name, @ShellOption String description,
-                             @ShellOption String authorName, @ShellOption String genreName) {
-        int i = bookService.updateBook(id, name, description, authorName, genreName);
-        if (i == 0) {
+    public String updatebook(@ShellOption Integer id, @ShellOption String name, @ShellOption String description) {
+        boolean b = bookService.updateBook(id, name, description);
+        if (!b) {
             return "Book with " + id + " updating attempt has been failed.";
         }
         return "Book with " + id + " and " + name + " successfully updated.";
@@ -51,20 +58,40 @@ public class BookShellController {
 
     @ShellMethod("deletebook")
     public String deletebook(@ShellOption Integer id) {
-        int i = bookService.deleteBookById(id);
-        if (i == 0) {
+        boolean b = bookService.deleteBookById(id);
+        if (!b) {
             return "Book with " + id + " deleting attempt has been failed.";
         }
         return "Book with " + id + " successfully deleted.";
     }
 
     @ShellMethod("addbook")
-    public String addbook(@ShellOption String name, @ShellOption String description,
-                          @ShellOption String authorName, @ShellOption String genreName) {
-        int i = bookService.addBook(name, description, authorName, genreName);
-        if (i == 0) {
-            return "Book " + name + " adding attempt has been failed.";
+    public String addbook(@ShellOption String name, @ShellOption String description) {
+        boolean b = bookService.addBook(name, description);
+        if (!b) {
+            return "Book with name " + name + " adding attempt has been failed.";
         }
-        return "Book with " + name + " successfully added.";
+        return "Book with name " + name + " successfully added.";
     }
+
+    @ShellMethod("addbookauthors")
+    public String addbookauthors(@ShellOption Integer bookId, @ShellOption String... names) {
+        Boolean b = bookService.updateBookAuthors(bookId, names);
+        if (!b) {
+            return "Book with id: " + bookId + " authors update has been failed.";
+        }
+        return "Book with id: " + bookId + " successfully updated. Updated authors with names: "
+                + Arrays.toString(names);
+    }
+
+    @ShellMethod("addbookgenres")
+    public String addbookgenres(@ShellOption Integer bookId, @ShellOption String... names) {
+        Boolean b = bookService.updateBookGenres(bookId, names);
+        if (!b) {
+            return "Book with id: " + bookId + " genres update has been failed.";
+        }
+        return "Book with id: " + bookId + " successfully updated. Updated genres with names: "
+                + Arrays.toString(names);
+    }
+
 }

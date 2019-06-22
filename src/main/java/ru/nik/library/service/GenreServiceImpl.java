@@ -18,32 +18,32 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Integer addGenre(String name) {
+    public Boolean addGenre(String name) {
         Genre genre = new Genre(null, name);
-        return dao.insert(genre);
+        return dao.insert(genre) != 0;
     }
 
     @Override
-    public Integer deleteGenreById(int id) {
-        return dao.deleteById(id);
+    public Boolean deleteGenreById(int id) {
+        return dao.deleteById(id) != 0;
     }
 
     @Override
-    public Integer deleteGenreByName(String name) {
-        return dao.deleteByName(name);
+    public Boolean deleteGenreByName(String name) {
+        return dao.deleteByName(name) != 0;
     }
 
     @Override
-    public Integer updateGenre(int id, String name) {
+    public Boolean updateGenre(int id, String name) {
         Genre genre = new Genre(id, name);
-        return dao.insert(genre);
+        return dao.update(genre) != 0;
     }
 
     @Override
     public Genre getGenreByName(String name) {
         try {
             return dao.getByName(name);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
 
@@ -53,7 +53,7 @@ public class GenreServiceImpl implements GenreService {
     public Genre getGenreById(int id) {
         try {
             return dao.getById(id);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return null;
         }
 
@@ -62,5 +62,10 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public List<Genre> getAllGenres() {
         return dao.getAll();
+    }
+
+    @Override
+    public List<Genre> getAllByNames(String... names) {
+        return dao.getAllByNames(names);
     }
 }

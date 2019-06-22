@@ -4,25 +4,29 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.nik.library.service.AuthorService;
 
+import javax.transaction.Transactional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(properties = {
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
-@SqlGroup({
-        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:schema.sql"),
-        @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:data.sql")
-})
+@EnableAutoConfiguration
+@AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 class AuthorShellControllerTest {
 
     @Autowired
@@ -32,12 +36,16 @@ class AuthorShellControllerTest {
     @BeforeEach
     void init() {
         controller = new AuthorShellController(service);
+        service.addAuthor("Достоевский");
+        service.addAuthor("Лермонтов");
     }
 
     @Test
     void authors() {
         String result = controller.authors();
-        assertEquals("id: 1000 Author(name=Пушкин)\n" +"id: 1001 Author(name=Кинг)\n", result);
+        System.out.println(result);
+        assertEquals("id: 1 Author(id=1, name=Достоевский, books=[])\n"
+                + "id: 2 Author(id=2, name=Лермонтов, books=[])\n", result);
     }
 
     @Test
@@ -48,31 +56,31 @@ class AuthorShellControllerTest {
 
     @Test
     void updateauthor() {
-        String result = controller.updateauthor(1000, "Вася");
-        assertEquals("Author with id: 1000 and name: Вася successfully updated.", result);
+        String result = controller.updateauthor(1, "Вася");
+        assertEquals("Author with id: 1 and name: Вася successfully updated.", result);
     }
 
     @Test
     void deleteauthorbyname() {
-        String result = controller.deleteauthorbyname("Кинг");
-        assertEquals("Author Кинг successfully deleted.", result);
+        String result = controller.deleteauthorbyname("Достоевский");
+        assertEquals("Author Достоевский successfully deleted.", result);
     }
 
     @Test
     void deleteauthorbyid() {
-        String result = controller.deleteauthorbyid(1000);
-        assertEquals("Author with id: 1000 successfully deleted.", result);
+        String result = controller.deleteauthorbyid(1);
+        assertEquals("Author with id: 1 successfully deleted.", result);
     }
 
     @Test
     void getauthorbyname() {
-        String result = controller.getauthorbyname("Кинг");
-        assertEquals("Author(name=Кинг)", result);
+        String result = controller.getauthorbyname("Лермонтов");
+        assertEquals("Author(id=2, name=Лермонтов, books=[])", result);
     }
 
     @Test
     void getauthorbyid() {
-        String result = controller.getauthorbyid(1001);
-        assertEquals("Author(name=Кинг)", result);
+        String result = controller.getauthorbyid(1);
+        assertEquals("Author(id=1, name=Достоевский, books=[])", result);
     }
 }
