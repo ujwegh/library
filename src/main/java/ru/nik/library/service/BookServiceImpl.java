@@ -1,13 +1,13 @@
 package ru.nik.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Genre;
-import ru.nik.library.repository.AuthorDao;
 import ru.nik.library.repository.BookDao;
-import ru.nik.library.repository.GenreDao;
+import ru.nik.library.repository.datajpa.BookRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,51 +15,52 @@ import java.util.stream.Collectors;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao;
+    private final BookRepository repository;
     private final AuthorService authorService;
     private final GenreService genreService;
 
     @Autowired
-    public BookServiceImpl(BookDao dao, AuthorService authorService, GenreService genreService) {
-        this.bookDao = dao;
+    public BookServiceImpl(BookRepository repository, AuthorService authorService, GenreService genreService) {
+        this.repository = repository;
         this.authorService = authorService;
         this.genreService = genreService;
     }
 
     @Override
     public Boolean addBook(String name, String description) {
-        return bookDao.insert(new Book(name, description)) != 0;
+        return repository.save(new Book(name, description)) != null;
     }
 
     @Override
     public Boolean deleteBookById(int id) {
-        return bookDao.deleteById(id) != 0;
-    }
-
-    @Override
-    public Boolean updateBook(int id, String name, String description) {
-        return bookDao.update(new Book(id, name, description)) != 0;
-    }
-
-    @Override
-    public Book getBookById(int id) {
-        try {
-            return bookDao.getById(id);
-        } catch (Exception e) {
-            return null;
+        try{
+            repository.deleteById(id);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
         }
     }
 
     @Override
+    public Boolean updateBook(int id, String name, String description) {
+        return repository.save(new Book(id, name, description)) != null;
+    }
+
+    @Override
+    public Book getBookById(int id) {
+        return repository.findById(id);
+    }
+
+    @Override
     public List<Book> getAllBooks() {
-        return bookDao.getAll();
+        return repository.findAll();
     }
 
 
     @Override
     public Boolean updateBookAuthors(int bookId, String... authors) {
         Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
-        Book book = bookDao.getById(bookId);
+        Book book = repository.findById(bookId);
 
         if (book != null) {
             List<Author> authorList = authorService.getAllByNames(authors);
@@ -72,7 +73,7 @@ public class BookServiceImpl implements BookService {
             Set<Author> bookAuthors = book.getAuthors();
             bookAuthors.addAll(sett);
             book.setAuthors(bookAuthors);
-            return bookDao.update(book) != 0;
+            return repository.save(book) != null;
         }
         return null;
     }
@@ -80,7 +81,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Boolean updateBookGenres(int bookId, String... genres) {
         Set<Genre> authorSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
-        Book book = bookDao.getById(bookId);
+        Book book = repository.findById(bookId);
 
         if (book != null) {
             List<Genre> genreList = genreService.getAllByNames(genres);
@@ -93,7 +94,7 @@ public class BookServiceImpl implements BookService {
             Set<Genre> bookGenres = book.getGenres();
             bookGenres.addAll(sett);
             book.setGenres(bookGenres);
-            return bookDao.update(book) != 0;
+            return repository.save(book) != null;
         }
         return null;
     }

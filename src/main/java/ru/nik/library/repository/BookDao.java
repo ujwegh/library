@@ -5,14 +5,14 @@ import ru.nik.library.domain.Book;
 import java.util.List;
 
 public interface BookDao {
-    int insert(Book book);
+    boolean insert(Book book);
 
-    int update(Book book);
+    Book update(Book book);
 
     Book getById(int id);
 
     List<Book> getAll();
 
-    int deleteById(int id);
+    boolean deleteById(int id);
 
 }

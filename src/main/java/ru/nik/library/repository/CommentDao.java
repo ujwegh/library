@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface CommentDao {
 
-    int insert(Comment comment, int bookId);
+    boolean insert(Comment comment, int bookId);
 
-    int update(Comment comment, int bookId);
+    Comment update(Comment comment, int bookId);
 
     Comment getById(int id, int bookId);
 
     List<Comment> getAll(int bookId);
 
-    int deleteById(int id, int bookId);
+    boolean deleteById(int id, int bookId);
 }

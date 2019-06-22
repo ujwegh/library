@@ -45,18 +45,18 @@ class AuthorDaoJpaImplTest {
     @Test
     void insert() {
         Author author = new Author("Роджер");
-        int i = dao.insert(author);
+        boolean b = dao.insert(author);
         int size = dao.getAll().size();
-        assertEquals(1, i);
+        assertTrue(b);
         assertEquals(3, size);
     }
 
     @Test
     void update() {
         Author expected = new Author(1, "Новый автор");
-        int i = dao.update(expected);
+        Author author = dao.update(expected);
+        assertNotNull(author);
         Author actual = dao.getByName(expected.getName());
-        assertEquals(2, i);
         assertEquals(expected.getName(), actual.getName());
     }
 
@@ -90,8 +90,8 @@ class AuthorDaoJpaImplTest {
 
     @Test
     void deleteById() {
-        int i = dao.deleteById(1);
-        assertEquals(1, i);
+        boolean b = dao.deleteById(1);
+        assertTrue(b);
         List<Author> authors = dao.getAll();
         assertNotNull(authors);
         assertEquals(1, authors.size());
@@ -99,8 +99,8 @@ class AuthorDaoJpaImplTest {
 
     @Test
     void deleteByName() {
-        int i = dao.deleteByName("Пушкин");
-        assertEquals(1, i);
+        boolean b = dao.deleteByName("Пушкин");
+        assertTrue(b);
         List<Author> authors = dao.getAll();
         assertNotNull(authors);
         assertEquals(1, authors.size());

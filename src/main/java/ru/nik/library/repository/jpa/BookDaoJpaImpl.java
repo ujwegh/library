@@ -20,16 +20,19 @@ public class BookDaoJpaImpl implements BookDao {
 
     @Override
     @Transactional
-    public int insert(Book book) {
-        em.persist(book);
-        return 1;
+    public boolean insert(Book book) {
+        try {
+            em.persist(book);
+return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     @Transactional
-    public int update(Book book) {
-        em.merge(book);
-        return 2;
+    public Book update(Book book) {
+        return em.merge(book);
     }
 
     @Override
@@ -45,9 +48,9 @@ public class BookDaoJpaImpl implements BookDao {
 
     @Override
     @Transactional
-    public int deleteById(int id) {
+    public boolean deleteById(int id) {
         Query query = em.createQuery("delete from Book a where a.id = :id");
         query.setParameter("id", id);
-        return query.executeUpdate();
+        return query.executeUpdate() != 0;
     }
 }

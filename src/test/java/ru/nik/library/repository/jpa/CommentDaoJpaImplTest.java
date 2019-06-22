@@ -49,10 +49,10 @@ class CommentDaoJpaImplTest {
     @Test
     void insert() {
         Comment comment = new Comment("плохой учебник, не читайте");
-        int i = dao.insert(comment, 1);
+        boolean b = dao.insert(comment, 1);
+        assertTrue(b);
         List<Comment> comments = dao.getAll(1);
         assertNotNull(comment);
-        assertEquals(1, i);
         assertEquals(3, comments.size());
     }
 
@@ -60,8 +60,8 @@ class CommentDaoJpaImplTest {
     void update() {
         Comment expected = dao.getById(1, 1);
         expected.setComment("был коммент 1, а стал коммент 3");
-        int i = dao.update(expected, expected.getBook().getId());
-        assertEquals(2, i);
+        Comment comment = dao.update(expected, expected.getBook().getId());
+assertNotNull(comment);
         Comment actual = dao.getById(1, 1);
         assertNotNull(actual);
         assertEquals(expected, actual);
@@ -85,8 +85,8 @@ class CommentDaoJpaImplTest {
 
     @Test
     void deleteById() {
-        int i = dao.deleteById(1, 1);
-        assertEquals(1, i);
+        boolean b = dao.deleteById(1, 1);
+        assertTrue(b);
         assertThrows(NoResultException.class, () -> dao.getById(1, 1));
     }
 }
