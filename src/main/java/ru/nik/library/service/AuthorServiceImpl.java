@@ -20,12 +20,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Boolean addAuthor(String name) {
-        Author author = new Author(null, name);
+        Author author = new Author(name);
         return repository.save(author) != null;
     }
 
     @Override
-    public Boolean deleteAuthorById(int id) {
+    public Boolean deleteAuthorById(String id) {
         try {
             repository.deleteById(id);
             return true;
@@ -40,8 +40,9 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Boolean updateAuthor(int id, String name) {
-        Author author = new Author(id, name);
+    public Boolean updateAuthor(String id, String name) {
+        Author author = repository.findById(id);
+        author.setName(name);
         return repository.save(author) != null;
     }
 
@@ -51,7 +52,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthorById(int id) {
+    public Author getAuthorById(String id) {
         return repository.findById(id);
     }
 
@@ -63,5 +64,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<Author> getAllByNames(String... names) {
         return repository.findAllByNameIn(names);
+    }
+
+    @Override
+    public List<Author> saveAll(List<Author> authors) {
+        return repository.saveAll(authors);
     }
 }

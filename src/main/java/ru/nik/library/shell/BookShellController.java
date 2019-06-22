@@ -10,10 +10,8 @@ import org.springframework.shell.standard.ShellOption;
 import ru.nik.library.domain.Book;
 import ru.nik.library.service.BookService;
 
-import javax.transaction.Transactional;
 
 @ShellComponent
-@Transactional
 public class BookShellController {
 
     private final BookService bookService;
@@ -39,7 +37,7 @@ public class BookShellController {
     }
 
     @ShellMethod("getbook")
-    public String getbook(@ShellOption Integer id) {
+    public String getbook(@ShellOption String id) {
         Book book = bookService.getBookById(id);
         if (book == null) {
             return "There is no books with this id.";
@@ -48,7 +46,7 @@ public class BookShellController {
     }
 
     @ShellMethod("updatebook")
-    public String updatebook(@ShellOption Integer id, @ShellOption String name, @ShellOption String description) {
+    public String updatebook(@ShellOption String id, @ShellOption String name, @ShellOption String description) {
         boolean b = bookService.updateBook(id, name, description);
         if (!b) {
             return "Book with " + id + " updating attempt has been failed.";
@@ -57,7 +55,7 @@ public class BookShellController {
     }
 
     @ShellMethod("deletebook")
-    public String deletebook(@ShellOption Integer id) {
+    public String deletebook(@ShellOption String id) {
         boolean b = bookService.deleteBookById(id);
         if (!b) {
             return "Book with " + id + " deleting attempt has been failed.";
@@ -75,7 +73,7 @@ public class BookShellController {
     }
 
     @ShellMethod("addbookauthors")
-    public String addbookauthors(@ShellOption Integer bookId, @ShellOption String... names) {
+    public String addbookauthors(@ShellOption String bookId, @ShellOption String... names) {
         Boolean b = bookService.updateBookAuthors(bookId, names);
         if (!b) {
             return "Book with id: " + bookId + " authors update has been failed.";
@@ -85,7 +83,7 @@ public class BookShellController {
     }
 
     @ShellMethod("addbookgenres")
-    public String addbookgenres(@ShellOption Integer bookId, @ShellOption String... names) {
+    public String addbookgenres(@ShellOption String bookId, @ShellOption String... names) {
         Boolean b = bookService.updateBookGenres(bookId, names);
         if (!b) {
             return "Book with id: " + bookId + " genres update has been failed.";

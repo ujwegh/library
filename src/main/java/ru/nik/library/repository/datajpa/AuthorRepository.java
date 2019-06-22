@@ -1,13 +1,12 @@
 package ru.nik.library.repository.datajpa;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.nik.library.domain.Author;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-public interface AuthorRepository extends CrudRepository<Author, Integer> {
+public interface AuthorRepository extends MongoRepository<Author, Integer> {
 
     List<Author> findAll();
 
@@ -15,10 +14,9 @@ public interface AuthorRepository extends CrudRepository<Author, Integer> {
 
     Author findByName(String name);
 
-    Author findById(int id);
+    Author findById(String id);
 
-    void deleteById(int id) throws EmptyResultDataAccessException;
+    void deleteById(String id) throws EmptyResultDataAccessException;
 
-    @Transactional
     int deleteByName(String name);
 }

@@ -30,7 +30,7 @@ public class AuthorController {
     }
 
     @GetMapping("/authors/edit/{id}")
-    public String edit(@PathVariable("id") int id, Model model) {
+    public String edit(@PathVariable("id") String id, Model model) {
         log.info("Edit author: " + id);
         Author author = service.getAuthorById(id);
         model.addAttribute("author", author);
@@ -38,7 +38,7 @@ public class AuthorController {
     }
 
     @PostMapping("/authors/delete")
-    public String delete(@RequestParam("id") int id) {
+    public String delete(@RequestParam("id") String id) {
         log.info("Delete author: " + id);
         service.deleteAuthorById(id);
         return "redirect:/authors";
@@ -52,7 +52,7 @@ public class AuthorController {
     }
 
     @PostMapping("/authors/update")
-    public String updateAuthor(@RequestParam("id") int id, @ModelAttribute("name") String name) {
+    public String updateAuthor(@RequestParam("id") String id, @ModelAttribute("name") String name) {
         log.info("Update author: id = " + id + " name = " + name);
         service.updateAuthor(id, name);
         return "redirect:/authors";

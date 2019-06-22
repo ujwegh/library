@@ -22,7 +22,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Boolean addComment(int bookId, String message) {
+    public Boolean addComment(String bookId, String message) {
         Comment comment = new Comment(message);
         Book book = bookRepository.findById(bookId);
         if (book != null){
@@ -34,24 +34,24 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Boolean deleteCommentById(int id, int bookId) {
+    public Boolean deleteCommentById(String id, String bookId) {
         return repository.deleteByIdAndBook_Id(id, bookId) != 0;
     }
 
     @Override
-    public Boolean updateBookComment(int id, int bookId, String message) {
+    public Boolean updateBookComment(String id, String bookId, String message) {
         Comment comment = repository.findByIdAndBook_Id(id, bookId);
         comment.setComment(message);
         return repository.save(comment) != null;
     }
 
     @Override
-    public Comment getCommentById(int id, int bookId) {
+    public Comment getCommentById(String id, String bookId) {
         return repository.findByIdAndBook_Id(id, bookId);
     }
 
     @Override
-    public List<Comment> getAllComments(int bookId) {
+    public List<Comment> getAllComments(String bookId) {
         return repository.findAllByBook_Id(bookId);
     }
 }

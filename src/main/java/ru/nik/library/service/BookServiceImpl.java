@@ -31,7 +31,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Boolean deleteBookById(int id) {
+    public Boolean deleteBookById(String id) {
         try {
             repository.deleteById(id);
             return true;
@@ -41,12 +41,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Boolean updateBook(int id, String name, String description) {
-        return repository.save(new Book(id, name, description)) != null;
+    public Boolean updateBook(String id, String name, String description) {
+        Book book = repository.findById(id);
+        book.setName(name);
+        book.setDescription(description);
+        return repository.save(book) != null;
     }
 
     @Override
-    public Book getBookById(int id) {
+    public Book getBookById(String id) {
         return repository.findById(id);
     }
 
@@ -57,7 +60,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Boolean updateBookAuthors(int bookId, String... authors) {
+    public Boolean updateBookAuthors(String bookId, String... authors) {
         Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
         Book book = repository.findById(bookId);
 
@@ -74,6 +77,8 @@ public class BookServiceImpl implements BookService {
             authorSet.removeAll(toDelete);
             authorSet.addAll(toAdd);
 
+            List<Author> toSaveAuthors = new ArrayList<>(authorSet);
+            authorService.saveAll(toSaveAuthors);
             book.setAuthors(authorSet);
             return repository.save(book) != null;
         }
@@ -81,7 +86,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Boolean updateBookGenres(int bookId, String... genres) {
+    public Boolean updateBookGenres(String bookId, String... genres) {
         Set<Genre> genreSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
         Book book = repository.findById(bookId);
 
@@ -99,6 +104,8 @@ public class BookServiceImpl implements BookService {
             genreSet.removeAll(toDelete);
             genreSet.addAll(toAdd);
 
+            List<Genre> toSaveAuthors = new ArrayList<>(genreSet);
+            genreService.saveAll(toSaveAuthors);
             book.setGenres(genreSet);
             return repository.save(book) != null;
         }

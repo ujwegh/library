@@ -1,23 +1,21 @@
 package ru.nik.library.repository.datajpa;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.nik.library.domain.Genre;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-public interface GenreRepository extends CrudRepository<Genre, Integer> {
+public interface GenreRepository extends MongoRepository<Genre, Integer> {
     List<Genre> findAll();
 
     List<Genre> findAllByNameIn(String... names);
 
     Genre findByName(String name);
 
-    Genre findById(int id);
+    Genre findById(String id);
 
-    void deleteById(int id) throws EmptyResultDataAccessException;
+    void deleteById(String id) throws EmptyResultDataAccessException;
 
-    @Transactional
     int deleteByName(String name);
 }

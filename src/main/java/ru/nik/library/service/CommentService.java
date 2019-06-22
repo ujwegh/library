@@ -5,13 +5,13 @@ import ru.nik.library.domain.Comment;
 import java.util.List;
 
 public interface CommentService {
-    Boolean addComment(int bookId, String comment);
+    Boolean addComment(String bookId, String comment);
 
-    Boolean deleteCommentById(int id, int bookId);
+    Boolean deleteCommentById(String id, String bookId);
 
-    Boolean updateBookComment(int id, int bookId, String comment);
+    Boolean updateBookComment(String id, String bookId, String comment);
 
-    Comment getCommentById(int id, int bookId);
+    Comment getCommentById(String id, String bookId);
 
-    List<Comment> getAllComments(int bookId);
+    List<Comment> getAllComments(String bookId);
 }

@@ -7,11 +7,9 @@ import org.springframework.shell.standard.ShellOption;
 import ru.nik.library.domain.Genre;
 import ru.nik.library.service.GenreService;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @ShellComponent
-@Transactional
 public class GenreShellController {
     private final GenreService genreService;
 
@@ -42,7 +40,7 @@ public class GenreShellController {
     }
 
     @ShellMethod("updategenre")
-    public String updategenre(@ShellOption Integer id, @ShellOption String name) {
+    public String updategenre(@ShellOption String id, @ShellOption String name) {
         boolean b = genreService.updateGenre(id, name);
         if (!b) {
             return "Genre with " + id + " and " + name + "updating attempt has been failed.";
@@ -60,7 +58,7 @@ public class GenreShellController {
     }
 
     @ShellMethod("deletegenrebyid")
-    public String deletegenrebyid(@ShellOption Integer id) {
+    public String deletegenrebyid(@ShellOption String id) {
         boolean b = genreService.deleteGenreById(id);
         if (!b) {
             return "Genre with " + id + " deleting attempt has been failed.";
@@ -78,7 +76,7 @@ public class GenreShellController {
     }
 
     @ShellMethod("getgenrebyid")
-    public String getgenrebyid(@ShellOption Integer id) {
+    public String getgenrebyid(@ShellOption String id) {
         Genre genre = genreService.getGenreById(id);
         if (genre == null) {
             return "There is no genres with this name.";
