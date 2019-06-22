@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List of all books</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">Header</div>
+<br>
+
+<div th:if="${authors != null}">
+    <h1 align="center">Authors</h1>
+    <br>
+    <br>
+    <form th:align="center" th:action="@{/authors}" th:method="POST">
+        <label>
+            <input type="text" name="name" th:value="*{name}" class="form-control" placeholder="Author's name"
+                   aria-label="Recipient's username" aria-describedby="basic-addon2" th:align="center">
+        </label>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+    <div class="limiter">
+        <div class="container-table100">
+            <div class="wrap-table100">
+                <div class="table100 ver1 m-b-110">
+                    <table align="center" class="authors">
+                        <thead>
+                        <tr class="row100 head">
+                            <th class="column101">№</th>
+                            <th class="column100">Name</th>
+                            <th class="column100">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="author, itemStat : ${authors}" th:object="${author}" class="row100">
+                            <td th:text="${itemStat.index}" class="column101">1</td>
+                            <td th:text="*{name}" class="column100">John Doe</td>
+                            <td>
+                                <a th:href="@{'/authors/edit/' + *{id}}" class="column100 btn btn-primary"
+                                   href="edit.html" style="float: left">Edit</a>
+                                <form th:action="@{/authors/delete(id=*{id})}" th:method="POST">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit" id="submitButton1" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:if="${genres != null}">
+    <h1 align="center">Genres</h1>
+    <br>
+    <br>
+    <form th:align="center" th:action="@{/genres}" th:method="POST">
+        <label>
+            <input type="text" name="name" th:value="*{name}" class="form-control" placeholder="Genre's name"
+                   aria-label="Recipient's username" aria-describedby="basic-addon2" th:align="center">
+        </label>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+    <div class="limiter">
+        <div class="container-table100">
+            <div class="wrap-table100">
+                <div class="table100 ver1 m-b-110">
+                    <table align="center" class="authors">
+                        <thead>
+                        <tr class="row100 head">
+                            <th class="column101">№</th>
+                            <th class="column100">Name</th>
+                            <th class="column100">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="genre, itemStat : ${genres}" th:object="${genre}" class="row100">
+                            <td th:text="${itemStat.index}" class="column101">1</td>
+                            <td th:text="*{name}" class="column100">John Doe</td>
+                            <td>
+                                <a th:href="@{'/genres/edit/' + *{id}}" class="column100 btn btn-primary"
+                                   href="edit.html" style="float: left">Edit</a>
+                                <form th:action="@{/genres/delete(id=*{id})}" th:method="POST">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit" id="submitButton2" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+</body>
+</html>

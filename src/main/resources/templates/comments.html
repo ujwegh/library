@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+
+    <script th:href="@{/js/jquery.min.js}"></script>
+    <script th:href="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">Header</div>
+<br>
+<br>
+<div th:object="${comments}" th:align="center">
+    <h1>Book comments</h1>
+    <br>
+    <br>
+    <form th:align="center" th:action="@{'/comments/' + ${bookId}}" th:method="POST">
+        <label>
+            <textarea id="comment-book-input" name="comment" th:text="${comment}" text="John Doe"
+                      class="form-control"
+                      placeholder="Book's comment" aria-describedby="basic-addon2"
+                      style="margin: auto; width: 250px; height: 50px"></textarea>
+        </label>
+        <br>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+    <div class="limiter">
+        <div class="container-table100">
+            <div class="wrap-table100">
+                <div class="table100 ver1 m-b-110">
+                    <table align="center" class="comments">
+                        <thead>
+                        <tr class="row100 head">
+                            <th class="column101">№</th>
+                            <th class="column100">comment</th>
+                            <th class="column100">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="comment, itemStat : ${comments}" th:object="${comment}" class="row100">
+                            <td th:text="${itemStat.index}" class="column101">1</td>
+                            <td th:text="*{comment}" class="column100">John Doe</td>
+                            <td>
+                                <a th:href="@{'/comments/'+ ${bookId} + '/edit/' + *{id}}" class="column100 btn btn-primary"
+                                   href="edit.html" style="float: left">Edit</a>
+                                <form th:action="@{'/comments/' + ${bookId} + '/delete/' + *{id}}" th:method="POST">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit" id="submitButton1" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</div>
+
+</body>
+</html>

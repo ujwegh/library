@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">Header</div>
+<br>
+<br>
+<div th:if="${author != null}" th:object="${author}">
+    <form id="edit-author-form" th:action="@{/authors/update(id=*{id})}" th:method="post" th:align="center">
+        <h1>Author Info:</h1>
+
+        <div>
+            <label for="id-author-input">ID:</label>
+            <input id="id-author-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   placeholder="Author's name" aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+
+        <div>
+            <label for="holder-author-input">Name:</label>
+            <input id="holder-author-input" name="name" type="text" th:value="*{name}" value="John Doe"
+                   class="form-control"
+                   placeholder="Author's name" aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<div th:if="${genre != null}" th:object="${genre}">
+    <form id="edit-genre-form" th:action="@{/genres/update(id=*{id})}" th:method="post" th:align="center">
+        <h1>Author Info:</h1>
+
+        <div>
+            <label for="id-genre-input">ID:</label>
+            <input id="id-genre-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+
+        <div>
+            <label for="holder-genre-input">Name:</label>
+            <input id="holder-genre-input" name="name" type="text" th:value="*{name}" value="John Doe"
+                   class="form-control"
+                   placeholder="Genre's name" aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<div th:if="${comment != null}" th:object="${comment}">
+    <form id="edit-comment-form" th:action="@{/comments/update(id=*{id}, bookId=${bookId})}" th:method="post" th:align="center">
+        <h1>Comment Info:</h1>
+
+        <div>
+            <label for="id-comment-input">ID:</label>
+            <input id="id-comment-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+        <div>
+            <label for="book-id-comment-input">Book ID:</label>
+            <input id="book-id-comment-input" type="text" readonly="readonly" th:value="${bookId}" value="1" class="form-control"
+                   aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+
+        <div>
+            <label for="holder-comment-input">Comment:</label>
+            <textarea id="holder-comment-input" name="comment" type="text" th:value="*{comment}" value="John Doe"
+                   class="form-control"
+                      placeholder="Genre's name" aria-describedby="basic-addon2"
+                      style="margin: auto; width: 250px; height: 150px"></textarea>
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<div th:if="${book != null}" th:object="${book}">
+    <form id="edit-book-form" th:action="@{/books/update(id=*{id})}" th:method="post" th:align="center">
+        <h1>Book Info:</h1>
+
+        <div>
+            <label for="id-book-input">ID:</label>
+            <input id="id-book-input" type="text" readonly="readonly" th:value="*{id}" value="1" class="form-control"
+                   aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+
+        <div>
+            <label for="name-book-input">Name:</label>
+            <input id="name-book-input" name="name" type="text" th:value="*{name}" value="John Doe"
+                   class="form-control"
+                   placeholder="Book's name" aria-describedby="basic-addon2" style="margin: auto; width: auto">
+        </div>
+
+        <div>
+            <label for="description-book-input">Description:</label>
+            <textarea id="description-book-input" name="description" th:text="*{description}" text="John Doe"
+                      class="form-control"
+                      placeholder="Book's description" aria-describedby="basic-addon2"
+                      style="margin: auto; width: 250px; height: 150px"></textarea>
+        </div>
+        <br>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+    <form id="edit-book-authors-form" th:action="@{/books/update/authors(id=*{id})}" th:method="post" th:align="center">
+        <div>
+            <label for="id-book-authors-input">Book authors:</label>
+            <input id="id-book-authors-input" type="text" th:value="${authors != null}? ${authors} : ''" value="1" class="form-control"
+                   name="authors" aria-describedby="basic-addon2" style="margin: auto; width: 300px">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+    <form id="edit-book-genres-form" th:action="@{/books/update/genres(id=*{id})}" th:method="post" th:align="center">
+        <div>
+            <label for="id-book-genres-input">Book genres:</label>
+            <input id="id-book-genres-input" type="text" th:value="${genres != null}? ${genres} : ''" value="1" class="form-control"
+                   name="genres" aria-describedby="basic-addon2" style="margin: auto; width: 300px">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+</div>
+
+</body>
+</html>

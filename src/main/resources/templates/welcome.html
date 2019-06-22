@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/core.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+
+    <script th:href="@{/js/jquery.min.js}"></script>
+    <script th:href="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">Header</div>
+
+<br>
+<H1 align="center">Welcome to the library!</H1>
+<br>
+<br>
+<form th:align="center" th:action="@{/books}" th:method="POST">
+    <label>
+        <input type="text" name="name" th:value="*{name}" class="form-control" placeholder="Book's name"
+               aria-label="Recipient's username" aria-describedby="basic-addon2" th:align="center">
+    </label>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100 ver1 m-b-110">
+                <table align="center" class="authors">
+                    <thead>
+                    <tr class="row100 head">
+                        <th class="column101">№</th>
+                        <th class="column100">Title</th>
+                        <th class="column100">Authors</th>
+                        <th class="column100">Genres</th>
+                        <th class="column100">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="book, itemStat : ${books}" th:object="${book}" class="row100">
+                        <td th:text="${itemStat.index}" class="column101">1</td>
+                        <td th:text="*{name}" class="column100">John Doe</td>
+                        <td th:text="*{authors.size() != 0} ? ${book.getAuthorsNames()} : 'No authors'"
+                            class="column100">John Doe
+                        </td>
+                        <td th:text="*{genres.size() != 0} ? ${book.getGenresNames()} + '' : 'No genres'"
+                            class="column100">John Doe
+                        </td>
+                        <td>
+                            <a th:href="@{'/books/edit/'+ *{id}}" class="column100 btn btn-primary"
+                               href="edit.html">Edit</a>
+                            <a th:href="@{'/books/view/' + *{id}}" class="column100 btn btn-primary"
+                               href="edit.html">View</a>
+                            <form th:action="@{/books/delete(id=${book.id})}" th:method="POST">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit" id="submitButton1" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

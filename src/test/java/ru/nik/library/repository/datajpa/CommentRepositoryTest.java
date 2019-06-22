@@ -1,5 +1,6 @@
 package ru.nik.library.repository.datajpa;
 
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
-import ru.nik.library.repository.jpa.BookDaoJpaImpl;
-import ru.nik.library.repository.jpa.CommentDaoJpaImpl;
 
 import java.util.List;
 
@@ -34,21 +33,24 @@ class CommentRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private EntityManager manager;
+
     @BeforeEach
     public void init() {
         Book book = new Book("книга", "интересная");
         Book book2 = new Book("книга 2", "можно почитать");
-        bookRepository.save(book);
-        bookRepository.save(book2);
+        manager.persist(book);
+        manager.persist(book2);
         Comment one = new Comment("коммент 1");
         one.setBook(book);
         Comment two = new Comment("коммент 2");
         two.setBook(book);
         Comment three = new Comment("коммент 1");
         three.setBook(book2);
-        repository.save(one);
-        repository.save(two);
-        repository.save(three);
+        manager.persist(one);
+        manager.persist(two);
+        manager.persist(three);
     }
 
     @Test

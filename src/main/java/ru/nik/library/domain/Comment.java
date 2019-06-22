@@ -1,5 +1,6 @@
 package ru.nik.library.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +11,9 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(name = "comments")
+@Data
 public class Comment{
 
     @Id

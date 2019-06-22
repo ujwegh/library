@@ -1,5 +1,6 @@
 package ru.nik.library.repository.datajpa;
 
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Author;
 
@@ -20,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@PropertySource("classpath:application-test.properties")
+@TestPropertySource("classpath:application-test.properties")
 @ContextConfiguration(classes = AuthorRepository.class)
 @EnableAutoConfiguration
 @EntityScan(basePackages = "ru.nik.library.domain")
@@ -30,12 +32,15 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository repository;
 
+    @Autowired
+    private EntityManager manager;
+
     @BeforeEach
     public void init() {
         Author one = new Author("Пушкин");
         Author two = new Author("Кинг");
-        repository.save(one);
-        repository.save(two);
+        manager.persist(one);
+        manager.persist(two);
     }
 
     @Test

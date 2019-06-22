@@ -1,5 +1,6 @@
 package ru.nik.library.repository.datajpa;
 
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -30,12 +31,15 @@ class GenreRepositoryTest {
     @Autowired
     private GenreRepository repository;
 
+    @Autowired
+    private EntityManager manager;
+
     @BeforeEach
     public void init() {
         Genre one = new Genre("жанр 1");
         Genre two = new Genre("жанр 2");
-        repository.save(one);
-        repository.save(two);
+        manager.persist(one);
+        manager.persist(two);
     }
 
     @Test
