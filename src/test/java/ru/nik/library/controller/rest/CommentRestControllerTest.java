@@ -2,6 +2,7 @@ package ru.nik.library.controller.rest;
 
 
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,15 +57,12 @@ class CommentRestControllerTest {
 		Mockito.when(service.getAllComments(0)).thenReturn(expected);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/comments/{bookId}", 0)
 			.accept(MediaType.APPLICATION_JSON_VALUE);
-		MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-
-		String expectedString = "[{\"id\":0,\"comment\":\"какой-то коммент\",\"book\":{\"id\":0,\"name\":\"книга\","
+		mvc.perform(requestBuilder).andExpect(status().isOk()).andExpect(content().json("[{\"id\":0,\"comment\":\"какой-то коммент\",\"book\":{\"id\":0,\"name\":\"книга\","
 			+ "\"description\":\"описание\",\"comments\":null,\"authors\":[],\"genres\":[],\"new\":false,"
 			+ "\"genresNames\":\"\",\"authorsNames\":\"\"},\"new\":false},{\"id\":1,\"comment\":\"другой какой-то коммент\","
 			+ "\"book\":{\"id\":0,\"name\":\"книга\",\"description\":\"описание\",\"comments\":null,\"authors\":[],"
-			+ "\"genres\":[],\"new\":false,\"genresNames\":\"\",\"authorsNames\":\"\"},\"new\":false}]";
+			+ "\"genres\":[],\"new\":false,\"genresNames\":\"\",\"authorsNames\":\"\"},\"new\":false}]")).andReturn();
 
-		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
 		verify(this.service, Mockito.atLeastOnce()).getAllComments(0);
 	}
 
@@ -83,9 +81,9 @@ class CommentRestControllerTest {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/comments/{bookId}", 0)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(asJsonString(new Comment(0, "новый, никому не нужный, коммент")));
-		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-		String expectedString = "{\"id\":0,\"comment\":\"новый, никому не нужный, коммент\",\"book\":null,\"new\":false}";
-		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+		this.mvc.perform(requestBuilder).andExpect(status().isOk())
+			.andExpect(content().json("{\"id\":0,\"comment\":\"новый, никому не нужный, коммент\","
+				+ "\"book\":null,\"new\":false}")).andReturn();
 		verify(this.service, Mockito.atLeastOnce()).updateBookComment(0, 0, "новый, никому не нужный, коммент");
 	}
 
@@ -96,9 +94,9 @@ class CommentRestControllerTest {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/comments/{bookId}",0)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(asJsonString(new Comment("новый, никому не нужный, коммент")));
-		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-		String expectedString = "{\"id\":null,\"comment\":\"новый, никому не нужный, коммент\",\"book\":null,\"new\":true}";
-		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+		this.mvc.perform(requestBuilder)
+			.andExpect(status().isOk()).andExpect(content().json("{\"id\":null,\"comment\":\"новый, "
+				+ "никому не нужный, коммент\",\"book\":null,\"new\":true}")).andReturn();
 		verify(this.service, Mockito.atLeastOnce()).addComment(0, "новый, никому не нужный, коммент");
 	}
 

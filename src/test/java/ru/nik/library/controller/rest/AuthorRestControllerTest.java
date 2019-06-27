@@ -1,6 +1,7 @@
 package ru.nik.library.controller.rest;
 
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,9 +51,9 @@ class AuthorRestControllerTest {
         Mockito.when(service.getAllAuthors()).thenReturn(expected);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/authors")
             .accept(MediaType.APPLICATION_JSON_VALUE);
-        MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-        String expectedString = "[{\"id\":1,\"name\":\"Пушкин\",\"bookNames\":[]},{\"id\":2,\"name\":\"Кинг\",\"bookNames\":[]}]";
-        JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+        mvc.perform(requestBuilder).andExpect(status().isOk())
+            .andExpect(content().json("[{\"id\":1,\"name\":\"Пушкин\",\"bookNames\":[]},"
+                + "{\"id\":2,\"name\":\"Кинг\",\"bookNames\":[]}]")).andReturn();
         verify(this.service, Mockito.atLeastOnce()).getAllAuthors();
     }
 
@@ -81,9 +82,8 @@ class AuthorRestControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/authors")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(new AuthorDto(0,"Лермонтов", Collections.emptyList())));
-		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-		String expectedString = "{\"id\":0,\"name\":\"Лермонтов\",\"bookNames\":[]}";
-		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+		this.mvc.perform(requestBuilder).andExpect(status().isOk())
+            .andExpect(content().json("{\"id\":0,\"name\":\"Лермонтов\",\"bookNames\":[]}")).andReturn();
         verify(this.service, Mockito.atLeastOnce()).addAuthor( "Лермонтов");
     }
 

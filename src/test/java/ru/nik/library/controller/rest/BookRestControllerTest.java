@@ -1,6 +1,7 @@
 package ru.nik.library.controller.rest;
 
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,14 +70,11 @@ class BookRestControllerTest {
 		Mockito.when(service.getAllBooks()).thenReturn(expected);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/books")
 			.accept(MediaType.APPLICATION_JSON_VALUE);
-		MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-
-		String expectedString = "[{\"id\":1,\"name\":\"book1\",\"description\":\"description1\","
+		mvc.perform(requestBuilder).andExpect(status().isOk())
+			.andExpect(content().json("[{\"id\":1,\"name\":\"book1\",\"description\":\"description1\","
 			+ "\"commentCount\":1,\"authorNames\":[\"Пушкин\",\"Кинг\"],\"genreNames\":[\"роман\","
 			+ "\"детектив\"]},{\"id\":2,\"name\":\"book2\",\"description\":\"description2\",\"commentCount\":0,"
-			+ "\"authorNames\":[],\"genreNames\":[\"роман\",\"детектив\"]}]";
-
-		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+			+ "\"authorNames\":[],\"genreNames\":[\"роман\",\"детектив\"]}]")).andReturn();
 		verify(this.service, Mockito.atLeastOnce()).getAllBooks();
 	}
 
@@ -96,9 +94,9 @@ class BookRestControllerTest {
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(asJsonString(new BookDto(1, "Новая книга", "Новое описание",
 				0, Collections.emptyList(), Collections.emptyList())));
-		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-		String expectedString = "{\"id\":1,\"name\":\"Новая книга\",\"description\":\"Новое описание\",\"commentCount\":0,\"authorNames\":[],\"genreNames\":[]}";
-		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+		this.mvc.perform(requestBuilder).andExpect(status().isOk()).andExpect(content()
+			.json("{\"id\":1,\"name\":\"Новая книга\",\"description\":\"Новое описание\","
+				+ "\"commentCount\":0,\"authorNames\":[],\"genreNames\":[]}")).andReturn();
 		verify(this.service, Mockito.atLeastOnce()).updateBook(1, "Новая книга", "Новое описание");
 	}
 
@@ -109,9 +107,9 @@ class BookRestControllerTest {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/books")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(asJsonString(new BookDto("учебник", "физика")));
-		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-		String expectedString = "{\"id\":null,\"name\":\"учебник\",\"description\":\"физика\",\"commentCount\":null,\"authorNames\":null,\"genreNames\":null}";
-		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+		this.mvc.perform(requestBuilder).andExpect(status().isOk())
+			.andExpect(content().json("{\"id\":null,\"name\":\"учебник\",\"description\":\"физика\","
+				+ "\"commentCount\":null,\"authorNames\":null,\"genreNames\":null}")).andReturn();
 		verify(this.service, Mockito.atLeastOnce()).addBook("учебник", "физика");
 	}
 

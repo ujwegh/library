@@ -1,6 +1,7 @@
 package ru.nik.library.controller.rest;
 
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,9 +51,9 @@ class GenreRestControllerTest {
         Mockito.when(service.getAllGenres()).thenReturn(expected);
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/genres")
             .accept(MediaType.APPLICATION_JSON_VALUE);
-        MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-        String expectedString = "[{\"id\":1,\"name\":\"фантастика\",\"bookNames\":[]},{\"id\":2,\"name\":\"роман\",\"bookNames\":[]}]";
-        JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
+        mvc.perform(requestBuilder).andExpect(status().isOk())
+            .andExpect(content().json("[{\"id\":1,\"name\":\"фантастика\",\"bookNames\":[]},"
+                + "{\"id\":2,\"name\":\"роман\",\"bookNames\":[]}]")).andReturn();
         verify(this.service, Mockito.atLeastOnce()).getAllGenres();
     }
 
