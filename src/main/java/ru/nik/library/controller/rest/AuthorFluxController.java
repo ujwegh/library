@@ -25,19 +25,19 @@ public class AuthorFluxController {
 		this.service = service;
 	}
 
-	@GetMapping("/rest/authors/all")
+	@GetMapping("/rest/authors")
 	public Flux<AuthorDto> getAuthors() {
 		log.info("Get all authors");
 		return service.getAllAuthors().map(AuthorDto::toAuthorDto);
 	}
 
-	@DeleteMapping("/rest/authors/author/{id}")
+	@DeleteMapping("/rest/authors/{id}")
 	public Mono<Void> deleteAuthor(@PathVariable String id){
 		log.info("Delete author: " + id);
 		return service.deleteAuthorById(id).then();
 	}
 
-	@PutMapping("/rest/authors/author/{id}")
+	@PutMapping("/rest/authors/{id}")
 	public Mono<AuthorDto> updateAuthor(@RequestBody AuthorDto author, @PathVariable String id) {
 		log.info("Update author: id = " + id + " name = " + author.getName());
 		return service.updateAuthor(id, author.getName()).map(AuthorDto::toAuthorDto);

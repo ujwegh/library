@@ -61,7 +61,7 @@ class BookControllerTest {
 
     @Test
     void index() throws Exception {
-        given(service.getAllBooks()).willReturn(expected);
+//        given(service.getAllBooks()).willReturn(expected);
         this.mvc.perform(get("/")).andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.view().name("welcome"))
             .andExpect(model().attribute("books", expected));
@@ -102,7 +102,7 @@ class BookControllerTest {
     @Test
     void addBook() throws Exception {
         expected.add(new Book("новая книжка", "ее описание"));
-        given(service.addBook("новая книжка", "ее описание")).willReturn(true);
+//        given(service.addBook("новая книжка", "ее описание")).willReturn(true);
         this.mvc.perform(post("/books").param("name", "новая книжка")
             .param("description", "ее описание")).andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"))

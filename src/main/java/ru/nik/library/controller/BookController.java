@@ -25,57 +25,57 @@ public class BookController {
         this.service = service;
     }
 
-    @GetMapping("/")
-    String index(Model model) {
-        log.info("Get all books");
-        model.addAttribute("books", sortBooks(service.getAllBooks()));
-        return "welcome";
-    }
-
-    @GetMapping("/books/edit/{id}")
-    public String edit(@PathVariable("id") String id, Model model) {
-        log.info("Edit book: " + id);
-        Book book = service.getBookById(id);
-        String authorNames = null;
-        String genreNames = null;
-        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
-            authorNames = getAuthorNames(book.getAuthors());
-        }
-        if (book.getGenres() != null && book.getGenres().size() > 0) {
-            genreNames = getGenreNames(book.getGenres());
-        }
-        model.addAttribute("authors", authorNames);
-        model.addAttribute("genres", genreNames);
-        model.addAttribute("book", book);
-        return "/edit";
-    }
-
-    @GetMapping("/books/view/{id}")
-    public String view(@PathVariable("id") String id, Model model) {
-        log.info("View book: " + id);
-        Book book = service.getBookById(id);
-        String authorNames = null;
-        String genreNames = null;
-        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
-            authorNames = getAuthorNames(book.getAuthors());
-        }
-        if (book.getGenres() != null && book.getGenres().size() > 0) {
-            genreNames = getGenreNames(book.getGenres());
-        }
-        model.addAttribute("authors", authorNames);
-        model.addAttribute("genres", genreNames);
-        model.addAttribute("book", book);
-        return "/viewbook";
-    }
-
-
-    @PostMapping("/books/delete")
-    public String delete(@RequestParam("id") String id, Model model) {
-        log.info("Delete book: " + id);
-        service.deleteBookById(id);
-        model.addAttribute("books", sortBooks(service.getAllBooks()));
-        return "redirect:/";
-    }
+//    @GetMapping("/")
+//    String index(Model model) {
+//        log.info("Get all books");
+//        model.addAttribute("books", sortBooks(service.getAllBooks()));
+//        return "welcome";
+//    }
+//
+//    @GetMapping("/books/edit/{id}")
+//    public String edit(@PathVariable("id") String id, Model model) {
+//        log.info("Edit book: " + id);
+//        Book book = service.getBookById(id);
+//        String authorNames = null;
+//        String genreNames = null;
+//        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
+//            authorNames = getAuthorNames(book.getAuthors());
+//        }
+//        if (book.getGenres() != null && book.getGenres().size() > 0) {
+//            genreNames = getGenreNames(book.getGenres());
+//        }
+//        model.addAttribute("authors", authorNames);
+//        model.addAttribute("genres", genreNames);
+//        model.addAttribute("book", book);
+//        return "/edit";
+//    }
+//
+//    @GetMapping("/books/view/{id}")
+//    public String view(@PathVariable("id") String id, Model model) {
+//        log.info("View book: " + id);
+//        Book book = service.getBookById(id);
+//        String authorNames = null;
+//        String genreNames = null;
+//        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
+//            authorNames = getAuthorNames(book.getAuthors());
+//        }
+//        if (book.getGenres() != null && book.getGenres().size() > 0) {
+//            genreNames = getGenreNames(book.getGenres());
+//        }
+//        model.addAttribute("authors", authorNames);
+//        model.addAttribute("genres", genreNames);
+//        model.addAttribute("book", book);
+//        return "/viewbook";
+//    }
+//
+//
+//    @PostMapping("/books/delete")
+//    public String delete(@RequestParam("id") String id, Model model) {
+//        log.info("Delete book: " + id);
+//        service.deleteBookById(id);
+//        model.addAttribute("books", sortBooks(service.getAllBooks()));
+//        return "redirect:/";
+//    }
 
     @PostMapping("/books")
     public String addBook(@ModelAttribute("name") String name,

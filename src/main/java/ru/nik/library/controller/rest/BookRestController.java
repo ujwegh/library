@@ -28,53 +28,53 @@ public class BookRestController {
     }
 
 
-    @GetMapping("/rest/books/all")
-    public List<BookDto> getAllBooks() {
-        log.info("Get all books");
-        List<BookDto> result = new ArrayList<>();
-        service.getAllBooks().forEach(b -> result.add(BookDto.toBookDto(b)));
-        return result;
-    }
-
-    @DeleteMapping("/rest/books/book/{id}")
-    public void deleteBook(@PathVariable Integer id) {
-        log.info("Delete book: " + id);
-        service.deleteBookById(id);
-    }
-
-    @PutMapping("/rest/books/book/{id}")
-    public BookDto updateBook(@RequestBody BookDto bookDto, @PathVariable Integer id) {
-        log.info("Update book: id = " + id + ", name = " + bookDto.getName() + ", description = "
-            + bookDto.getDescription());
-        if (service.updateBook(bookDto.getId(), bookDto.getName(), bookDto.getDescription())) {
-            return bookDto;
-        } else {
-            return null;
-        }
-    }
-
-    @PostMapping("/rest/books")
-    public BookDto addBook(@RequestBody BookDto bookDto) {
-        log.info("Add book: name =" + bookDto.getName() + ", description = " + bookDto.getDescription());
-        if (service.addBook(bookDto.getName(), bookDto.getDescription())) {
-            return bookDto;
-        } else {
-            return null;
-        }
-    }
-
-
-    @PostMapping("/rest/books/book/{id}/authors")
-    public void updateBookAuthors(@RequestBody String string, @PathVariable Integer id) {
-        String[] authors = string.split(", ");
-        service.updateBookAuthors(id, authors);
-    }
-
-    @PostMapping("/rest/books/book/{id}/genres")
-    public void updateBookGenres(@RequestBody String string, @PathVariable Integer id) {
-        String[] genres = string.split(", ");
-        service.updateBookGenres(id, genres);
-    }
+//    @GetMapping("/rest/books/all")
+//    public List<BookDto> getAllBooks() {
+//        log.info("Get all books");
+//        List<BookDto> result = new ArrayList<>();
+//        service.getAllBooks().forEach(b -> result.add(BookDto.toBookDto(b)));
+//        return result;
+//    }
+//
+//    @DeleteMapping("/rest/books/book/{id}")
+//    public void deleteBook(@PathVariable Integer id) {
+//        log.info("Delete book: " + id);
+//        service.deleteBookById(id);
+//    }
+//
+//    @PutMapping("/rest/books/book/{id}")
+//    public BookDto updateBook(@RequestBody BookDto bookDto, @PathVariable Integer id) {
+//        log.info("Update book: id = " + id + ", name = " + bookDto.getName() + ", description = "
+//            + bookDto.getDescription());
+//        if (service.updateBook(bookDto.getId(), bookDto.getName(), bookDto.getDescription())) {
+//            return bookDto;
+//        } else {
+//            return null;
+//        }
+//    }
+//
+//    @PostMapping("/rest/books")
+//    public BookDto addBook(@RequestBody BookDto bookDto) {
+//        log.info("Add book: name =" + bookDto.getName() + ", description = " + bookDto.getDescription());
+//        if (service.addBook(bookDto.getName(), bookDto.getDescription())) {
+//            return bookDto;
+//        } else {
+//            return null;
+//        }
+//    }
+//
+//
+//    @PostMapping("/rest/books/book/{id}/authors")
+//    public void updateBookAuthors(@RequestBody String string, @PathVariable Integer id) {
+//        String[] authors = string.split(", ");
+//        service.updateBookAuthors(id, authors);
+//    }
+//
+//    @PostMapping("/rest/books/book/{id}/genres")
+//    public void updateBookGenres(@RequestBody String string, @PathVariable Integer id) {
+//        String[] genres = string.split(", ");
+//        service.updateBookGenres(id, genres);
+//    }
 
 
 }

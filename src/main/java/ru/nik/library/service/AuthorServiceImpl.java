@@ -13,9 +13,9 @@ import java.util.List;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorRepository repository;
+    private AuthorRepository repository;
 
-    @Autowired
+
     public AuthorServiceImpl(AuthorRepository repository) {
         this.repository = repository;
     }

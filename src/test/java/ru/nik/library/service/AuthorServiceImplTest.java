@@ -39,63 +39,63 @@ class AuthorServiceImplTest {
         service.addAuthor("Лермонтов");
     }
 
-    @Test
-    void addAuthorTest() {
-        Author expected = new Author("a","Толкин");
-        service.addAuthor(expected.getName());
-        List<Author> autors = service.getAllAuthors();
-        assertNotNull(autors);
-        Author actual = autors.get(2);
-        assertEquals(expected.getName(), actual.getName());
-    }
-
-    @Test
-    void deleteAuthorByIdTest() {
-        Author author = service.getAuthorByName("Достоевский");
-        service.deleteAuthorById(author.getId());
-        List<Author> authors = service.getAllAuthors();
-        assertNotNull(authors);
-        assertEquals(1, authors.size());
-        assertNull(service.getAuthorById(author.getId()));
-    }
-
-    @Test
-    void deleteAuthorByNameTest() {
-        service.deleteAuthorByName("Достоевский");
-        List<Author> authors = service.getAllAuthors();
-        assertNotNull(authors);
-        assertEquals(1, authors.size());
-        assertNull(service.getAuthorByName("Достоевский"));
-    }
-
-    @Test
-    void updateAuthorTest() {
-        Author expected = service.getAuthorByName("Достоевский");
-        service.updateAuthor(expected.getId(), "Новый автор");
-        Author actual = service.getAuthorById(expected.getId());
-        assertEquals("Новый автор", actual.getName());
-    }
-
-    @Test
-    void getAuthorByNameTest() {
-        Author expected = new Author("Лермонтов");
-        Author actual = service.getAuthorByName("Лермонтов");
-        assertEquals(expected.getName(), actual.getName());
-    }
-
-    @Test
-    void getAuthorByIdTest() {
-        Author expected = service.getAuthorByName("Достоевский");
-        Author actual = service.getAuthorById(expected.getId());
-        assertEquals(expected.getName(), actual.getName());
-    }
-
-    @Test
-    void getAllTest() {
-        List<Author> expected = new ArrayList<>();
-        expected.add(new Author("Пушкин"));
-        expected.add(new Author("Кинг"));
-        List<Author> actual = service.getAllAuthors();
-        assertEquals(expected.size(), actual.size());
-    }
+//    @Test
+//    void addAuthorTest() {
+//        Author expected = new Author("a","Толкин");
+//        service.addAuthor(expected.getName());
+//        List<Author> autors = service.getAllAuthors();
+//        assertNotNull(autors);
+//        Author actual = autors.get(2);
+//        assertEquals(expected.getName(), actual.getName());
+//    }
+//
+//    @Test
+//    void deleteAuthorByIdTest() {
+//        Author author = service.getAuthorByName("Достоевский");
+//        service.deleteAuthorById(author.getId());
+//        List<Author> authors = service.getAllAuthors();
+//        assertNotNull(authors);
+//        assertEquals(1, authors.size());
+//        assertNull(service.getAuthorById(author.getId()));
+//    }
+//
+//    @Test
+//    void deleteAuthorByNameTest() {
+//        service.deleteAuthorByName("Достоевский");
+//        List<Author> authors = service.getAllAuthors();
+//        assertNotNull(authors);
+//        assertEquals(1, authors.size());
+//        assertNull(service.getAuthorByName("Достоевский"));
+//    }
+//
+//    @Test
+//    void updateAuthorTest() {
+//        Author expected = service.getAuthorByName("Достоевский");
+//        service.updateAuthor(expected.getId(), "Новый автор");
+//        Author actual = service.getAuthorById(expected.getId());
+//        assertEquals("Новый автор", actual.getName());
+//    }
+//
+//    @Test
+//    void getAuthorByNameTest() {
+//        Author expected = new Author("Лермонтов");
+//        Author actual = service.getAuthorByName("Лермонтов");
+//        assertEquals(expected.getName(), actual.getName());
+//    }
+//
+//    @Test
+//    void getAuthorByIdTest() {
+//        Author expected = service.getAuthorByName("Достоевский");
+//        Author actual = service.getAuthorById(expected.getId());
+//        assertEquals(expected.getName(), actual.getName());
+//    }
+//
+//    @Test
+//    void getAllTest() {
+//        List<Author> expected = new ArrayList<>();
+//        expected.add(new Author("Пушкин"));
+//        expected.add(new Author("Кинг"));
+//        List<Author> actual = service.getAllAuthors();
+//        assertEquals(expected.size(), actual.size());
+//    }
 }

@@ -60,52 +60,50 @@ public class BookServiceImpl implements BookService {
     @Override
     public Mono<Book> updateBookAuthors(String bookId, String... authors) {
         Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
-        Book book = repository.findById(bookId);
+        Mono<Book> book = repository.findById(bookId);
 
         Set<Author> toAdd = new HashSet<>();
         Set<Author> toDelete = new HashSet<>();
         if (book != null) {
-            Flux<Author> authorList = authorService.getAllByNames(authors);
-            authorSet.forEach(a -> authorList.stream()
-                    .filter(dbAuthor -> a.getName().equals(dbAuthor.getName()))
-                    .forEachOrdered(dbAuthor -> {
-                        toDelete.add(a);
-                        toAdd.add(dbAuthor);
-                    }));
+            authorSet.forEach(a -> authorService.getAllByNames(authors).map(author -> {
+                if (a.getName().equals(author.getName())) {
+                    toDelete.add(a);
+                    toAdd.add(author);
+                }
+                return author;
+            }));
             authorSet.removeAll(toDelete);
             authorSet.addAll(toAdd);
-
             List<Author> toSaveAuthors = new ArrayList<>(authorSet);
+
             authorService.saveAll(toSaveAuthors);
-            book.setAuthors(authorSet);
-            return repository.save(book) != null;
+            return book.doOnSuccess(b -> b.setAuthors(authorSet)).doOnSuccess(repository::save);
         }
         return null;
     }
 
     @Override
-    public Boolean updateBookGenres(String bookId, String... genres) {
+    public Mono<Book> updateBookGenres(String bookId, String... genres) {
         Set<Genre> genreSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
-        Book book = repository.findById(bookId);
+        Mono<Book> book = repository.findById(bookId);
 
         Set<Genre> toAdd = new HashSet<>();
         Set<Genre> toDelete = new HashSet<>();
         if (book != null) {
-            List<Genre> genreList = genreService.getAllByNames(genres);
-
-            genreSet.forEach(a -> genreList.stream()
-                    .filter(dbGenre -> a.getName().equals(dbGenre.getName()))
-                    .forEachOrdered(dbGenre -> {
-                        toDelete.add(a);
-                        toAdd.add(dbGenre);
-                    }));
+            genreSet.forEach(a -> genreService.getAllByNames(genres).map(genre -> {
+                if (a.getName().equals(genre.getName())) {
+                    toDelete.add(a);
+                    toAdd.add(genre);
+                }
+                return genre;
+            }));
             genreSet.removeAll(toDelete);
             genreSet.addAll(toAdd);
 
             List<Genre> toSaveAuthors = new ArrayList<>(genreSet);
+
             genreService.saveAll(toSaveAuthors);
-            book.setGenres(genreSet);
-            return repository.save(book) != null;
+            return book.doOnSuccess(b -> b.setGenres(genreSet)).doOnSuccess(repository::save);
         }
         return null;
     }

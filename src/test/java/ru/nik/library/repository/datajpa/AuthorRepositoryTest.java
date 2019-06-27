@@ -36,79 +36,79 @@ class AuthorRepositoryTest {
         repository.save(two);
     }
 
-    @Test
-    void findAll() {
-        List<Author> expected = new ArrayList<>();
-        Author one = new Author("Пушкин");
-        Author two = new Author("Кинг");
-        expected.add(one);
-        expected.add(two);
-
-        List<Author> actual = repository.findAll();
-        assertNotNull(actual);
-        assertEquals(expected.size(), actual.size());
-    }
-
-    @Test
-    void findAllByNameIn() {
-        List<Author> expected = new ArrayList<>();
-        Author one = new Author("Пушкин");
-        Author two = new Author("Кинг");
-        expected.add(one);
-        expected.add(two);
-
-        List<Author> actual = repository.findAllByNameIn(one.getName(), two.getName());
-        assertNotNull(actual);
-        assertEquals(expected.size(), actual.size());
-    }
-
-    @Test
-    void save() {
-        Author expected = new Author("Новый автор");
-        Author actual = repository.save(expected);
-        assertNotNull(actual);
-        assertEquals(expected.getName(), actual.getName());
-        List<Author> authors = repository.findAll();
-        assertEquals(3, authors.size());
-    }
-
-    @Test
-    void update() {
-        Author expected = repository.findByName("Пушкин");
-        expected.setName("Гоголь");
-        repository.save(expected);
-        Author actual = repository.findById(expected.getId());
-        assertNotNull(actual);
-        assertEquals(expected.toString(), actual.toString());
-    }
-
-    @Test
-    void findById() {
-        Author expected = new Author("abc","Пушкин");
-        Author actual = repository.findById("abc");
-        assertNotNull(actual);
-        assertEquals(expected.toString(), actual.toString());
-    }
-
-    @Test
-    void findByName() {
-        Author expected = new Author( "Пушкин");
-        Author actual = repository.findByName(expected.getName());
-        assertNotNull(actual);
-        assertEquals(expected.getName(), actual.getName());
-    }
-
-
-    @Test
-    void deleteById() {
-        repository.deleteById("aaa");
-        assertNull(repository.findById("aaa"));
-    }
-
-    @Test
-    void deleteByName() {
-        int i = repository.deleteByName("Пушкин");
-        assertEquals(1, i);
-        assertNull(repository.findByName("Пушкин"));
-    }
+//    @Test
+//    void findAll() {
+//        List<Author> expected = new ArrayList<>();
+//        Author one = new Author("Пушкин");
+//        Author two = new Author("Кинг");
+//        expected.add(one);
+//        expected.add(two);
+//
+//        List<Author> actual = repository.findAll();
+//        assertNotNull(actual);
+//        assertEquals(expected.size(), actual.size());
+//    }
+//
+//    @Test
+//    void findAllByNameIn() {
+//        List<Author> expected = new ArrayList<>();
+//        Author one = new Author("Пушкин");
+//        Author two = new Author("Кинг");
+//        expected.add(one);
+//        expected.add(two);
+//
+//        List<Author> actual = repository.findAllByNameIn(one.getName(), two.getName());
+//        assertNotNull(actual);
+//        assertEquals(expected.size(), actual.size());
+//    }
+//
+//    @Test
+//    void save() {
+//        Author expected = new Author("Новый автор");
+//        Author actual = repository.save(expected);
+//        assertNotNull(actual);
+//        assertEquals(expected.getName(), actual.getName());
+//        List<Author> authors = repository.findAll();
+//        assertEquals(3, authors.size());
+//    }
+//
+//    @Test
+//    void update() {
+//        Author expected = repository.findByName("Пушкин");
+//        expected.setName("Гоголь");
+//        repository.save(expected);
+//        Author actual = repository.findById(expected.getId());
+//        assertNotNull(actual);
+//        assertEquals(expected.toString(), actual.toString());
+//    }
+//
+//    @Test
+//    void findById() {
+//        Author expected = new Author("abc","Пушкин");
+//        Author actual = repository.findById("abc");
+//        assertNotNull(actual);
+//        assertEquals(expected.toString(), actual.toString());
+//    }
+//
+//    @Test
+//    void findByName() {
+//        Author expected = new Author( "Пушкин");
+//        Author actual = repository.findByName(expected.getName());
+//        assertNotNull(actual);
+//        assertEquals(expected.getName(), actual.getName());
+//    }
+//
+//
+//    @Test
+//    void deleteById() {
+//        repository.deleteById("aaa");
+//        assertNull(repository.findById("aaa"));
+//    }
+//
+//    @Test
+//    void deleteByName() {
+//        int i = repository.deleteByName("Пушкин");
+//        assertEquals(1, i);
+//        assertNull(repository.findByName("Пушкин"));
+//    }
 }

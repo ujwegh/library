@@ -42,58 +42,58 @@ class BookRepositoryTest {
     }
 
 
-    @Test
-    void findAll() {
-        List<Book> expected = new ArrayList<>();
-        Book one = new Book("aaa", "книга", "интересная");
-        Book two = new Book("bbb", "журнал", "новый");
-        expected.add(one);
-        expected.add(two);
-
-        List<Book> actual = repository.findAll();
-        assertNotNull(actual);
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected.toString(), actual.toString());
-    }
-
-    @Test
-    void findById() {
-        Book expected = new Book("aaa", "книга", "интересная");
-        Book actual = repository.findById("aaa");
-        assertNotNull(actual);
-        assertEquals(expected.toString(), actual.toString());
-    }
-
-    @Test
-    void deleteById() {
-        repository.deleteById("bbb");
-        assertNull(repository.findById("bbb"));
-    }
-
-    @Test
-    void save() {
-        Book expected = new Book("ccc", "новая книга", "неизвестно");
-        Book actual = repository.save(expected);
-        assertNotNull(actual);
-        assertEquals(3, repository.findAll().size());
-        assertEquals(expected.toString(), actual.toString());
-    }
-
-    @Test
-    void update() {
-        Book book = repository.findById("aaa");
-        book.setName("Новая книжка");
-        book.setDescription("новое описание");
-        Set<Author> authors = new HashSet<>();
-        authors.add(new Author("aa", "Пушкин"));
-        authors.add(new Author("bb", "Лермонтов"));
-        book.setAuthors(authors);
-        List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("aa", "вот это хренотаа"));
-        comments.add(new Comment("bb", "советую почитать"));
-        book.setComments(comments);
-        Book actual = repository.save(book);
-        assertNotNull(actual);
-        assertEquals(book, actual);
-    }
+//    @Test
+//    void findAll() {
+//        List<Book> expected = new ArrayList<>();
+//        Book one = new Book("aaa", "книга", "интересная");
+//        Book two = new Book("bbb", "журнал", "новый");
+//        expected.add(one);
+//        expected.add(two);
+//
+//        List<Book> actual = repository.findAll();
+//        assertNotNull(actual);
+//        assertEquals(expected.size(), actual.size());
+//        assertEquals(expected.toString(), actual.toString());
+//    }
+//
+//    @Test
+//    void findById() {
+//        Book expected = new Book("aaa", "книга", "интересная");
+//        Book actual = repository.findById("aaa");
+//        assertNotNull(actual);
+//        assertEquals(expected.toString(), actual.toString());
+//    }
+//
+//    @Test
+//    void deleteById() {
+//        repository.deleteById("bbb");
+//        assertNull(repository.findById("bbb"));
+//    }
+//
+//    @Test
+//    void save() {
+//        Book expected = new Book("ccc", "новая книга", "неизвестно");
+//        Book actual = repository.save(expected);
+//        assertNotNull(actual);
+//        assertEquals(3, repository.findAll().size());
+//        assertEquals(expected.toString(), actual.toString());
+//    }
+//
+//    @Test
+//    void update() {
+//        Book book = repository.findById("aaa");
+//        book.setName("Новая книжка");
+//        book.setDescription("новое описание");
+//        Set<Author> authors = new HashSet<>();
+//        authors.add(new Author("aa", "Пушкин"));
+//        authors.add(new Author("bb", "Лермонтов"));
+//        book.setAuthors(authors);
+//        List<Comment> comments = new ArrayList<>();
+//        comments.add(new Comment("aa", "вот это хренотаа"));
+//        comments.add(new Comment("bb", "советую почитать"));
+//        book.setComments(comments);
+//        Book actual = repository.save(book);
+//        assertNotNull(actual);
+//        assertEquals(book, actual);
+//    }
 }
