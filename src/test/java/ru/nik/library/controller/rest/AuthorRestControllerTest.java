@@ -48,7 +48,7 @@ class AuthorRestControllerTest {
     @Test
     void getAuthors() throws Exception {
         Mockito.when(service.getAllAuthors()).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/authors/all")
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/authors")
             .accept(MediaType.APPLICATION_JSON_VALUE);
         MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
         String expectedString = "[{\"id\":1,\"name\":\"Пушкин\",\"bookNames\":[]},{\"id\":2,\"name\":\"Кинг\",\"bookNames\":[]}]";
@@ -59,7 +59,7 @@ class AuthorRestControllerTest {
     @Test
     void deleteAuthor() throws Exception {
         Mockito.when(service.deleteAuthorById(1)).thenReturn(true);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/authors/author/{id}", 1);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/authors/{id}", 1);
         this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
         verify(this.service, Mockito.atLeastOnce()).deleteAuthorById(1);
     }
@@ -67,7 +67,7 @@ class AuthorRestControllerTest {
     @Test
     void updateAuthor() throws Exception {
         Mockito.when(service.updateAuthor(1, "Лермонтов")).thenReturn(true);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/authors/author/{id}", 1)
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/authors/{id}", 1)
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(new AuthorDto(1, "Лермонтов", Collections.emptyList())));
         this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();

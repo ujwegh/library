@@ -18,7 +18,6 @@ import ru.nik.library.dto.BookDto;
 import ru.nik.library.service.BookService;
 
 @RestController
-@Transactional
 public class BookRestController {
 
     private static Logger log = Logger.getLogger(BookRestController.class.getName());
@@ -30,7 +29,7 @@ public class BookRestController {
     }
 
 
-    @GetMapping("/rest/books/all")
+    @GetMapping("/rest/books")
     public List<BookDto> getAllBooks() {
         log.info("Get all books");
         List<BookDto> result = new ArrayList<>();
@@ -38,13 +37,13 @@ public class BookRestController {
         return result;
     }
 
-    @DeleteMapping("/rest/books/book/{id}")
+    @DeleteMapping("/rest/books/{id}")
     public void deleteBook(@PathVariable Integer id) {
         log.info("Delete book: " + id);
         service.deleteBookById(id);
     }
 
-    @PutMapping("/rest/books/book/{id}")
+    @PutMapping("/rest/books/{id}")
     public BookDto updateBook(@RequestBody BookDto bookDto, @PathVariable Integer id) {
         log.info("Update book: id = " + id + ", name = " + bookDto.getName() + ", description = "
             + bookDto.getDescription());
@@ -66,13 +65,13 @@ public class BookRestController {
     }
 
 
-    @PostMapping("/rest/books/book/{id}/authors")
+    @PostMapping("/rest/books/{id}/authors")
     public void updateBookAuthors(@RequestBody String string, @PathVariable Integer id) {
         String[] authors = string.split(", ");
         service.updateBookAuthors(id, authors);
     }
 
-    @PostMapping("/rest/books/book/{id}/genres")
+    @PostMapping("/rest/books/{id}/genres")
     public void updateBookGenres(@RequestBody String string, @PathVariable Integer id) {
         String[] genres = string.split(", ");
         service.updateBookGenres(id, genres);

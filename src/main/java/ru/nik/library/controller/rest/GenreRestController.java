@@ -16,7 +16,6 @@ import ru.nik.library.dto.GenreDto;
 import ru.nik.library.service.GenreService;
 
 @RestController
-@Transactional
 public class GenreRestController {
     private static Logger log = Logger.getLogger(GenreRestController.class.getName());
     private final GenreService service;
@@ -26,7 +25,7 @@ public class GenreRestController {
         this.service = service;
     }
 
-    @GetMapping("/rest/genres/all")
+    @GetMapping("/rest/genres")
     public List<GenreDto> getGenres() {
         log.info("Get all genres");
         List<GenreDto> result = new ArrayList<>();
@@ -34,13 +33,13 @@ public class GenreRestController {
         return result;
     }
 
-    @DeleteMapping("/rest/genres/genre/{id}")
+    @DeleteMapping("/rest/genres/{id}")
     public void deleteGenre(@PathVariable Integer id){
         log.info("Delete genre: " + id);
         service.deleteGenreById(id);
     }
 
-    @PutMapping("/rest/genres/genre/{id}")
+    @PutMapping("/rest/genres/{id}")
     public GenreDto updateGenre(@RequestBody GenreDto genre, @PathVariable Integer id) {
         log.info("Update genre: id = " + id + " name = " + genre.getName());
         if (service.updateGenre(id, genre.getName())) {

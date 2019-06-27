@@ -1,5 +1,6 @@
 package ru.nik.library.service;
 
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import ru.nik.library.repository.datajpa.GenreRepository;
 import java.util.List;
 
 @Service
+@Transactional
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository repository;
 

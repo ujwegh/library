@@ -54,7 +54,7 @@ class CommentRestControllerTest {
 	@Test
 	void getAllComments() throws Exception {
 		Mockito.when(service.getAllComments(0)).thenReturn(expected);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/comments/{bookId}/all", 0)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/comments/{bookId}", 0)
 			.accept(MediaType.APPLICATION_JSON_VALUE);
 		MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
 
@@ -80,7 +80,7 @@ class CommentRestControllerTest {
 	@Test
 	void updateComment() throws Exception {
 		Mockito.when(service.updateBookComment(0, 0, "новый, никому не нужный, коммент")).thenReturn(true);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/comments/{bookId}/comment", 0)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/comments/{bookId}", 0)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(asJsonString(new Comment(0, "новый, никому не нужный, коммент")));
 		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
@@ -93,7 +93,7 @@ class CommentRestControllerTest {
 	void addComment() throws Exception {
 		Mockito.when(service.addComment(0, "новый, никому не нужный, коммент")).thenReturn(true);
 		expected.add(new Comment("новый, никому не нужный, коммент"));
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/comments/{bookId}/comment",0)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/comments/{bookId}",0)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(asJsonString(new Comment("новый, никому не нужный, коммент")));
 		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();

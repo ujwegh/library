@@ -67,7 +67,7 @@ class BookRestControllerTest {
 	@Test
 	void getAllBooks() throws Exception {
 		Mockito.when(service.getAllBooks()).thenReturn(expected);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/books/all")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/books")
 			.accept(MediaType.APPLICATION_JSON_VALUE);
 		MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
 
@@ -83,7 +83,7 @@ class BookRestControllerTest {
 	@Test
 	void deleteBook() throws Exception {
 		Mockito.when(service.deleteBookById(1)).thenReturn(true);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/books/book/{id}", 1)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/books/{id}", 1)
 			.accept(MediaType.APPLICATION_JSON_VALUE);
 		this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
 		verify(this.service, Mockito.atLeastOnce()).deleteBookById(1);
@@ -92,7 +92,7 @@ class BookRestControllerTest {
 	@Test
 	void updateBook() throws Exception {
 		Mockito.when(service.updateBook(1, "Новая книга", "Новое описание")).thenReturn(true);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/books/book/{id}", 1)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/books/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(asJsonString(new BookDto(1, "Новая книга", "Новое описание",
 				0, Collections.emptyList(), Collections.emptyList())));
@@ -118,7 +118,7 @@ class BookRestControllerTest {
 	@Test
 	void updateBookAuthors() throws Exception {
 		Mockito.when(service.updateBookAuthors(1, "Лермонтов", "Достоевский")).thenReturn(true);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/books/book/{id}/authors", 1)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/books/{id}/authors", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("Лермонтов, Достоевский");
 		this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
@@ -128,7 +128,7 @@ class BookRestControllerTest {
 	@Test
 	void updateBookGenres() throws Exception {
 		Mockito.when(service.updateBookGenres(1, "учебник", "задачник")).thenReturn(true);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/books/book/{id}/genres", 1)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/books/{id}/genres", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content("учебник, задачник");
 		this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();

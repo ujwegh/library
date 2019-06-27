@@ -15,7 +15,6 @@ import ru.nik.library.domain.Comment;
 import ru.nik.library.service.CommentService;
 
 @RestController
-@Transactional
 public class CommentRestController {
     private static Logger log = Logger.getLogger(CommentRestController.class.getName());
     private final CommentService service;
@@ -25,7 +24,7 @@ public class CommentRestController {
         this.service = service;
     }
 
-    @GetMapping("/rest/comments/{bookId}/all")
+    @GetMapping("/rest/comments/{bookId}")
     public List<Comment> getAllComments(@PathVariable Integer bookId) {
         log.info("Get all comments");
         return service.getAllComments(bookId);
@@ -37,7 +36,7 @@ public class CommentRestController {
         service.deleteCommentById(id, bookId);
     }
 
-    @PutMapping("/rest/comments/{bookId}/comment")
+    @PutMapping("/rest/comments/{bookId}")
     public Comment updateComment(@RequestBody Comment comment, @PathVariable Integer bookId) {
         log.info("Update comment: " + comment.getId() + " name = " + comment);
         if (service.updateBookComment(comment.getId(), bookId, comment.getComment()))
@@ -45,7 +44,7 @@ public class CommentRestController {
         else return null;
     }
 
-    @PostMapping("/rest/comments/{bookId}/comment")
+    @PostMapping("/rest/comments/{bookId}")
     public Comment addComment(@RequestBody Comment comment, @PathVariable Integer bookId) {
         log.info("Add comment: " + comment + ", book id: " + bookId);
         if (service.addComment(bookId, comment.getComment()))

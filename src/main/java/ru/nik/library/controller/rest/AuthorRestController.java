@@ -16,7 +16,6 @@ import ru.nik.library.dto.AuthorDto;
 import ru.nik.library.service.AuthorService;
 
 @RestController
-@Transactional
 public class AuthorRestController {
     private static Logger log = Logger.getLogger(AuthorRestController.class.getName());
     private final AuthorService service;
@@ -26,7 +25,7 @@ public class AuthorRestController {
         this.service = service;
     }
 
-    @GetMapping("/rest/authors/all")
+    @GetMapping("/rest/authors")
     public List<AuthorDto> getAuthors() {
         log.info("Get all authors");
         List<AuthorDto> result = new ArrayList<>();
@@ -34,13 +33,13 @@ public class AuthorRestController {
         return result;
     }
 
-    @DeleteMapping("/rest/authors/author/{id}")
+    @DeleteMapping("/rest/authors/{id}")
     public void deleteAuthor(@PathVariable Integer id){
         log.info("Delete author: " + id);
         service.deleteAuthorById(id);
     }
 
-    @PutMapping("/rest/authors/author/{id}")
+    @PutMapping("/rest/authors/{id}")
     public AuthorDto updateAuthor(@RequestBody AuthorDto author, @PathVariable Integer id) {
         log.info("Update author: id = " + id + " name = " + author.getName());
         if (service.updateAuthor(id, author.getName())) {

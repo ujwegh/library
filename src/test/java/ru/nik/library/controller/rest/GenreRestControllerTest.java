@@ -48,7 +48,7 @@ class GenreRestControllerTest {
     @Test
     void getGenres() throws Exception {
         Mockito.when(service.getAllGenres()).thenReturn(expected);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/genres/all")
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/genres")
             .accept(MediaType.APPLICATION_JSON_VALUE);
         MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
         String expectedString = "[{\"id\":1,\"name\":\"фантастика\",\"bookNames\":[]},{\"id\":2,\"name\":\"роман\",\"bookNames\":[]}]";
@@ -59,7 +59,7 @@ class GenreRestControllerTest {
     @Test
     void deleteGenre() throws Exception {
         Mockito.when(service.deleteGenreById(1)).thenReturn(true);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/genres/genre/{id}", 1);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/genres/{id}", 1);
         this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
         verify(this.service, Mockito.atLeastOnce()).deleteGenreById(1);
     }
@@ -67,7 +67,7 @@ class GenreRestControllerTest {
     @Test
     void updateGenre() throws Exception {
         Mockito.when(service.updateGenre(1, "учебник")).thenReturn(true);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/genres/genre/{id}", 1)
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/genres/{id}", 1)
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(new GenreDto(1, "учебник", Collections.emptyList())));
         this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
