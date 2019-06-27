@@ -15,7 +15,7 @@ import ru.nik.library.domain.Book;
 @AllArgsConstructor
 public class BookDto {
 
-    private Integer id;
+    private String id;
 
     private String name;
 

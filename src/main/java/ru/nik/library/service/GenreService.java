@@ -1,25 +1,27 @@
 package ru.nik.library.service;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Genre;
 
 import java.util.List;
 
 public interface GenreService {
-    Boolean addGenre(String name);
+    Mono<Genre> addGenre(String name);
 
-    Boolean deleteGenreById(String id);
+    Mono<Boolean> deleteGenreById(String id);
 
-    Boolean deleteGenreByName(String name);
+    Mono<Boolean> deleteGenreByName(String name);
 
-    Boolean updateGenre(String id, String name);
+    Mono<Genre> updateGenre(String id, String name);
 
-    Genre getGenreByName(String name);
+    Mono<Genre> getGenreByName(String name);
 
-    Genre getGenreById(String id);
+    Mono<Genre> getGenreById(String id);
 
-    List<Genre> getAllGenres();
+    Flux<Genre> getAllGenres();
 
-    List<Genre> getAllByNames(String ... names);
+    Flux<Genre> getAllByNames(String ... names);
 
-    List<Genre> saveAll(List<Genre> genres);
+    Flux<Genre> saveAll(List<Genre> genres);
 }

@@ -3,6 +3,8 @@ package ru.nik.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Genre;
@@ -26,48 +28,44 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Boolean addBook(String name, String description) {
-        return repository.save(new Book(name, description)) != null;
+    public Mono<Book> addBook(String name, String description) {
+        return repository.save(new Book(name, description));
     }
 
     @Override
-    public Boolean deleteBookById(String id) {
-        try {
-            repository.deleteById(id);
-            return true;
-        } catch (EmptyResultDataAccessException e) {
-            return false;
-        }
+    public Mono<Boolean> deleteBookById(String id) {
+        return repository.deleteById(id);
     }
 
     @Override
-    public Boolean updateBook(String id, String name, String description) {
-        Book book = repository.findById(id);
-        book.setName(name);
-        book.setDescription(description);
-        return repository.save(book) != null;
+    public Mono<Book> updateBook(String id, String name, String description) {
+        return repository.findById(id).doOnSuccess(book -> {
+            book.setName(name);
+            book.setDescription(description);
+            repository.save(book);
+        });
     }
 
     @Override
-    public Book getBookById(String id) {
+    public Mono<Book> getBookById(String id) {
         return repository.findById(id);
     }
 
     @Override
-    public List<Book> getAllBooks() {
+    public Flux<Book> getAllBooks() {
         return repository.findAll();
     }
 
 
     @Override
-    public Boolean updateBookAuthors(String bookId, String... authors) {
+    public Mono<Book> updateBookAuthors(String bookId, String... authors) {
         Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
         Book book = repository.findById(bookId);
 
         Set<Author> toAdd = new HashSet<>();
         Set<Author> toDelete = new HashSet<>();
         if (book != null) {
-            List<Author> authorList = authorService.getAllByNames(authors);
+            Flux<Author> authorList = authorService.getAllByNames(authors);
             authorSet.forEach(a -> authorList.stream()
                     .filter(dbAuthor -> a.getName().equals(dbAuthor.getName()))
                     .forEachOrdered(dbAuthor -> {

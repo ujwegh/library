@@ -14,7 +14,7 @@ import ru.nik.library.domain.Genre;
 @AllArgsConstructor
 public class GenreDto {
 
-    private int id;
+    private String id;
 
     private String name;
 

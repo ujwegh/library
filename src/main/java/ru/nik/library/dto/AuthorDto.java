@@ -14,7 +14,7 @@ import ru.nik.library.domain.Author;
 @AllArgsConstructor
 public class AuthorDto {
 
-    private int id;
+    private String id;
 
     private String name;
 

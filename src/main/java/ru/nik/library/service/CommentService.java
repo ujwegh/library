@@ -1,17 +1,17 @@
 package ru.nik.library.service;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Comment;
 
-import java.util.List;
-
 public interface CommentService {
-    Boolean addComment(String bookId, String comment);
+    Mono<Comment> addComment(String bookId, String comment);
 
-    Boolean deleteCommentById(String id, String bookId);
+    Mono<Boolean> deleteCommentById(String id, String bookId);
 
-    Boolean updateBookComment(String id, String bookId, String comment);
+    Mono<Comment> updateBookComment(String id, String bookId, String comment);
 
-    Comment getCommentById(String id, String bookId);
+    Mono<Comment> getCommentById(String id, String bookId);
 
-    List<Comment> getAllComments(String bookId);
+    Flux<Comment> getAllComments(String bookId);
 }

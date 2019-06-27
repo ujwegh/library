@@ -3,6 +3,8 @@ package ru.nik.library.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Author;
 import ru.nik.library.repository.datajpa.AuthorRepository;
 
@@ -19,55 +21,50 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Boolean addAuthor(String name) {
-        Author author = new Author(name);
-        return repository.save(author) != null;
+    public Mono<Author> addAuthor(String name) {
+        return repository.save(new Author(name));
     }
 
     @Override
-    public Boolean deleteAuthorById(String id) {
-        try {
-            repository.deleteById(id);
-            return true;
-        } catch (EmptyResultDataAccessException e) {
-            return false;
-        }
+    public Mono<Boolean> deleteAuthorById(String id) {
+        return repository.deleteById(id);
     }
 
     @Override
-    public Boolean deleteAuthorByName(String name) {
-        return repository.deleteByName(name) != 0;
+    public Mono<Boolean> deleteAuthorByName(String name) {
+        return repository.deleteByName(name);
     }
 
     @Override
-    public Boolean updateAuthor(String id, String name) {
-        Author author = repository.findById(id);
-        author.setName(name);
-        return repository.save(author) != null;
+    public Mono<Author> updateAuthor(String id, String name) {
+        return repository.findById(id).doOnSuccess(author -> {
+            author.setName(name);
+            repository.save(author);
+        });
     }
 
     @Override
-    public Author getAuthorByName(String name) {
+    public Mono<Author> getAuthorByName(String name) {
         return repository.findByName(name);
     }
 
     @Override
-    public Author getAuthorById(String id) {
+    public Mono<Author> getAuthorById(String id) {
         return repository.findById(id);
     }
 
     @Override
-    public List<Author> getAllAuthors() {
+    public Flux<Author> getAllAuthors() {
         return repository.findAll();
     }
 
     @Override
-    public List<Author> getAllByNames(String... names) {
+    public Flux<Author> getAllByNames(String... names) {
         return repository.findAllByNameIn(names);
     }
 
     @Override
-    public List<Author> saveAll(List<Author> authors) {
+    public Flux<Author> saveAll(List<Author> authors) {
         return repository.saveAll(authors);
     }
 }

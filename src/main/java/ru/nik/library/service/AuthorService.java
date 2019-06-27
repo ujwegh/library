@@ -1,26 +1,28 @@
 package ru.nik.library.service;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Author;
 
 import java.util.List;
 
 public interface AuthorService {
-    Boolean addAuthor(String name);
+    Mono<Author> addAuthor(String name);
 
-    Boolean deleteAuthorById(String id);
+    Mono<Boolean> deleteAuthorById(String id);
 
-    Boolean deleteAuthorByName(String name);
+    Mono<Boolean> deleteAuthorByName(String name);
 
-    Boolean updateAuthor(String id, String name);
+    Mono<Author> updateAuthor(String id, String name);
 
-    Author getAuthorByName(String name);
+    Mono<Author> getAuthorByName(String name);
 
-    Author getAuthorById(String id);
+    Mono<Author> getAuthorById(String id);
 
-    List<Author> getAllAuthors();
+    Flux<Author> getAllAuthors();
 
-    List<Author> getAllByNames(String ... names);
+    Flux<Author> getAllByNames(String ... names);
 
-    List<Author> saveAll(List<Author> authors);
+    Flux<Author> saveAll(List<Author> authors);
 
 }

@@ -2,6 +2,8 @@ package ru.nik.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
 import ru.nik.library.repository.datajpa.BookRepository;
@@ -22,36 +24,31 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Boolean addComment(String bookId, String message) {
+    public Mono<Comment> addComment(String bookId, String message) {
         Comment comment = new Comment(message);
-        Book book = bookRepository.findById(bookId);
-        if (book != null){
-            comment.setBook(book);
-        } else {
-            return false;
-        }
-        return repository.save(comment) != null;
+        return bookRepository.findById(bookId).doOnSuccess(comment::setBook).then(repository.save(comment));
     }
 
     @Override
-    public Boolean deleteCommentById(String id, String bookId) {
-        return repository.deleteByIdAndBook_Id(id, bookId) != 0;
+    public Mono<Boolean> deleteCommentById(String id, String bookId) {
+        return repository.deleteByIdAndBook_Id(id, bookId);
     }
 
     @Override
-    public Boolean updateBookComment(String id, String bookId, String message) {
-        Comment comment = repository.findByIdAndBook_Id(id, bookId);
-        comment.setComment(message);
-        return repository.save(comment) != null;
+    public Mono<Comment> updateBookComment(String id, String bookId, String message) {
+        return repository.findByIdAndBook_Id(id, bookId).doOnSuccess(comment -> {
+            comment.setComment(message);
+            repository.save(comment);
+        });
     }
 
     @Override
-    public Comment getCommentById(String id, String bookId) {
+    public Mono<Comment> getCommentById(String id, String bookId) {
         return repository.findByIdAndBook_Id(id, bookId);
     }
 
     @Override
-    public List<Comment> getAllComments(String bookId) {
+    public Flux<Comment> getAllComments(String bookId) {
         return repository.findAllByBook_Id(bookId);
     }
 }

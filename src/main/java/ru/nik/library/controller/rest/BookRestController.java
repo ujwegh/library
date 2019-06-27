@@ -3,7 +3,6 @@ package ru.nik.library.controller.rest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +17,6 @@ import ru.nik.library.dto.BookDto;
 import ru.nik.library.service.BookService;
 
 @RestController
-@Transactional
 public class BookRestController {
 
     private static Logger log = Logger.getLogger(BookRestController.class.getName());

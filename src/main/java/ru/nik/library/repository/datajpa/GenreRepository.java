@@ -1,21 +1,21 @@
 package ru.nik.library.repository.datajpa;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Genre;
 
-import java.util.List;
+public interface GenreRepository extends ReactiveMongoRepository<Genre, Integer> {
 
-public interface GenreRepository extends MongoRepository<Genre, Integer> {
-    List<Genre> findAll();
+	Flux<Genre> findAll();
 
-    List<Genre> findAllByNameIn(String... names);
+	Flux<Genre> findAllByNameIn(String... names);
 
-    Genre findByName(String name);
+	Mono<Genre> findByName(String name);
 
-    Genre findById(String id);
+	Mono<Genre> findById(String id);
 
-    void deleteById(String id) throws EmptyResultDataAccessException;
+	Mono<Boolean> deleteById(String id);
 
-    int deleteByName(String name);
+	Mono<Boolean> deleteByName(String name);
 }

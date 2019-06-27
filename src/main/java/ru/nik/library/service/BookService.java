@@ -1,21 +1,21 @@
 package ru.nik.library.service;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Book;
 
-import java.util.List;
-
 public interface BookService {
-    Boolean addBook(String name, String description);
+    Mono<Book> addBook(String name, String description);
 
-    Boolean deleteBookById(String id);
+    Mono<Boolean> deleteBookById(String id);
 
-    Boolean updateBook(String id,String name, String description);
+    Mono<Book> updateBook(String id,String name, String description);
 
-    Book getBookById(String id);
+    Mono<Book> getBookById(String id);
 
-    List<Book> getAllBooks();
+    Flux<Book> getAllBooks();
 
-    Boolean updateBookAuthors(String bookId, String ... authors);
+    Mono<Book> updateBookAuthors(String bookId, String ... authors);
 
-    Boolean updateBookGenres(String bookId, String ... genres);
+    Mono<Book> updateBookGenres(String bookId, String ... genres);
 }

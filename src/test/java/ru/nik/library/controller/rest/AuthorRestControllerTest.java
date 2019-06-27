@@ -40,8 +40,8 @@ class AuthorRestControllerTest {
     @BeforeEach
     void setUp() {
         expected = new ArrayList<>();
-        expected.add(new Author(1, "Пушкин"));
-        expected.add(new Author(2, "Кинг"));
+        expected.add(new Author("a", "Пушкин"));
+        expected.add(new Author("b", "Кинг"));
     }
 
 
@@ -51,27 +51,27 @@ class AuthorRestControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/rest/authors/all")
             .accept(MediaType.APPLICATION_JSON_VALUE);
         MvcResult result = mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-        String expectedString = "[{\"id\":1,\"name\":\"Пушкин\",\"bookNames\":[]},{\"id\":2,\"name\":\"Кинг\",\"bookNames\":[]}]";
+        String expectedString = "[{\"id\":a,\"name\":\"Пушкин\",\"bookNames\":[]},{\"id\":b,\"name\":\"Кинг\",\"bookNames\":[]}]";
         JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
         verify(this.service, Mockito.atLeastOnce()).getAllAuthors();
     }
 
     @Test
     void deleteAuthor() throws Exception {
-        Mockito.when(service.deleteAuthorById(1)).thenReturn(true);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/authors/author/{id}", 1);
+        Mockito.when(service.deleteAuthorById("a")).thenReturn(true);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/rest/authors/author/{id}", "a");
         this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-        verify(this.service, Mockito.atLeastOnce()).deleteAuthorById(1);
+        verify(this.service, Mockito.atLeastOnce()).deleteAuthorById("a");
     }
 
     @Test
     void updateAuthor() throws Exception {
-        Mockito.when(service.updateAuthor(1, "Лермонтов")).thenReturn(true);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/authors/author/{id}", 1)
+        Mockito.when(service.updateAuthor("a", "Лермонтов")).thenReturn(true);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/rest/authors/author/{id}", "a")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(new AuthorDto(1, "Лермонтов", Collections.emptyList())));
+            .content(asJsonString(new AuthorDto("a", "Лермонтов", Collections.emptyList())));
         this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-        verify(this.service, Mockito.atLeastOnce()).updateAuthor(1, "Лермонтов");
+        verify(this.service, Mockito.atLeastOnce()).updateAuthor("a", "Лермонтов");
     }
 
     @Test
@@ -80,9 +80,9 @@ class AuthorRestControllerTest {
         expected.add(new Author("Лермонтов"));
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/rest/authors")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(new AuthorDto(0,"Лермонтов", Collections.emptyList())));
+            .content(asJsonString(new AuthorDto("a","Лермонтов", Collections.emptyList())));
 		MvcResult result = this.mvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
-		String expectedString = "{\"id\":0,\"name\":\"Лермонтов\",\"bookNames\":[]}";
+		String expectedString = "{\"id\":a,\"name\":\"Лермонтов\",\"bookNames\":[]}";
 		JSONAssert.assertEquals(expectedString, result.getResponse().getContentAsString(), false);
         verify(this.service, Mockito.atLeastOnce()).addAuthor( "Лермонтов");
     }
