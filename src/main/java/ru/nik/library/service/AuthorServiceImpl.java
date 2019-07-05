@@ -26,21 +26,18 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Mono<Boolean> deleteAuthorById(String id) {
+    public Mono<Void> deleteAuthorById(String id) {
         return repository.deleteById(id);
     }
 
     @Override
-    public Mono<Boolean> deleteAuthorByName(String name) {
-        return repository.deleteByName(name);
-    }
-
-    @Override
     public Mono<Author> updateAuthor(String id, String name) {
-        return repository.findById(id).doOnSuccess(author -> {
+        Mono<Author> authorMono = repository.findById(id).map(author -> {
             author.setName(name);
-            repository.save(author);
+            return author;
         });
+
+        return repository.save(authorMono.block());
     }
 
     @Override

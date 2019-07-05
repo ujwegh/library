@@ -33,17 +33,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Mono<Boolean> deleteBookById(String id) {
+    public Mono<Void> deleteBookById(String id) {
         return repository.deleteById(id);
     }
 
     @Override
     public Mono<Book> updateBook(String id, String name, String description) {
-        return repository.findById(id).doOnSuccess(book -> {
-            book.setName(name);
-            book.setDescription(description);
-            repository.save(book);
-        });
+		Mono<Book> bookMono = repository.findById(id).map(book -> {
+			book.setName(name);
+			book.setDescription(description);
+			return book;
+		});
+
+		return repository.save(bookMono.block());
     }
 
     @Override
@@ -65,19 +67,29 @@ public class BookServiceImpl implements BookService {
         Set<Author> toAdd = new HashSet<>();
         Set<Author> toDelete = new HashSet<>();
         if (book != null) {
-            authorSet.forEach(a -> authorService.getAllByNames(authors).map(author -> {
-                if (a.getName().equals(author.getName())) {
-                    toDelete.add(a);
-                    toAdd.add(author);
-                }
-                return author;
-            }));
+            List<Author> existedAuthors = authorService.getAllByNames(authors).collectList().block();
+
+            authorSet.forEach(author -> existedAuthors.forEach(existedAuthor -> {
+					if (author.getName().equals(existedAuthor.getName())) {
+						toDelete.add(author);
+						toAdd.add(existedAuthor);
+					}
+				})
+			);
+
             authorSet.removeAll(toDelete);
             authorSet.addAll(toAdd);
             List<Author> toSaveAuthors = new ArrayList<>(authorSet);
 
-            authorService.saveAll(toSaveAuthors);
-            return book.doOnSuccess(b -> b.setAuthors(authorSet)).doOnSuccess(repository::save);
+			toSaveAuthors.forEach(System.out::println);
+            Flux<Author> authorFlux = authorService.saveAll(toSaveAuthors);
+            Set<Author> set = new HashSet<>(
+				Objects.requireNonNull(authorFlux.collectList().block()));
+            Mono<Book> mono = book.map(b -> {
+            	b.setAuthors(set);
+            	return b;
+			});
+            return repository.save(mono.block());
         }
         return null;
     }
@@ -90,20 +102,29 @@ public class BookServiceImpl implements BookService {
         Set<Genre> toAdd = new HashSet<>();
         Set<Genre> toDelete = new HashSet<>();
         if (book != null) {
-            genreSet.forEach(a -> genreService.getAllByNames(genres).map(genre -> {
-                if (a.getName().equals(genre.getName())) {
-                    toDelete.add(a);
-                    toAdd.add(genre);
-                }
-                return genre;
-            }));
+			List<Genre> existedGenres = genreService.getAllByNames(genres).collectList().block();
+
+			genreSet.forEach(genre -> existedGenres.forEach(existedGenre -> {
+					if (genre.getName().equals(existedGenre.getName())) {
+						toDelete.add(genre);
+						toAdd.add(existedGenre);
+					}
+				})
+			);
+
             genreSet.removeAll(toDelete);
             genreSet.addAll(toAdd);
 
-            List<Genre> toSaveAuthors = new ArrayList<>(genreSet);
+            List<Genre> toSaveGenres = new ArrayList<>(genreSet);
 
-            genreService.saveAll(toSaveAuthors);
-            return book.doOnSuccess(b -> b.setGenres(genreSet)).doOnSuccess(repository::save);
+			Flux<Genre> genreFlux = genreService.saveAll(toSaveGenres);
+			Set<Genre> set = new HashSet<>(
+				Objects.requireNonNull(genreFlux.collectList().block()));
+			Mono<Book> mono = book.map(b -> {
+				b.setGenres(set);
+				return b;
+			});
+			return repository.save(mono.block());
         }
         return null;
     }

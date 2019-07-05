@@ -27,7 +27,8 @@ public class BookDto {
 
     private List<String> genreNames;
 
-    public BookDto(String name, String description) {
+    public BookDto(String id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }

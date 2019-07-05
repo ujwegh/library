@@ -14,41 +14,44 @@ import java.util.List;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentRepository repository;
-    private final BookRepository bookRepository;
+	private final CommentRepository repository;
+	private final BookRepository bookRepository;
 
-    @Autowired
-    public CommentServiceImpl(CommentRepository repository, BookRepository bookRepository) {
-        this.repository = repository;
-        this.bookRepository = bookRepository;
-    }
+	@Autowired
+	public CommentServiceImpl(CommentRepository repository, BookRepository bookRepository) {
+		this.repository = repository;
+		this.bookRepository = bookRepository;
+	}
 
-    @Override
-    public Mono<Comment> addComment(String bookId, String message) {
-        Comment comment = new Comment(message);
-        return bookRepository.findById(bookId).doOnSuccess(comment::setBook).then(repository.save(comment));
-    }
+	@Override
+	public Mono<Comment> addComment(String bookId, String message) {
+		Comment comment = new Comment(message);
+		return bookRepository.findById(bookId).doOnSuccess(comment::setBook)
+			.then(repository.save(comment));
+	}
 
-    @Override
-    public Mono<Boolean> deleteCommentById(String id, String bookId) {
-        return repository.deleteByIdAndBook_Id(id, bookId);
-    }
+	@Override
+	public Mono<Void> deleteCommentById(String id, String bookId) {
+		return repository.deleteByIdAndBook_Id(id, bookId).then();
+	}
 
-    @Override
-    public Mono<Comment> updateBookComment(String id, String bookId, String message) {
-        return repository.findByIdAndBook_Id(id, bookId).doOnSuccess(comment -> {
-            comment.setComment(message);
-            repository.save(comment);
-        });
-    }
+	@Override
+	public Mono<Comment> updateBookComment(String id, String bookId, String message) {
+		Mono<Comment> commentMono = repository.findByIdAndBook_Id(id, bookId).map(comment -> {
+			comment.setComment(message);
+			return comment;
+		});
 
-    @Override
-    public Mono<Comment> getCommentById(String id, String bookId) {
-        return repository.findByIdAndBook_Id(id, bookId);
-    }
+		return repository.save(commentMono.block());
+	}
 
-    @Override
-    public Flux<Comment> getAllComments(String bookId) {
-        return repository.findAllByBook_Id(bookId);
-    }
+	@Override
+	public Mono<Comment> getCommentById(String id, String bookId) {
+		return repository.findByIdAndBook_Id(id, bookId);
+	}
+
+	@Override
+	public Flux<Comment> getAllComments(String bookId) {
+		return repository.findAllByBook_Id(bookId);
+	}
 }

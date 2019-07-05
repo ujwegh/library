@@ -1,5 +1,6 @@
 package ru.nik.library.repository.datajpa;
 
+import com.mongodb.MongoClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -8,8 +9,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
@@ -32,68 +36,93 @@ class BookRepositoryTest {
     @Autowired
     private BookRepository repository;
 
+    private MongoTemplate mongoTemplate = new MongoTemplate(new MongoClient("localhost", 27017),
+        "testdb");
 
     @BeforeEach
     public void init() {
         Book one = new Book("aaa", "книга", "интересная");
         Book two = new Book("bbb", "журнал", "новый");
-        repository.save(one);
-        repository.save(two);
+        mongoTemplate.dropCollection("books");
+        mongoTemplate.save(one);
+        mongoTemplate.save(two);
     }
 
 
-//    @Test
-//    void findAll() {
-//        List<Book> expected = new ArrayList<>();
-//        Book one = new Book("aaa", "книга", "интересная");
-//        Book two = new Book("bbb", "журнал", "новый");
-//        expected.add(one);
-//        expected.add(two);
-//
-//        List<Book> actual = repository.findAll();
-//        assertNotNull(actual);
-//        assertEquals(expected.size(), actual.size());
-//        assertEquals(expected.toString(), actual.toString());
-//    }
-//
-//    @Test
-//    void findById() {
-//        Book expected = new Book("aaa", "книга", "интересная");
-//        Book actual = repository.findById("aaa");
-//        assertNotNull(actual);
-//        assertEquals(expected.toString(), actual.toString());
-//    }
-//
-//    @Test
-//    void deleteById() {
-//        repository.deleteById("bbb");
-//        assertNull(repository.findById("bbb"));
-//    }
-//
-//    @Test
-//    void save() {
-//        Book expected = new Book("ccc", "новая книга", "неизвестно");
-//        Book actual = repository.save(expected);
-//        assertNotNull(actual);
-//        assertEquals(3, repository.findAll().size());
-//        assertEquals(expected.toString(), actual.toString());
-//    }
-//
-//    @Test
-//    void update() {
-//        Book book = repository.findById("aaa");
-//        book.setName("Новая книжка");
-//        book.setDescription("новое описание");
-//        Set<Author> authors = new HashSet<>();
-//        authors.add(new Author("aa", "Пушкин"));
-//        authors.add(new Author("bb", "Лермонтов"));
-//        book.setAuthors(authors);
-//        List<Comment> comments = new ArrayList<>();
-//        comments.add(new Comment("aa", "вот это хренотаа"));
-//        comments.add(new Comment("bb", "советую почитать"));
-//        book.setComments(comments);
-//        Book actual = repository.save(book);
-//        assertNotNull(actual);
-//        assertEquals(book, actual);
-//    }
+    @Test
+    void findAll() {
+        List<Book> expected = new ArrayList<>();
+        Book one = new Book("aaa", "книга", "интересная");
+        Book two = new Book("bbb", "журнал", "новый");
+        expected.add(one);
+        expected.add(two);
+
+        repository.findAll().collectList()
+        .as(StepVerifier::create)
+        .assertNext(books -> {
+            assertNotNull(books);
+            assertEquals(expected.size(), books.size());
+            assertEquals(expected.toString(), books.toString());
+        }).verifyComplete();
+    }
+
+    @Test
+    void findById() {
+        Book expected = new Book("aaa", "книга", "интересная");
+        repository.findById("aaa")
+        .as(StepVerifier::create)
+        .assertNext(book -> {
+            assertNotNull(book);
+            assertEquals(expected.toString(), book.toString());
+        }).verifyComplete();
+    }
+
+    @Test
+    void deleteById() {
+        repository.deleteById("bbb")
+        .as(StepVerifier::create)
+        .verifyComplete();
+
+        assertNull(repository.findById("bbb").block());
+    }
+
+    @Test
+    void save() {
+        Book expected = new Book("ccc", "новая книга", "неизвестно");
+        repository.save(expected)
+        .as(StepVerifier::create)
+        .assertNext(book -> {
+            assertNotNull(book);
+            assertEquals(expected.toString(), book.toString());
+        }).verifyComplete();
+    }
+
+    @Test
+    void update() {
+        Set<Author> authors = new HashSet<>();
+        authors.add(new Author("aa", "Пушкин"));
+        authors.add(new Author("bb", "Лермонтов"));
+
+        List<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("aa", "вот это хренотаа"));
+        comments.add(new Comment("bb", "советую почитать"));
+
+        Mono<Book> book = repository.findById("aaa").map(book1 -> {
+            book1.setName("Новая книжка");
+            book1.setDescription("новое описание");
+            book1.setAuthors(authors);
+            book1.setComments(comments);
+            return book1;
+        });
+
+        Book expected = book.block();
+
+        repository.save(expected)
+        .as(StepVerifier::create)
+        .assertNext(s -> {
+            assertNotNull(s);
+            assertEquals(expected, s);
+        }).verifyComplete();
+
+    }
 }

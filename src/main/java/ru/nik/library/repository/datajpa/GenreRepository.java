@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Genre;
 
-public interface GenreRepository extends ReactiveMongoRepository<Genre, Integer> {
+public interface GenreRepository extends ReactiveMongoRepository<Genre, String> {
 
 	Flux<Genre> findAll();
 
@@ -15,7 +15,7 @@ public interface GenreRepository extends ReactiveMongoRepository<Genre, Integer>
 
 	Mono<Genre> findById(String id);
 
-	Mono<Boolean> deleteById(String id);
+	Mono<Void> deleteById(String id);
 
-	Mono<Boolean> deleteByName(String name);
+	Mono<Void> deleteByName(String name);
 }

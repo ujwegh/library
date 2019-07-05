@@ -1,5 +1,6 @@
 package ru.nik.library.utils;
 
+import reactor.core.publisher.Flux;
 import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Genre;
@@ -21,8 +22,7 @@ public class Util {
         return builder.substring(0, builder.toString().length() - 2);
     }
 
-    public static List<Book> sortBooks(List<Book> books) {
-        books.sort(Comparator.comparing(Book::getName));
-        return books;
+    public static Flux<Book> sortBooks(Flux<Book> books) {
+        return books.sort(Comparator.comparing(Book::getName));
     }
 }

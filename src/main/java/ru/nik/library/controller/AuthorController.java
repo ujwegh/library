@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Author;
 import ru.nik.library.service.AuthorService;
 
@@ -21,41 +23,41 @@ public class AuthorController {
         this.service = service;
     }
 
-//    @GetMapping("/authors")
-//    public String getAuthors(Model model) {
-//        log.info("Get all authors");
-//        List<Author> authors = service.getAllAuthors();
-//        model.addAttribute("authors", authors);
-//        return "list";
-//    }
-//
-//    @GetMapping("/authors/edit/{id}")
-//    public String edit(@PathVariable("id") String id, Model model) {
-//        log.info("Edit author: " + id);
-//        Author author = service.getAuthorById(id);
-//        model.addAttribute("author", author);
-//        return "/edit";
-//    }
-//
-//    @PostMapping("/authors/delete")
-//    public String delete(@RequestParam("id") String id) {
-//        log.info("Delete author: " + id);
-//        service.deleteAuthorById(id);
-//        return "redirect:/authors";
-//    }
-//
-//    @PostMapping("/authors")
-//    public String addAuthor(@RequestParam("name") String name) {
-//        log.info("Add author: " + name);
-//        service.addAuthor(name);
-//        return "redirect:/authors";
-//    }
-//
-//    @PostMapping("/authors/update")
-//    public String updateAuthor(@RequestParam("id") String id, @ModelAttribute("name") String name) {
-//        log.info("Update author: id = " + id + " name = " + name);
-//        service.updateAuthor(id, name);
-//        return "redirect:/authors";
-//    }
+    @GetMapping("/authors")
+    public String getAuthors(Model model) {
+        log.info("Get all authors");
+        Flux<Author> authors = service.getAllAuthors();
+        model.addAttribute("authors", authors);
+        return "list";
+    }
+
+    @GetMapping("/authors/edit/{id}")
+    public String edit(@PathVariable("id") String id, Model model) {
+        log.info("Edit author: " + id);
+        Mono<Author> author = service.getAuthorById(id);
+        model.addAttribute("author", author);
+        return "/edit";
+    }
+
+    @PostMapping("/authors/delete")
+    public String delete(@RequestParam("id") String id) {
+        log.info("Delete author: " + id);
+        service.deleteAuthorById(id);
+        return "redirect:/authors";
+    }
+
+    @PostMapping("/authors")
+    public String addAuthor(@RequestParam("name") String name) {
+        log.info("Add author: " + name);
+        service.addAuthor(name);
+        return "redirect:/authors";
+    }
+
+    @PostMapping("/authors/update")
+    public String updateAuthor(@RequestParam("id") String id, @ModelAttribute("name") String name) {
+        log.info("Update author: id = " + id + " name = " + name);
+        service.updateAuthor(id, name);
+        return "redirect:/authors";
+    }
 
 }

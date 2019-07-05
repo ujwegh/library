@@ -9,9 +9,9 @@ import java.util.List;
 public interface GenreService {
     Mono<Genre> addGenre(String name);
 
-    Mono<Boolean> deleteGenreById(String id);
+    Mono<Void> deleteGenreById(String id);
 
-    Mono<Boolean> deleteGenreByName(String name);
+    Mono<Void> deleteGenreByName(String name);
 
     Mono<Genre> updateGenre(String id, String name);
 

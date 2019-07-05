@@ -7,7 +7,7 @@ import ru.nik.library.domain.Comment;
 public interface CommentService {
     Mono<Comment> addComment(String bookId, String comment);
 
-    Mono<Boolean> deleteCommentById(String id, String bookId);
+    Mono<Void> deleteCommentById(String id, String bookId);
 
     Mono<Comment> updateBookComment(String id, String bookId, String comment);
 

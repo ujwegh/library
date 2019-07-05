@@ -1,11 +1,12 @@
 package ru.nik.library.repository.datajpa;
 
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Author;
 
-public interface AuthorRepository extends ReactiveMongoRepository<Author, Integer> {
+public interface AuthorRepository extends ReactiveMongoRepository<Author, String> {
 
     Flux<Author> findAll();
 
@@ -15,7 +16,7 @@ public interface AuthorRepository extends ReactiveMongoRepository<Author, Intege
 
     Mono<Author> findById(String id);
 
-    Mono<Boolean> deleteById(String id);
+    Mono<Void> deleteById(String id);
 
-    Mono<Boolean> deleteByName(String name);
+    Mono<Void> deleteByName(String name);
 }

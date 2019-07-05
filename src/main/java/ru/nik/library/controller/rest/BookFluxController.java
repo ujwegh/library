@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.nik.library.dto.BookDto;
 import ru.nik.library.service.BookService;
 
 @RestController
 public class BookFluxController {
 
-	private static Logger log = Logger.getLogger(BookRestController.class.getName());
+	private static Logger log = Logger.getLogger(BookFluxController.class.getName());
 	private final BookService service;
 
 	@Autowired
@@ -25,51 +27,43 @@ public class BookFluxController {
 		this.service = service;
 	}
 
-//	@GetMapping("/rest/books/all")
-//	public List<BookDto> getAllBooks() {
-//		log.info("Get all books");
-//		List<BookDto> result = new ArrayList<>();
-//		service.getAllBooks().forEach(b -> result.add(BookDto.toBookDto(b)));
-//		return result;
-//	}
-//
-//	@DeleteMapping("/rest/books/book/{id}")
-//	public void deleteBook(@PathVariable Integer id) {
-//		log.info("Delete book: " + id);
-//		service.deleteBookById(id);
-//	}
-//
-//	@PutMapping("/rest/books/book/{id}")
-//	public BookDto updateBook(@RequestBody BookDto bookDto, @PathVariable Integer id) {
-//		log.info("Update book: id = " + id + ", name = " + bookDto.getName() + ", description = "
-//			+ bookDto.getDescription());
-//		if (service.updateBook(bookDto.getId(), bookDto.getName(), bookDto.getDescription())) {
-//			return bookDto;
-//		} else {
-//			return null;
-//		}
-//	}
-//
-//	@PostMapping("/rest/books")
-//	public BookDto addBook(@RequestBody BookDto bookDto) {
-//		log.info("Add book: name =" + bookDto.getName() + ", description = " + bookDto.getDescription());
-//		if (service.addBook(bookDto.getName(), bookDto.getDescription())) {
-//			return bookDto;
-//		} else {
-//			return null;
-//		}
-//	}
-//
-//
-//	@PostMapping("/rest/books/book/{id}/authors")
-//	public void updateBookAuthors(@RequestBody String string, @PathVariable Integer id) {
-//		String[] authors = string.split(", ");
-//		service.updateBookAuthors(id, authors);
-//	}
-//
-//	@PostMapping("/rest/books/book/{id}/genres")
-//	public void updateBookGenres(@RequestBody String string, @PathVariable Integer id) {
-//		String[] genres = string.split(", ");
-//		service.updateBookGenres(id, genres);
-//	}
+	@GetMapping("/rest/books")
+	public Flux<BookDto> getAllBooks() {
+		log.info("Get all books");
+		return service.getAllBooks().map(BookDto::toBookDto);
+	}
+
+	@DeleteMapping("/rest/books/{id}")
+	public Mono<Void> deleteBook(@PathVariable String id) {
+		log.info("Delete book: " + id);
+		return service.deleteBookById(id).then();
+	}
+
+	@PutMapping("/rest/books/{id}")
+	public Mono<BookDto> updateBook(@RequestBody BookDto bookDto, @PathVariable String id) {
+		log.info("Update book: id = " + id + ", name = " + bookDto.getName() + ", description = "
+			+ bookDto.getDescription());
+		return service.updateBook(bookDto.getId(), bookDto.getName(), bookDto.getDescription()).map(
+			BookDto::toBookDto);
+	}
+
+	@PostMapping("/rest/books")
+	public Mono<BookDto> addBook(@RequestBody BookDto bookDto) {
+		log.info("Add book: name =" + bookDto.getName() + ", description = " + bookDto.getDescription());
+		return service.addBook(bookDto.getName(), bookDto.getDescription()).map(BookDto::toBookDto);
+	}
+
+
+	@PostMapping("/rest/books/{id}/authors")
+	public Mono<BookDto> updateBookAuthors(@RequestBody String string, @PathVariable String id) {
+		String[] authors = string.split(", ");
+		return service.updateBookAuthors(id, authors).map(BookDto::toBookDto);
+	}
+
+	@PostMapping("/rest/books/{id}/genres")
+	public Mono<BookDto> updateBookGenres(@RequestBody String string, @PathVariable String id) {
+		String[] genres = string.split(", ");
+		return service.updateBookGenres(id, genres).map(BookDto::toBookDto);
+	}
+
 }

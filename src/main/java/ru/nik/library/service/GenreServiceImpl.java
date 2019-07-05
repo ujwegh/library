@@ -26,23 +26,25 @@ public class GenreServiceImpl implements GenreService {
 	}
 
 	@Override
-	public Mono<Boolean> deleteGenreById(String id) {
+	public Mono<Void> deleteGenreById(String id) {
 
 		return repository.deleteById(id);
 
 	}
 
 	@Override
-	public Mono<Boolean> deleteGenreByName(String name) {
+	public Mono<Void> deleteGenreByName(String name) {
 		return repository.deleteByName(name);
 	}
 
 	@Override
 	public Mono<Genre> updateGenre(String id, String name) {
-		return repository.findById(id).doOnSuccess(genre -> {
+		Mono<Genre> genreMono = repository.findById(id).map(genre -> {
 			genre.setName(name);
-			repository.save(genre);
+			return genre;
 		});
+
+		return repository.save(genreMono.block());
 	}
 
 	@Override

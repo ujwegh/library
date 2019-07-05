@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 import ru.nik.library.domain.Book;
+import ru.nik.library.dto.BookDto;
 import ru.nik.library.service.BookService;
 
 import java.util.logging.Logger;
@@ -25,57 +27,61 @@ public class BookController {
         this.service = service;
     }
 
-//    @GetMapping("/")
-//    String index(Model model) {
-//        log.info("Get all books");
-//        model.addAttribute("books", sortBooks(service.getAllBooks()));
-//        return "welcome";
-//    }
-//
-//    @GetMapping("/books/edit/{id}")
-//    public String edit(@PathVariable("id") String id, Model model) {
-//        log.info("Edit book: " + id);
-//        Book book = service.getBookById(id);
-//        String authorNames = null;
-//        String genreNames = null;
-//        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
-//            authorNames = getAuthorNames(book.getAuthors());
-//        }
-//        if (book.getGenres() != null && book.getGenres().size() > 0) {
-//            genreNames = getGenreNames(book.getGenres());
-//        }
-//        model.addAttribute("authors", authorNames);
-//        model.addAttribute("genres", genreNames);
-//        model.addAttribute("book", book);
-//        return "/edit";
-//    }
-//
-//    @GetMapping("/books/view/{id}")
-//    public String view(@PathVariable("id") String id, Model model) {
-//        log.info("View book: " + id);
-//        Book book = service.getBookById(id);
-//        String authorNames = null;
-//        String genreNames = null;
-//        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
-//            authorNames = getAuthorNames(book.getAuthors());
-//        }
-//        if (book.getGenres() != null && book.getGenres().size() > 0) {
-//            genreNames = getGenreNames(book.getGenres());
-//        }
-//        model.addAttribute("authors", authorNames);
-//        model.addAttribute("genres", genreNames);
-//        model.addAttribute("book", book);
-//        return "/viewbook";
-//    }
-//
-//
-//    @PostMapping("/books/delete")
-//    public String delete(@RequestParam("id") String id, Model model) {
-//        log.info("Delete book: " + id);
-//        service.deleteBookById(id);
-//        model.addAttribute("books", sortBooks(service.getAllBooks()));
-//        return "redirect:/";
-//    }
+    @GetMapping("/")
+    String index(Model model) {
+        log.info("Get all books");
+        model.addAttribute("books", sortBooks(service.getAllBooks()).collectList().block());
+
+        return "welcome";
+    }
+
+    @GetMapping("/books/edit/{id}")
+    public String edit(@PathVariable("id") String id, Model model) {
+        log.info("Edit book: " + id);
+        final String[] authorNames = {null};
+        final String[] genreNames = {null};
+        Mono<Book> book = service.getBookById(id).doOnSuccess(b -> {
+            if (b.getAuthors() != null && b.getAuthors().size() > 0) {
+                authorNames[0] = getAuthorNames(b.getAuthors());
+            }
+            if (b.getGenres() != null && b.getGenres().size() > 0) {
+                genreNames[0] = getGenreNames(b.getGenres());
+            }
+        });
+
+        model.addAttribute("authors", authorNames[0]);
+        model.addAttribute("genres", genreNames[0]);
+        model.addAttribute("book", book);
+        return "/edit";
+    }
+
+    @GetMapping("/books/view/{id}")
+    public String view(@PathVariable("id") String id, Model model) {
+        log.info("View book: " + id);
+        final String[] authorNames = {null};
+        final String[] genreNames = {null};
+        Mono<Book> book = service.getBookById(id).doOnSuccess(b -> {
+            if (b.getAuthors() != null && b.getAuthors().size() > 0) {
+                authorNames[0] = getAuthorNames(b.getAuthors());
+            }
+            if (b.getGenres() != null && b.getGenres().size() > 0) {
+                genreNames[0] = getGenreNames(b.getGenres());
+            }
+        });
+        model.addAttribute("authors", authorNames);
+        model.addAttribute("genres", genreNames);
+        model.addAttribute("book", book);
+        return "/viewbook";
+    }
+
+
+    @PostMapping("/books/delete")
+    public String delete(@RequestParam("id") String id, Model model) {
+        log.info("Delete book: " + id);
+        service.deleteBookById(id);
+        model.addAttribute("books", sortBooks(service.getAllBooks()));
+        return "redirect:/";
+    }
 
     @PostMapping("/books")
     public String addBook(@ModelAttribute("name") String name,
@@ -97,7 +103,6 @@ public class BookController {
     public String updateBookAuthors(@RequestParam("id") String id,
         @ModelAttribute("authors") String authors) {
         log.info("Update authors of book : id = " + id + ", authors = " + authors);
-
         String[] authorNames = authors.split(", ");
         service.updateBookAuthors(id, authorNames);
         return "redirect:/";

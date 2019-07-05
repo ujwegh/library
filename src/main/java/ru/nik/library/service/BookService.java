@@ -7,7 +7,7 @@ import ru.nik.library.domain.Book;
 public interface BookService {
     Mono<Book> addBook(String name, String description);
 
-    Mono<Boolean> deleteBookById(String id);
+    Mono<Void> deleteBookById(String id);
 
     Mono<Book> updateBook(String id,String name, String description);
 

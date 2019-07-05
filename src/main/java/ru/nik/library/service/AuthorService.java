@@ -9,9 +9,7 @@ import java.util.List;
 public interface AuthorService {
     Mono<Author> addAuthor(String name);
 
-    Mono<Boolean> deleteAuthorById(String id);
-
-    Mono<Boolean> deleteAuthorByName(String name);
+    Mono<Void> deleteAuthorById(String id);
 
     Mono<Author> updateAuthor(String id, String name);
 
