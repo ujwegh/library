@@ -22,7 +22,8 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 "classpath:/static/js/",
                 "classpath:/static/images/",
                 "classpath:/static/fonts/",
-                "classpath:/static/vendor/");
+                "classpath:/static/vendor/",
+                "classpath:/META-INF/resources/webjars/");
     }
 
     /**

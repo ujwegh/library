@@ -29,7 +29,7 @@ public class BookController {
         this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping("/books")
     String index(Model model) {
         log.info("Get all books");
         model.addAttribute("books", sortBooks(service.getAllBooks()));
@@ -78,7 +78,7 @@ public class BookController {
         log.info("Delete book: " + id);
         service.deleteBookById(id);
         model.addAttribute("books", sortBooks(service.getAllBooks()));
-        return "redirect:/";
+        return "redirect:/books";
     }
 
     @PostMapping("/books")
@@ -86,7 +86,7 @@ public class BookController {
         @ModelAttribute("description") String description) {
         log.info("Add book: name =" + name + ", description = " + description);
         service.addBook(name, description);
-        return "redirect:/";
+        return "redirect:/books";
     }
 
     @PostMapping("/books/update")
@@ -94,7 +94,7 @@ public class BookController {
         @ModelAttribute("description") String description) {
         log.info("Update book: id = " + id + ", name = " + name + ", description = " + description);
         service.updateBook(id, name, description);
-        return "redirect:/";
+        return "redirect:/books";
     }
 
     @PostMapping("/books/update/authors")
@@ -104,7 +104,7 @@ public class BookController {
 
         String[] authorNames = authors.split(", ");
         service.updateBookAuthors(id, authorNames);
-        return "redirect:/";
+        return "redirect:/books";
     }
 
     @PostMapping("/books/update/genres")
@@ -114,7 +114,7 @@ public class BookController {
 
         String[] genreNames = genres.split(", ");
         service.updateBookGenres(id, genreNames);
-        return "redirect:/";
+        return "redirect:/books";
     }
 
 

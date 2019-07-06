@@ -17,13 +17,16 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li th:classappend="${module == 'home' ? 'active' : ''}">
-                    <a href="#" th:href="@{/}">Home</a>
+                    <a href="#" th:href="@{/books}">Home</a>
                 </li>
                 <li th:classappend="${module == 'Authors' ? 'active' : ''}">
                     <a href="#" th:href="@{/authors}">Authors</a>
                 </li>
                 <li th:classappend="${module == 'Genres' ? 'active' : ''}">
                     <a href="#" th:href="@{/genres}">Genres</a>
+                </li>
+                <li>
+                    <a href="#" th:href="@{/logout}">Logout</a>
                 </li>
             </ul>
         </div>
