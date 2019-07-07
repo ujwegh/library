@@ -1,7 +1,6 @@
 package ru.nik.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -39,12 +38,10 @@ public class GenreServiceImpl implements GenreService {
 
 	@Override
 	public Mono<Genre> updateGenre(String id, String name) {
-		Mono<Genre> genreMono = repository.findById(id).map(genre -> {
+		return repository.findById(id).flatMap(genre -> {
 			genre.setName(name);
-			return genre;
+			return repository.save(genre);
 		});
-
-		return repository.save(genreMono.block());
 	}
 
 	@Override

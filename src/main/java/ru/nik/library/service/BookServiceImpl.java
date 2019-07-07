@@ -1,7 +1,6 @@
 package ru.nik.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -39,13 +38,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Mono<Book> updateBook(String id, String name, String description) {
-		Mono<Book> bookMono = repository.findById(id).map(book -> {
+		return repository.findById(id).flatMap(book -> {
 			book.setName(name);
 			book.setDescription(description);
-			return book;
+			 return repository.save(book);
 		});
-
-		return repository.save(bookMono.block());
     }
 
     @Override
@@ -62,71 +59,63 @@ public class BookServiceImpl implements BookService {
     @Override
     public Mono<Book> updateBookAuthors(String bookId, String... authors) {
         Set<Author> authorSet = Arrays.stream(authors).map(Author::new).collect(Collectors.toSet());
-        Mono<Book> book = repository.findById(bookId);
-
         Set<Author> toAdd = new HashSet<>();
         Set<Author> toDelete = new HashSet<>();
-        if (book != null) {
-            List<Author> existedAuthors = authorService.getAllByNames(authors).collectList().block();
 
-            authorSet.forEach(author -> existedAuthors.forEach(existedAuthor -> {
-					if (author.getName().equals(existedAuthor.getName())) {
-						toDelete.add(author);
-						toAdd.add(existedAuthor);
-					}
-				})
-			);
+		return repository.findById(bookId).flatMap(book1 -> {
+			authorService.getAllByNames(authors).collectList().map(authors1 -> {
 
-            authorSet.removeAll(toDelete);
-            authorSet.addAll(toAdd);
-            List<Author> toSaveAuthors = new ArrayList<>(authorSet);
-
-			toSaveAuthors.forEach(System.out::println);
-            Flux<Author> authorFlux = authorService.saveAll(toSaveAuthors);
-            Set<Author> set = new HashSet<>(
-				Objects.requireNonNull(authorFlux.collectList().block()));
-            Mono<Book> mono = book.map(b -> {
-            	b.setAuthors(set);
-            	return b;
+				authorSet.forEach(author -> authors1.forEach(existedAuthor -> {
+						if (author.getName().equals(existedAuthor.getName())) {
+							toDelete.add(author);
+							toAdd.add(existedAuthor);
+						}
+					})
+				);
+				return authors1;
 			});
-            return repository.save(mono.block());
-        }
-        return null;
+
+			authorSet.removeAll(toDelete);
+			authorSet.addAll(toAdd);
+			List<Author> toSaveAuthors = new ArrayList<>(authorSet);
+
+			return authorService.saveAll(toSaveAuthors).collectList().flatMap(authors1 -> {
+				Set<Author> set = new HashSet<>(authors1);
+				book1.setAuthors(set);
+				return Mono.just(book1);
+			}).flatMap(repository::save);
+		});
     }
 
     @Override
     public Mono<Book> updateBookGenres(String bookId, String... genres) {
         Set<Genre> genreSet = Arrays.stream(genres).map(Genre::new).collect(Collectors.toSet());
-        Mono<Book> book = repository.findById(bookId);
-
         Set<Genre> toAdd = new HashSet<>();
         Set<Genre> toDelete = new HashSet<>();
-        if (book != null) {
-			List<Genre> existedGenres = genreService.getAllByNames(genres).collectList().block();
 
-			genreSet.forEach(genre -> existedGenres.forEach(existedGenre -> {
-					if (genre.getName().equals(existedGenre.getName())) {
-						toDelete.add(genre);
-						toAdd.add(existedGenre);
-					}
-				})
-			);
+		return repository.findById(bookId).flatMap(book1 -> {
+			genreService.getAllByNames(genres).collectList().map(genres1 -> {
 
-            genreSet.removeAll(toDelete);
-            genreSet.addAll(toAdd);
-
-            List<Genre> toSaveGenres = new ArrayList<>(genreSet);
-
-			Flux<Genre> genreFlux = genreService.saveAll(toSaveGenres);
-			Set<Genre> set = new HashSet<>(
-				Objects.requireNonNull(genreFlux.collectList().block()));
-			Mono<Book> mono = book.map(b -> {
-				b.setGenres(set);
-				return b;
+				genreSet.forEach(genre -> genres1.forEach(existedGenre -> {
+						if (genre.getName().equals(existedGenre.getName())) {
+							toDelete.add(genre);
+							toAdd.add(existedGenre);
+						}
+					})
+				);
+				return genres1;
 			});
-			return repository.save(mono.block());
-        }
-        return null;
+
+			genreSet.removeAll(toDelete);
+			genreSet.addAll(toAdd);
+			List<Genre> toSaveGenres = new ArrayList<>(genreSet);
+
+			return genreService.saveAll(toSaveGenres).collectList().flatMap(genres1 -> {
+				Set<Genre> set = new HashSet<>(genres1);
+				book1.setGenres(set);
+				return Mono.just(book1);
+			}).flatMap(repository::save);
+		});
     }
 
 }

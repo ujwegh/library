@@ -1,7 +1,5 @@
 package ru.nik.library.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,12 +30,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Mono<Author> updateAuthor(String id, String name) {
-        Mono<Author> authorMono = repository.findById(id).map(author -> {
+        return repository.findById(id).flatMap(author -> {
             author.setName(name);
-            return author;
+            return repository.save(author);
         });
-
-        return repository.save(authorMono.block());
     }
 
     @Override

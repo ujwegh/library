@@ -4,12 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
 import ru.nik.library.repository.datajpa.BookRepository;
 import ru.nik.library.repository.datajpa.CommentRepository;
-
-import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -37,12 +34,10 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Mono<Comment> updateBookComment(String id, String bookId, String message) {
-		Mono<Comment> commentMono = repository.findByIdAndBook_Id(id, bookId).map(comment -> {
+		return repository.findByIdAndBook_Id(id, bookId).flatMap(comment -> {
 			comment.setComment(message);
-			return comment;
+			return repository.save(comment);
 		});
-
-		return repository.save(commentMono.block());
 	}
 
 	@Override
