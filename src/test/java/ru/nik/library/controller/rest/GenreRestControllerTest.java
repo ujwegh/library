@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.nik.library.domain.Genre;
@@ -68,7 +66,9 @@ class GenreRestControllerTest {
         verify(this.service, Mockito.atLeastOnce()).getAllGenres();
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void deleteGenre() throws Exception {
         Mockito.when(service.deleteGenreById(1)).thenReturn(true);
@@ -78,7 +78,9 @@ class GenreRestControllerTest {
         verify(this.service, Mockito.atLeastOnce()).deleteGenreById(1);
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void updateGenre() throws Exception {
         Mockito.when(service.updateGenre(1, "учебник")).thenReturn(true);
@@ -90,7 +92,9 @@ class GenreRestControllerTest {
         verify(this.service, Mockito.atLeastOnce()).updateGenre(1, "учебник");
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void addGenre() throws Exception {
         Mockito.when(service.addGenre("учебник")).thenReturn(true);

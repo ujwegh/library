@@ -23,6 +23,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest arg0, HttpServletResponse arg1, Authentication arg2) throws IOException, ServletException {
+
+
 		userRepository.updateLastLogin(new Date());
 	}
 }

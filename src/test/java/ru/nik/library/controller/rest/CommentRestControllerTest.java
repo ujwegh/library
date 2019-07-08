@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.nik.library.domain.Book;
@@ -76,7 +74,9 @@ class CommentRestControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).getAllComments(0);
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void deleteComment() throws Exception {
 		Mockito.when(service.deleteCommentById(0,0)).thenReturn(true);
@@ -87,7 +87,9 @@ class CommentRestControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).deleteCommentById(0,0);
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void updateComment() throws Exception {
 		Mockito.when(service.updateBookComment(0, 0, "новый, никому не нужный, коммент")).thenReturn(true);

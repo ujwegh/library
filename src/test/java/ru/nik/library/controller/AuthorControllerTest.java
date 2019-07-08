@@ -61,7 +61,9 @@ class AuthorControllerTest {
         verify(this.service, Mockito.atLeastOnce()).getAllAuthors();
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void editTest() throws Exception {
         given(service.getAuthorById(0)).willReturn(expected.get(0));
@@ -71,7 +73,9 @@ class AuthorControllerTest {
         verify(this.service, Mockito.atLeastOnce()).getAuthorById(0);
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void deleteTest() throws Exception {
         given(service.deleteAuthorById(0)).willReturn(true);
@@ -82,7 +86,9 @@ class AuthorControllerTest {
         verify(this.service, Mockito.atLeastOnce()).deleteAuthorById(0);
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void addAuthorTest() throws Exception {
         given(service.addAuthor("King")).willReturn(true);
@@ -94,7 +100,9 @@ class AuthorControllerTest {
         verify(this.service, Mockito.atLeastOnce()).addAuthor("King");
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void updateAuthorTest() throws Exception {
         given(service.updateAuthor(0, "King")).willReturn(true);

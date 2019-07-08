@@ -16,11 +16,9 @@ import ru.nik.library.security.AuthenticationSuccessHandlerImpl;
 import ru.nik.library.service.CommentService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import ru.nik.library.service.UserService;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -71,7 +69,9 @@ class CommentControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).getAllComments(0);
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void edit() throws Exception {
 		given(service.getCommentById(0, 0)).willReturn(expected.get(0));
@@ -83,7 +83,9 @@ class CommentControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).getCommentById(0, 0);
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void delete() throws Exception {
 		given(service.deleteCommentById(0, 0)).willReturn(true);

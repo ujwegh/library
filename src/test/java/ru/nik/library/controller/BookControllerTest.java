@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -16,13 +15,11 @@ import ru.nik.library.domain.Author;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
 import ru.nik.library.domain.Genre;
-import ru.nik.library.repository.datajpa.UserRepository;
 import ru.nik.library.security.AuthenticationSuccessHandlerImpl;
 import ru.nik.library.service.BookService;
 
 import java.util.*;
 import ru.nik.library.service.UserService;
-import ru.nik.library.service.UserServiceImpl;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -81,7 +78,9 @@ class BookControllerTest {
 			.andExpect(model().attribute("books", expected));
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void edit() throws Exception {
 		given(service.getBookById(0)).willReturn(expected.get(0));
@@ -105,7 +104,9 @@ class BookControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).getBookById(0);
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void delete() throws Exception {
 		given(service.deleteBookById(1)).willReturn(true);
@@ -116,7 +117,9 @@ class BookControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).deleteBookById(1);
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void addBook() throws Exception {
 		expected.add(new Book("новая книжка", "ее описание"));
@@ -128,7 +131,9 @@ class BookControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).addBook("новая книжка", "ее описание");
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void updateBook() throws Exception {
 		expected.set(1, new Book("обновленная кника", "ее описание"));
@@ -140,7 +145,9 @@ class BookControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).updateBook(1, "", "");
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void updateBookAuthors() throws Exception {
 		Book book1 = new Book("book 1", "description 1");
@@ -156,7 +163,9 @@ class BookControllerTest {
 			.andExpect(redirectedUrl("/books"));
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void updateBookGenres() throws Exception {
 		Book book1 = new Book("book 1", "description 1");

@@ -3,6 +3,7 @@ package ru.nik.library.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,11 +19,16 @@ import ru.nik.library.service.UserService;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
+
+	private final AuthenticationSuccessHandlerImpl successHandler;
 
 	@Autowired
-	private AuthenticationSuccessHandlerImpl successHandler;
+	public SecurityConfiguration(UserService userService,
+		AuthenticationSuccessHandlerImpl successHandler) {
+		this.userService = userService;
+		this.successHandler = successHandler;
+	}
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
@@ -34,6 +40,44 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/css/**",
 				"/img/**",
 				"/webjars/**").permitAll()
+			.and()
+			.authorizeRequests()
+				.antMatchers(
+					"/books/delete",
+					"/books/update/authors",
+					"/books/update",
+					"/books/update/genres",
+					"/books/edit/{\\d+}",
+					"/authors/delete",
+					"/authors/update",
+					"/authors/edit/{\\d+}",
+					"/genres/delete",
+					"/genres/update",
+					"/genres/edit/{\\d+}",
+					"/comments/{\\d+}/edit/{\\d+}",
+					"/comments/{\\d+}/delete").hasRole("ADMIN")
+			.and().authorizeRequests()
+			.antMatchers(HttpMethod.POST,
+				"/books",
+				"/authors",
+				"/genres",
+				"/rest/authors",
+				"/rest/genres",
+				"/rest/books",
+				"/rest/books/{\\d+}/authors",
+				"/rest/books/{\\d+}/genres").hasRole("ADMIN")
+			.and().authorizeRequests().antMatchers(
+				HttpMethod.DELETE,
+				"/rest/authors/{\\d+}",
+				"/rest/books/{\\d+}",
+				"/rest/comments/{\\d+}/comment/{\\d+}",
+				"/rest/genres/{\\d+}").hasRole("ADMIN")
+			.and().authorizeRequests()
+			.antMatchers(HttpMethod.PUT,
+				"/rest/authors/{\\d+}",
+				"/rest/genres/{\\d+}",
+				"/rest/books/{\\d+}",
+				"/rest/comments/{\\d+}").hasRole("ADMIN")
 			.anyRequest().authenticated()
 			.and()
 				.formLogin()
@@ -67,18 +111,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.and()
 			.authenticationProvider(authenticationProvider());
 	}
-
-//    @SuppressWarnings("deprecation")
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
-
-//    @Autowired
-//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("admin").password("password").roles("ADMIN");
-//    }
 
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {

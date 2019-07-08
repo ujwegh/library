@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.nik.library.domain.Author;
@@ -67,7 +65,9 @@ class AuthorRestControllerTest {
         verify(this.service, Mockito.atLeastOnce()).getAllAuthors();
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void deleteAuthor() throws Exception {
         Mockito.when(service.deleteAuthorById(1)).thenReturn(true);
@@ -77,7 +77,9 @@ class AuthorRestControllerTest {
         verify(this.service, Mockito.atLeastOnce()).deleteAuthorById(1);
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void updateAuthor() throws Exception {
         Mockito.when(service.updateAuthor(1, "Лермонтов")).thenReturn(true);
@@ -89,7 +91,9 @@ class AuthorRestControllerTest {
         verify(this.service, Mockito.atLeastOnce()).updateAuthor(1, "Лермонтов");
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void addAuthor() throws Exception {
         Mockito.when(service.addAuthor("Лермонтов")).thenReturn(true);

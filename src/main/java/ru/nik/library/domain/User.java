@@ -37,7 +37,8 @@ public class User {
 	private String email;
 	private String password;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE,
+		CascadeType.DETACH})
 	@JoinTable(
 		name = "users_roles",
 		joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -55,7 +56,8 @@ public class User {
 		this.password = password;
 	}
 
-	public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
+	public User(String firstName, String lastName, String email, String password,
+		Collection<Role> roles) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;

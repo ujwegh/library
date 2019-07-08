@@ -1,6 +1,7 @@
 package ru.nik.library.controller;
 
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import ru.nik.library.dto.UserRegistrationDto;
 import ru.nik.library.service.UserService;
 
 @Controller
+@Slf4j
 public class UserController {
 
 	private final UserService userService;
@@ -32,12 +34,14 @@ public class UserController {
 	public String registration(@ModelAttribute("user") @Valid UserRegistrationDto userDto,
 		BindingResult result) {
 
+		log.info("Register new User: {}", userDto.toString());
 		User existing = userService.findByEmail(userDto.getEmail());
-		if (existing != null){
-			result.rejectValue("email", null, "There is already an account registered with that email");
+		if (existing != null) {
+			result.rejectValue("email", null,
+				"There is already an account registered with that email");
 		}
 
-		if (result.hasErrors()){
+		if (result.hasErrors()) {
 			return "registration";
 		}
 

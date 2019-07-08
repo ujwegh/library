@@ -1,5 +1,6 @@
 package ru.nik.library.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,57 +13,54 @@ import ru.nik.library.domain.Genre;
 import ru.nik.library.service.GenreService;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Controller
+@Slf4j
 public class GenreController {
 
-    private static Logger log = Logger.getLogger(GenreController.class.getName());
-    private final GenreService service;
+	private final GenreService service;
 
-    @Autowired
-    public GenreController(GenreService service) {
-        this.service = service;
-    }
+	@Autowired
+	public GenreController(GenreService service) {
+		this.service = service;
+	}
 
-    @GetMapping("/genres")
-    public String getGenres(Model model) {
-        log.info("Get all genres");
-        List<Genre> genres = service.getAllGenres();
-        model.addAttribute("genres", genres);
-        return "list";
-    }
+	@GetMapping("/genres")
+	public String getGenres(Model model) {
+		log.info("Get all genres");
+		List<Genre> genres = service.getAllGenres();
+		model.addAttribute("genres", genres);
+		return "list";
+	}
 
-    @GetMapping("/genres/edit/{id}")
-    public String edit(@PathVariable("id") int id, Model model) {
-        log.info("Edit genre: " + id);
-        Genre genre = service.getGenreById(id);
-        model.addAttribute("genre", genre);
-        return "/edit";
-    }
+	@GetMapping("/genres/edit/{id}")
+	public String edit(@PathVariable("id") int id, Model model) {
+		log.info("Edit genre: " + id);
+		Genre genre = service.getGenreById(id);
+		model.addAttribute("genre", genre);
+		return "/edit";
+	}
 
-    @PostMapping("/genres/delete")
-    public String delete(@RequestParam("id") int id) {
-        log.info("Delete genre: " + id);
-        service.deleteGenreById(id);
-        return "redirect:/genres";
-    }
+	@PostMapping("/genres/delete")
+	public String delete(@RequestParam("id") int id) {
+		log.info("Delete genre: " + id);
+		service.deleteGenreById(id);
+		return "redirect:/genres";
+	}
 
-    @PostMapping("/genres")
-    public String addGenre(@RequestParam("name") String name) {
-        log.info("Add genre: " + name);
-        service.addGenre(name);
-        return "redirect:/genres";
-    }
+	@PostMapping("/genres")
+	public String addGenre(@RequestParam("name") String name) {
+		log.info("Add genre: " + name);
+		service.addGenre(name);
+		return "redirect:/genres";
+	}
 
-    @PostMapping("/genres/update")
-    public String updateGenre(@RequestParam("id") int id, @ModelAttribute("name") String name) {
-        log.info("Update genre: id = " + id + " name = " + name);
-        service.updateGenre(id, name);
-        return "redirect:/genres";
-    }
-
-
+	@PostMapping("/genres/update")
+	public String updateGenre(@RequestParam("id") int id, @ModelAttribute("name") String name) {
+		log.info("Update genre: id = " + id + " name = " + name);
+		service.updateGenre(id, name);
+		return "redirect:/genres";
+	}
 
 
 }

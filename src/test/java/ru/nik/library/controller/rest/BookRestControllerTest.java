@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.nik.library.domain.Author;
@@ -88,7 +86,9 @@ class BookRestControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).getAllBooks();
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void deleteBook() throws Exception {
 		Mockito.when(service.deleteBookById(1)).thenReturn(true);
@@ -99,7 +99,9 @@ class BookRestControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).deleteBookById(1);
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void updateBook() throws Exception {
 		Mockito.when(service.updateBook(1, "Новая книга", "Новое описание")).thenReturn(true);
@@ -114,7 +116,9 @@ class BookRestControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).updateBook(1, "Новая книга", "Новое описание");
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void addBook() throws Exception {
 		Mockito.when(service.addBook("учебник", "физика")).thenReturn(true);
@@ -128,7 +132,9 @@ class BookRestControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).addBook("учебник", "физика");
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void updateBookAuthors() throws Exception {
 		Mockito.when(service.updateBookAuthors(1, "Лермонтов", "Достоевский")).thenReturn(true);
@@ -140,7 +146,9 @@ class BookRestControllerTest {
 		verify(this.service, Mockito.atLeastOnce()).updateBookAuthors(1, "Лермонтов", "Достоевский");
 	}
 
-	@WithMockUser
+	@WithMockUser(
+		authorities = "ROLE_ADMIN"
+	)
 	@Test
 	void updateBookGenres() throws Exception {
 		Mockito.when(service.updateBookGenres(1, "учебник", "задачник")).thenReturn(true);

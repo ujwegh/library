@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Set;
 
 public class Util {
+
+    private Util() {
+    }
+
     public static String getAuthorNames(Set<Author> authors) {
         StringBuilder builder = new StringBuilder();
         authors.forEach(a -> builder.append(a.getName()).append(", "));

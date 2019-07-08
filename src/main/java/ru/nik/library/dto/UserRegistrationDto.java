@@ -3,6 +3,7 @@ package ru.nik.library.dto;
 import javax.validation.constraints.AssertTrue;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import ru.nik.library.validation.FieldMatch;
 
 @FieldMatch.List({
@@ -11,6 +12,7 @@ import ru.nik.library.validation.FieldMatch;
 })
 @Getter
 @Setter
+@ToString
 public class UserRegistrationDto {
 
     private String firstName;

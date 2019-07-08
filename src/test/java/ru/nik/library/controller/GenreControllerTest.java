@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import ru.nik.library.service.UserService;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -66,7 +65,9 @@ class GenreControllerTest {
         verify(this.service, Mockito.atLeastOnce()).getAllGenres();
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void editTest() throws Exception {
         given(service.getGenreById(0)).willReturn(expected.get(0));
@@ -76,7 +77,9 @@ class GenreControllerTest {
         verify(this.service, Mockito.atLeastOnce()).getGenreById(0);
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void deleteTest() throws Exception {
         given(service.deleteGenreById(0)).willReturn(true);
@@ -87,7 +90,9 @@ class GenreControllerTest {
         verify(this.service, Mockito.atLeastOnce()).deleteGenreById(0);
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void addAuthorTest() throws Exception {
         given(service.addGenre("детектив")).willReturn(true);
@@ -99,7 +104,9 @@ class GenreControllerTest {
         verify(this.service, Mockito.atLeastOnce()).addGenre("детектив");
     }
 
-    @WithMockUser
+    @WithMockUser(
+        authorities = "ROLE_ADMIN"
+    )
     @Test
     void updateAuthorTest() throws Exception {
         given(service.updateGenre(0, "детектив")).willReturn(true);
