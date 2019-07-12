@@ -30,18 +30,20 @@ public class Book {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     @Lazy
-    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH,
+        CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_authors",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
     @Lazy
-    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH,
+        CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "map_books_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

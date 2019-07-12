@@ -105,7 +105,9 @@ class BookServiceImplTest {
         Author one = new Author("Петя");
         Author two = new Author("Кинг");
 
-        Set<Author> authors = new HashSet<>(Set.of(one, two));
+        Set<Author> authors = new HashSet<>();
+        authors.add(one);
+        authors.add(two);
         expected.setAuthors(authors);
         service.updateBookAuthors(1, one.getName(), two.getName());
         Book actual = service.getBookById(1);
@@ -118,7 +120,9 @@ class BookServiceImplTest {
         Genre one = new Genre("жанр 1");
         Genre two = new Genre("жанр 2");
 
-        Set<Genre> genres = new HashSet<>(Set.of(one, two));
+        Set<Genre> genres = new HashSet<>();
+        genres.add(one);
+        genres.add(two);
         expected.setGenres(genres);
         service.updateBookGenres(1, one.getName(), two.getName());
         Book actual = service.getBookById(1);

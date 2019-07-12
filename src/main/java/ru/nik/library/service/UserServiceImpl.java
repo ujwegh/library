@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.nik.library.domain.Role;
 import ru.nik.library.domain.User;
 import ru.nik.library.dto.UserDto;
@@ -20,6 +21,7 @@ import ru.nik.library.repository.datajpa.RoleRepository;
 import ru.nik.library.repository.datajpa.UserRepository;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
 	@Autowired

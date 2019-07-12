@@ -78,7 +78,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/rest/genres/{\\d+}",
 				"/rest/books/{\\d+}",
 				"/rest/comments/{\\d+}").hasRole("ADMIN")
-			.anyRequest().authenticated()
+			.anyRequest().fullyAuthenticated()
 			.and()
 				.formLogin()
 				.loginPage("/login")
@@ -89,7 +89,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.clearAuthentication(true)
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/login?logout")
-			.permitAll();
+			.permitAll()
+			.and().httpBasic()
+			.and().csrf().disable();
 
 	}
 
