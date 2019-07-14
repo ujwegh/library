@@ -16,11 +16,14 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository repository;
     private final BookRepository bookRepository;
+    private final PoliterService politerService;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository repository, BookRepository bookRepository) {
+    public CommentServiceImpl(CommentRepository repository, BookRepository bookRepository,
+        PoliterService politerService) {
         this.repository = repository;
         this.bookRepository = bookRepository;
+        this.politerService = politerService;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class CommentServiceImpl implements CommentService {
         } else {
             return false;
         }
+        politerService.process(comment);
         return repository.save(comment) != null;
     }
 

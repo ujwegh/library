@@ -53,7 +53,7 @@
                             <td>
                                 <a th:href="@{'/comments/'+ ${bookId} + '/edit/' + *{id}}" class="column100 btn btn-primary"
                                    href="edit.html" style="float: left">Edit</a>
-                                <form th:action="@{'/comments/' + ${bookId} + '/delete/' + *{id}}" th:method="POST">
+                                <form th:action="@{'/comments/' + ${bookId} + '/delete'(id=*{id})}" th:method="POST">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <button type="submit" id="submitButton1" class="btn btn-danger">Delete</button>
                                 </form>
