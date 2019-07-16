@@ -9,7 +9,10 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "mongo_comments")
 @NoArgsConstructor
 @Entity
 @Table(name = "comments")
@@ -24,6 +27,7 @@ public class Comment{
     @Column(name = "comment")
     private String comment;
 
+    @DBRef
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     @OnDelete(action = OnDeleteAction.CASCADE)

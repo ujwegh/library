@@ -11,7 +11,10 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "mongo_genres")
 @NoArgsConstructor
 @Entity
 @Table(name = "genres")
@@ -26,6 +29,7 @@ public class Genre{
     @Column(name = "name", unique = true)
     private String name;
 
+    @DBRef
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
     private Set<Book> books = new HashSet<>();

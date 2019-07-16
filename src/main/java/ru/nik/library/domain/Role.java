@@ -16,7 +16,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "mongo_roles")
 @Getter
 @Setter
 @Entity
@@ -30,6 +33,7 @@ public class Role {
 
 	private String name;
 
+	@DBRef
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
 	private List<User> users;

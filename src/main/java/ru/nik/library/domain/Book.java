@@ -10,7 +10,10 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "mongo_books")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -30,9 +33,11 @@ public class Book {
     @Column(name = "description")
     private String description;
 
+    @DBRef
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
+    @DBRef
     @Lazy
     @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH,
         CascadeType.PERSIST}, fetch = FetchType.EAGER)
@@ -41,6 +46,7 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
+    @DBRef
     @Lazy
     @ManyToMany( cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH,
         CascadeType.PERSIST}, fetch = FetchType.EAGER)

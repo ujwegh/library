@@ -18,9 +18,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("library_users")
+@Document("mongo_library_users")
 @Getter
 @Setter
 @Entity
@@ -39,6 +40,7 @@ public class User {
 	private String email;
 	private String password;
 
+	@DBRef
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.MERGE,
 		CascadeType.DETACH})
 	@JoinTable(
