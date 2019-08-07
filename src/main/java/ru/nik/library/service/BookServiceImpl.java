@@ -1,5 +1,6 @@
 package ru.nik.library.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -52,9 +53,17 @@ public class BookServiceImpl implements BookService {
         return repository.findById(id);
     }
 
+    @HystrixCommand(fallbackMethod = "defaultBooks")
     @Override
     public List<Book> getAllBooks() {
         return repository.findAll();
+    }
+
+    public List<Book> defaultBooks() {
+        Book one = new Book("книга", "интересная");
+        Book two = new Book("журнал", "новый");
+
+        return new ArrayList<>(Arrays.asList(one, two));
     }
 
 

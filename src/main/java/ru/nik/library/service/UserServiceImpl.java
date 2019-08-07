@@ -1,10 +1,12 @@
 package ru.nik.library.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +21,7 @@ import ru.nik.library.dto.UserRegistrationDto;
 import ru.nik.library.repository.datajpa.RoleRepository;
 import ru.nik.library.repository.datajpa.UserRepository;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -77,12 +80,27 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByEmail(email);
 	}
 
+	@HystrixCommand(fallbackMethod = "getDefaultUser")
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = userRepository.findByEmail(email);
 		if (user == null){
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
+		return new org.springframework.security.core.userdetails.User(user.getEmail(),
+			user.getPassword(),
+			mapRolesToAuthorities(user.getRoles()));
+	}
+
+	public UserDetails getDefaultUser(String email) {
+		log.info("Return default user..");
+		User user = new User();
+		user.setEmail("user");
+		user.setFirstName("user");
+		user.setLastName("");
+		user.setPassword(bCryptPasswordEncoder.encode("password"));
+		user.setRoles(Collections.singletonList(new Role("ROLE_DEFAULT")));
+
 		return new org.springframework.security.core.userdetails.User(user.getEmail(),
 			user.getPassword(),
 			mapRolesToAuthorities(user.getRoles()));
