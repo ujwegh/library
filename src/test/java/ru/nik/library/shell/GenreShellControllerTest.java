@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Transactional
-class GenreShellControllerTest {
+public class GenreShellControllerTest {
 
     @Autowired
     private GenreService service;

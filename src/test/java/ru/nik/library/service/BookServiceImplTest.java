@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Transactional
-class BookServiceImplTest {
+public class BookServiceImplTest {
 
     @Autowired
     private BookService service;
@@ -104,8 +104,11 @@ class BookServiceImplTest {
         Book expected = new Book(1, "книга 1", "описание");
         Author one = new Author("Петя");
         Author two = new Author("Кинг");
+        Set<Author>set = new HashSet<>();
+        set.add(one);
+        set.add(two);
 
-        Set<Author> authors = new HashSet<>(Set.of(one, two));
+        Set<Author> authors = new HashSet<>(set);
         expected.setAuthors(authors);
         service.updateBookAuthors(1, one.getName(), two.getName());
         Book actual = service.getBookById(1);
@@ -117,8 +120,11 @@ class BookServiceImplTest {
         Book expected = new Book(1, "книга 1", "описание");
         Genre one = new Genre("жанр 1");
         Genre two = new Genre("жанр 2");
+        Set<Genre>set = new HashSet<>();
+        set.add(one);
+        set.add(two);
 
-        Set<Genre> genres = new HashSet<>(Set.of(one, two));
+        Set<Genre> genres = new HashSet<>(set);
         expected.setGenres(genres);
         service.updateBookGenres(1, one.getName(), two.getName());
         Book actual = service.getBookById(1);

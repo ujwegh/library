@@ -3,6 +3,7 @@ package ru.nik.library.repository.datajpa;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Author;
 
@@ -20,14 +22,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @TestPropertySource("classpath:application-test.properties")
 @ContextConfiguration(classes = AuthorRepository.class)
 @EnableAutoConfiguration
 @EntityScan(basePackages = "ru.nik.library.domain")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class AuthorRepositoryTest {
+public class AuthorRepositoryTest {
 
     @Autowired
     private AuthorRepository repository;
@@ -70,7 +72,7 @@ class AuthorRepositoryTest {
     }
 
     @Test
-    void save() {
+    public void save() {
         Author expected = new Author("Новый автор");
         Author actual = repository.save(expected);
         assertNotNull(actual);

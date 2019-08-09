@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class GenreServiceImplTest {
+public class GenreServiceImplTest {
 
     @Autowired
     private GenreService service;

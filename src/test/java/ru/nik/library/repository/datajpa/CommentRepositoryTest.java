@@ -3,6 +3,7 @@ package ru.nik.library.repository.datajpa;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.nik.library.domain.Book;
 import ru.nik.library.domain.Comment;
@@ -19,14 +21,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @PropertySource("classpath:application-test.properties")
 @ContextConfiguration(classes = {CommentRepository.class, BookRepository.class})
 @EnableAutoConfiguration
 @EntityScan(basePackages = "ru.nik.library.domain")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class CommentRepositoryTest {
+public class CommentRepositoryTest {
 
     @Autowired
     private CommentRepository repository;
